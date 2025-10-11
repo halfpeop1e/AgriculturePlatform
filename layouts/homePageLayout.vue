@@ -1,0 +1,95 @@
+<template>
+    <div class="flex-col h-screen ">
+        <div class="h-16">
+            <TopBar>
+            <!-- 默认插槽内容（会出现在左侧） -->
+                <template #default>
+                    <div class="text-white text-xl flex h-full items-center">
+                                        <!-- 可点击的导航项：点击后高亮（色块变深） -->
+                                <el-dropdown class="flex items-center justify-center"
+                                    v-for="(item, i) in nav"
+                                    :key="i"
+                                    @click="setActive(i)"
+                                    @keydown.enter="setActive(i)"
+                                    tabindex="0"
+                                    size="large"
+                                    :class="[
+                                        'nav-item',
+                                        activeIndex === i ? 'active' : ''
+                                    ]"
+                                >
+                            <span class="h-full w-full flex items-center justify-center text-lg">{{ item.label }}</span>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item
+                                        v-for="(subitem, i) in item.items"
+                                        :key="i"
+                                        @click="handleClick(subitem.routername)"
+                                        >
+                                        {{ subitem.label }}
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                    </div>
+                </template>
+            <!-- 命名插槽 end：放置在右侧 -->
+            <template #end>
+                <div class="flex items-center gap-5">
+                   <el-button type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
+                  <el-avatar :size="50" src="https://empty" @error="errorHandler">
+                <img
+                    src=""
+                />
+                  </el-avatar>
+                </div>
+            </template>
+        </TopBar>
+        </div>
+    <div class="flex-col overflow-auto mt-1 ml-16 mr-16">
+        <slot/>
+    </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import TopBar from '~/components/topBar.vue'
+import { nav } from '~/config/topbarRoute'
+
+const handleClick = (routerlink:string) => {
+  navigateTo(routerlink)
+}
+
+const activeIndex = ref(0)
+
+function setActive(i: number) {
+    activeIndex.value = i
+}
+
+const errorHandler = () => {
+    return true
+}
+</script>
+
+<style scoped>
+.nav-item {
+    height: 100%;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 250ms ease, transform 150ms ease, box-shadow 250ms ease;
+    background: transparent;
+    color: inherit;
+}
+
+.nav-item:hover {
+    background: linear-gradient( rgba(92, 92, 92, 0.591));
+    transform: translateY(-1px);
+}
+
+
+</style>
