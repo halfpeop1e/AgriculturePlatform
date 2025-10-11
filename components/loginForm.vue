@@ -23,7 +23,7 @@
             </el-form-item>
 
             <div class="register">
-                还没有账号？ <a @click.prevent="$emit('register')">注册</a>
+                还没有账号？ <a @click.prevent="toRegister">注册</a>
             </div>
         </el-form>
         <el-divider>或者</el-divider>
@@ -42,7 +42,7 @@ import { ElMessage } from 'element-plus'
 import Wechat from './icons/Wechat.vue';
 const emit = defineEmits<{
     (e: 'submit', payload: { username: string; password: string; remember: boolean }): void
-    (e: 'register'): void
+    (e: 'register'): void;
     (e: 'forgot'): void
 }>()
 
@@ -78,6 +78,9 @@ function onForgot() {
 }
 function onWechatLogin() {
     // 处理微信登录逻辑
+}
+const toRegister=()=>{
+    emit('register')
 }
 </script>
 
