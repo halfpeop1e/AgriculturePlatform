@@ -1,0 +1,2 @@
+# AgriculturePlatform
+bjtu大三专业综合实训前端项目
