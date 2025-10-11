@@ -15,8 +15,7 @@
                             class="text-3xl mb-1 fancy-underline"
                             role="button"
                             tabindex="0"
-                            @click="onClickExperience"
-                            
+                            @click="onClickExperience"    
                         >
                             立刻体验
                         </div>
@@ -39,7 +38,7 @@ import ImageShow from '~/components/imageShow.vue'
 definePageMeta({ layout: 'home-page-layout' })
 
 function onClickExperience() {
-    
+    navigateTo('/login')
 }
 </script>
 

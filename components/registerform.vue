@@ -1,0 +1,122 @@
+<template>
+    <el-card class="login-card" :body-style="{ padding: '20px' }">
+        <h3 class="title">注册</h3>
+
+        <el-form :model="form" :rules="rules" ref="formRef" label-position="top">
+            <el-form-item label="用户名" prop="username">
+                <el-input v-model="form.username" placeholder="请输入用户名" clearable/>
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+                <el-input v-model="form.email"  placeholder="请输入邮箱" clearable/>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password />
+            </el-form-item>
+            <el-form-item label="确认密码" prop="compassword">
+                <el-input v-model="form.compassword" type="password" placeholder="请确认密码" show-password />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" :loading="loading" @click="onSubmit" style="width:100%">注册</el-button>
+            </el-form-item>
+
+            <div class="register">
+                已有账号？ <a @click.prevent="$emit('login')">登录</a>
+            </div>
+        </el-form>
+    </el-card>
+</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+const emit = defineEmits<{
+    (e: 'submit', payload: { username: string; email:string; password: string; compassword:string  }): void
+    (e: 'register'): void
+    (e: 'forgot'): void
+    (e: 'login'): void
+}>()
+
+const formRef = ref<any>(null)
+const form = ref({ username: '',email:'', password: '',compassword:'' })
+const loading = ref(false)
+
+const rules: Record<string, any> = {
+    username: [{ required: true, message: '请输入用户名或邮箱', trigger: 'blur' }],
+    email: [
+        { required: true, message: '请输入邮箱', trigger: 'blur' },
+        { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] },
+    ],
+    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+     compassword: [
+        { required: true, message: '请确认密码', trigger: [] },
+        {
+            validator: (value: string) => {
+                if (!value) {
+                    return Promise.reject('请确认密码')
+                }
+                if (value !== form.value.password) {
+                    return Promise.reject('两次输入的密码不一致')
+                }
+                return Promise.resolve()
+            },
+            trigger: [],
+        }
+    ]
+}
+async function onSubmit() {
+    if (!formRef.value) return
+        try {
+                await formRef.value.validate()
+        } catch (err) {
+                ElMessage.error('注册失败')
+                 return
+        }
+        loading.value = true
+        try {
+                // 模拟异步请求（替换为真实 API）
+                await new Promise((r) => setTimeout(r, 800))
+                emit('submit', { ...form.value })
+                ElMessage.success('注册成功（模拟）')
+        } catch (err) {
+                ElMessage.error('注册失败')
+        } finally {
+                loading.value = false
+        }
+}
+</script>
+
+<style scoped>
+.login-card {
+    width: 400px;
+    height: 600px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.244);
+}
+.title {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    text-align: center;
+}
+.flex-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.forgot {
+    color: #059669;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.forgot:hover {
+    text-decoration: underline;
+}
+.register {
+    margin-top: 8px;
+    text-align: center;
+    color: #666;
+}
+.register a {
+    color: #059669;
+    cursor: pointer;
+}
+</style>

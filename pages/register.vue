@@ -1,16 +1,17 @@
 <template>
     <div class="flex items-center justify-center h-screen">
-        <LoginForm class="mb-20" @register="handleRegister"/>
+        <RegisterForm class="mb-20" @login="handleLogin"/>
     </div>
 </template>
 
 <script setup lang="ts">
-import LoginForm from '~/components/loginForm.vue';
+
+import RegisterForm from '~/components/registerform.vue';
 
 definePageMeta({ layout: 'home-page-layout' })
 
-const handleRegister=()=>{
-    navigateTo('/register')
+const handleLogin=()=>{
+    navigateTo('/login')
 }
 </script>
 
