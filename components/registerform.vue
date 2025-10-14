@@ -15,6 +15,12 @@
             <el-form-item label="确认密码" prop="compassword">
                 <el-input v-model="form.compassword" type="password" placeholder="请确认密码" show-password />
             </el-form-item>
+            <el-form-item label="验证邮箱" prop="comemail">
+                <div class="flex justify-between w-full">
+                <el-input v-model="comemail" style="width: 70%;" placeholder="请输入验证码"/>
+                <el-button type="success" :loading="loading" @click="onSendCode(form.email)" plain>发送验证码</el-button>
+                </div>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" :loading="loading" @click="onSubmit" style="width:100%">注册</el-button>
             </el-form-item>
@@ -28,37 +34,41 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { onSendCode , onVerifyCode} from '~/composables/useRegister'
+import type { RegisterRequest } from '~/types/register'
+import type { FormRules } from 'element-plus'
 const emit = defineEmits<{
-    (e: 'submit', payload: { username: string; email:string; password: string; compassword:string  }): void
+    (e: 'submit', payload: RegisterRequest): void
     (e: 'register'): void
     (e: 'forgot'): void
     (e: 'login'): void
 }>()
 
 const formRef = ref<any>(null)
-const form = ref({ username: '',email:'', password: '',compassword:'' })
+const form = ref({ username: '',email:'', password: '',compassword:'',isverified:false })
+const comemail=ref<string>('')
 const loading = ref(false)
 
-const rules: Record<string, any> = {
+const rules:  FormRules = {
     username: [{ required: true, message: '请输入用户名或邮箱', trigger: 'blur' }],
     email: [
         { required: true, message: '请输入邮箱', trigger: 'blur' },
         { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] },
     ],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-     compassword: [
-        { required: true, message: '请确认密码', trigger: [] },
+    compassword: [
+        { required: true, message: '请确认密码', trigger: 'blur' },
         {
-            validator: (value: string) => {
+            validator: (rule, value, callback) => {
                 if (!value) {
-                    return Promise.reject('请确认密码')
-                }
-                if (value !== form.value.password) {
-                    return Promise.reject('两次输入的密码不一致')
-                }
-                return Promise.resolve()
-            },
-            trigger: [],
+                callback(new Error('请确认密码'))
+            } else if (value !== form.value.password) {
+                callback(new Error('两次输入的密码不一致'))
+            } else {
+                callback()
+            }
+        },
+            trigger: ['blur', 'change'],
         }
     ]
 }
@@ -71,9 +81,16 @@ async function onSubmit() {
                  return
         }
         loading.value = true
-        try {
-                // 模拟异步请求（替换为真实 API）
-                await new Promise((r) => setTimeout(r, 800))
+        try {   
+                const response=await onVerifyCode(form.value.email,comemail.value)
+                if(response!==200){
+                        ElMessage.error('验证码错误或已过期')
+                        loading.value = false
+                        throw new Error('验证码错误或已过期')
+                }
+                else{
+                        form.value.isverified=true
+                }
                 emit('submit', { ...form.value })
                 ElMessage.success('注册成功（模拟）')
         } catch (err) {
@@ -82,6 +99,7 @@ async function onSubmit() {
                 loading.value = false
         }
 }
+
 </script>
 
 <style scoped>

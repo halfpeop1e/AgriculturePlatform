@@ -28,7 +28,8 @@
     <div style="width: 100%; margin-top: 20px;" class="flex justify-center">
     <DataInHome />      
     </div>
-          
+    <el-divider />
+
 </template>
 
 <script setup lang="ts">

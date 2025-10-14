@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    /* 基本编译选项 */
+    "target": "ES2020",                 /* 编译到的 JavaScript 版本 */
+    "module": "CommonJS",               /* Node.js 使用 CommonJS 模块系统 */
+    "rootDir": "./src",                 /* 源代码目录 */
+    "outDir": "./dist",                 /* 编译后的输出目录 */
+    "strict": true,                     /* 开启严格类型检查 */
+    "esModuleInterop": true,            /* 允许兼容 import/export 语法 */
+    "forceConsistentCasingInFileNames": true, /* 文件名大小写保持一致 */
+    "skipLibCheck": true,               /* 跳过声明文件检查，加快编译速度 */
+
+    /* Node.js 相关支持 */
+    "moduleResolution": "node",
+    "resolveJsonModule": true,          /* 允许导入 JSON 文件 */
+    "types": ["node"],                  /* 引入 Node.js 类型定义 */
+
+    /* 调试支持 */
+    "sourceMap": true                   /* 生成 source map 便于调试 */
+  },
+  "include": ["src"],                   /* 指定要编译的目录 */
+  "exclude": ["node_modules", "dist"]   /* 排除目录 */
+}
