@@ -2,6 +2,7 @@ const store = new Map<string, string>();
 
 export const codeStore = {
   set(email: string, code: string) {
+    store.delete(email);
     store.set(email, code);
     setTimeout(() => store.delete(email), 5 * 60 * 1000); // 5分钟后自动清除
   },

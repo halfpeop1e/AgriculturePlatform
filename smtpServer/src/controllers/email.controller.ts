@@ -8,7 +8,6 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   codeStore.set(email, code);
-  const message = `您的验证码是：${code}\n,`;
   try {
     await sendMail(email,`您好\n您的验证码是：${code}\n,请在5分钟内使用该验证码完成验证。\n如果这不是你在操作，请忽略该邮件。\n\n谢谢`);
     res.status(200).json({ message: "验证码已发送，请检查邮箱" });

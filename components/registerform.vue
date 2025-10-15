@@ -18,8 +18,9 @@
             <el-form-item label="验证邮箱" prop="comemail">
                 <div class="flex justify-between w-full">
                 <el-input v-model="comemail" style="width: 70%;" placeholder="请输入验证码"/>
-                <el-button type="success" :loading="loading" @click="onSendCode(form.email)" plain>发送验证码</el-button>
+                <el-button type="success" :loading="LodingStore.sendLoading" @click="onSendCode(form.email),Countdown(60)" plain>发送验证码</el-button>
                 </div>
+                <div v-if="LodingStore.sendLoading" class="flex items-center">请在{{ count }}秒后重试</div>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" :loading="loading" @click="onSubmit" style="width:100%">注册</el-button>
@@ -37,18 +38,19 @@ import { ElMessage } from 'element-plus'
 import { onSendCode , onVerifyCode} from '~/composables/useRegister'
 import type { RegisterRequest } from '~/types/register'
 import type { FormRules } from 'element-plus'
+import {useLoadingStore} from '../utils/loadingStore'
+const count = ref(0)
 const emit = defineEmits<{
     (e: 'submit', payload: RegisterRequest): void
     (e: 'register'): void
     (e: 'forgot'): void
     (e: 'login'): void
 }>()
-
+const LodingStore=useLoadingStore()
 const formRef = ref<any>(null)
 const form = ref({ username: '',email:'', password: '',compassword:'',isverified:false })
 const comemail=ref<string>('')
 const loading = ref(false)
-
 const rules:  FormRules = {
     username: [{ required: true, message: '请输入用户名或邮箱', trigger: 'blur' }],
     email: [
@@ -98,7 +100,17 @@ async function onSubmit() {
                 loading.value = false
         }
 }
-
+function Countdown(seconds: number) {
+    count.value = seconds
+    const interval = setInterval(() => {
+        if (count.value > 0) {
+            count.value--
+        } else {
+            clearInterval(interval)
+            LodingStore.cancelLoading(false)
+        }
+    }, 1000)
+}
 </script>
 
 <style scoped>
