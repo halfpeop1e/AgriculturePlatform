@@ -92,7 +92,6 @@ async function onSubmit() {
                         form.value.isverified=true
                 }
                 emit('submit', { ...form.value })
-                ElMessage.success('注册成功（模拟）')
         } catch (err) {
                 ElMessage.error('注册失败')
         } finally {
