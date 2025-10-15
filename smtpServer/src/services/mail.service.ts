@@ -13,11 +13,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendMail = async (to: string, subject: string, text: string) => {
+export const sendMail = async (to: string, text: string) => {
   await transporter.sendMail({
     from: `"邮箱验证系统" <${process.env.SMTP_USER}>`,
     to,
-    subject,
+    subject:"验证您的邮箱",
     text,
   });
 };
