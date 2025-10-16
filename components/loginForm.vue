@@ -29,9 +29,14 @@
         <el-divider>或者</el-divider>
 
         <div class="flex-col items-center">
-            <el-button type="success" :loading="loading" @click="onWechatLogin" style="width:100%" plain>
+            <el-button type="success" :loading="loading" @click="onWechatLogin" style="width:100%;margin: 0;" plain>
                 <Wechat :size="20" class="mr-2"/>
-                登录
+                使用微信登录
+            </el-button>
+            <div class="m-4"></div>
+            <el-button color="#303133" :loading="loading" @click="onWechatLogin" style="width:100%; margin: 0;" plain>
+                <Apple :size="20" class="mr-2"/>
+                使用Apple登录
             </el-button>
         </div>
     </el-card>
@@ -40,6 +45,7 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Wechat from './icons/Wechat.vue';
+import Apple from './icons/Apple.vue';
 const emit = defineEmits<{
     (e: 'submit', payload: { username: string; password: string; remember: boolean }): void
     (e: 'register'): void;
