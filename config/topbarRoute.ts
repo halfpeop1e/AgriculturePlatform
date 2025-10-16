@@ -1,14 +1,8 @@
 export const nav = [
   {
-    label: '首页',
-    items: [
-      { label: '首页',routername:'/homePage'},
-    ],
-  },
-  {
     label: '产品交易',
     items: [
-      { label: '所有商品',routername:'/homePage' },
+      { label: '所有商品',routername:'/product/allproduct' },
       { label: '出售/买入',routername:'/homePage'},
       { label: '我的订单',routername:'/homePage' },
     ],

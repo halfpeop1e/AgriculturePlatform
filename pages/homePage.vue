@@ -1,10 +1,10 @@
 <template>
-    <div class="flex">
-        <div style="width: 800px;height:350px; margin-top: 20px;">
-        <imageShow/>  
+    <div class="flex items-center justify-center">
+        <div style="width: 900px;height:350px; margin-top: 20px;">
+        <ImageShow />  
         </div> 
         <el-divider direction="vertical" class="h-full"/>
-        <el-card style="width: 310px;margin-top: 20px;">
+        <el-card style="width: 310px;margin-top: 20px;height: 350px;">
         <div>
         <p class="text-3xl mb-1">平台宗旨</p>
         <div class="text-lg">以数据驱动为核心，融合金融服务与农产品营销，实现产业链上下游的高效对接与智能化管理，助力农业数字化转型。</div>
@@ -12,7 +12,7 @@
         <el-divider/>
         <div>
                         <div
-                            class="text-3xl mb-1 fancy-underline"
+                            class="text-3xl mb-1 fancy-underline text-cyan-700"
                             role="button"
                             tabindex="0"
                             @click="onClickExperience"    
@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import DataInHome from '~/components/dataInHome.vue'
 import ImageShow from '~/components/imageShow.vue'
 definePageMeta({ layout: 'home-page-layout' })
@@ -59,7 +58,7 @@ function onClickExperience() {
     height: 3px;
     background: linear-gradient(90deg, rgb(111, 111, 111), rgb(161, 175, 38),rgb(92, 187, 221));
     border-radius: 4px;
-    transition: width 260ms cubic-bezier(.2,.8,.2,1), opacity 200ms ease;
+    transition: width 850ms cubic-bezier(.2,.8,.2,1), opacity 200ms ease;
     opacity: 0;
 }
 

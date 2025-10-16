@@ -5,7 +5,6 @@
             <!-- 默认插槽内容（会出现在左侧） -->
                 <template #default>
                     <div class="text-white text-xl flex h-full items-center">
-                                        <!-- 可点击的导航项：点击后高亮（色块变深） -->
                                 <el-dropdown class="flex items-center justify-center"
                                     v-for="(item, i) in nav"
                                     :key="i"
@@ -44,9 +43,9 @@
                   </el-avatar>
                 </div>
             </template>
-        </TopBar>
+            </TopBar>
         </div>
-    <div class="flex-col overflow-auto mt-1 ml-16 mr-16">
+    <div class="flex-col overflow-auto mt-1 ml-20 mr-20 items-center">
         <slot/>
     </div>
     </div>
