@@ -1,7 +1,11 @@
 <template>
+    <div>
+        <ImageShow size='500px' :images="Imageitem"/>
+    </div>
+    <el-divider />
     <div class="flex items-center justify-center">
         <div style="width: 900px;height:350px; margin-top: 20px;">
-        <ImageShow />  
+        <ImageShow size="350px"/>  
         </div> 
         <el-divider direction="vertical" class="h-full"/>
         <el-card style="width: 310px;margin-top: 20px;height: 350px;">
@@ -29,12 +33,17 @@
     <DataInHome />      
     </div>
     <el-divider />
+    <div style="width: 100%; margin-top: 20px;" class="flex justify-center">
+        <Contactus/>
+    </div>
 
 </template>
 
 <script setup lang="ts">
 import DataInHome from '~/components/dataInHome.vue'
 import ImageShow from '~/components/imageShow.vue'
+import Contactus from '~/components/Contactus.vue'
+import { Imageitem } from '~/types/imageshow'
 definePageMeta({ layout: 'home-page-layout' })
 
 function onClickExperience() {
