@@ -36,12 +36,20 @@
             <template #end>
                 <div class="flex items-center gap-5">
                    <el-button type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
-                  <el-avatar :size="50" src="https://empty" @error="errorHandler">
-                <img
-                    src=""
-                />
-                  </el-avatar>
-                </div>
+                  <Avatar
+      image="https://avatars.githubusercontent.com/u/9919?s=280&v=4"
+      shape="circle"
+      size="large"
+      class="cursor-pointer border border-gray-300 hover:ring-2 hover:ring-gray-300 transition-all"
+      @click="toggleMenu"
+    />
+    <Menu
+      ref="menu"
+      :model="menuItems"
+      :popup="true"
+      style="margin-top: 10px;margin-left: 10px;"
+    />
+             </div>
             </template>
             </TopBar>
         </div>
@@ -55,19 +63,20 @@
 import { ref } from 'vue'
 import TopBar from '~/components/topBar.vue'
 import { nav } from '~/config/topbarRoute'
-
+import Menu from 'primevue/menu'
+import Avatar from 'primevue/avatar'
+import { menuItems } from '~/config/topbarRoute'
+const menu = ref()
 const handleClick = (routerlink:string) => {
   navigateTo(routerlink)
 }
-
+const toggleMenu = (event: Event) => {
+  menu.value.toggle(event)
+}
 const activeIndex = ref(0)
 
 function setActive(i: number) {
     activeIndex.value = i
-}
-
-const errorHandler = () => {
-    return true
 }
 </script>
 

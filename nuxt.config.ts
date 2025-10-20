@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-
+import Aura from '@primeuix/themes/aura';
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -9,7 +9,15 @@ export default defineNuxtConfig({
     '@element-plus/nuxt',
     '@pinia/nuxt',
     'nuxt-icons',
+    '@primevue/nuxt-module',
   ],
+  primevue: {
+    options: {
+            theme: {
+                preset: Aura
+            }
+        }
+  },
   elementPlus: { 
 
     },

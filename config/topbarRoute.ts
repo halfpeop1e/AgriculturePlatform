@@ -1,3 +1,4 @@
+import  {testprofile} from "~/types/test"
 export const nav = [
   {
     label: '产品交易',
@@ -34,3 +35,23 @@ export const nav = [
   },
  
 ]
+export const menuItems = ref([
+  {
+    label: '个人中心',
+    icon: 'pi pi-user',
+    command: () => navigateTo(`/profile/${testprofile.userId}`)
+ },
+  {
+    label: '设置',
+    icon: 'pi pi-cog',
+    command: () => navigateTo('/settings')
+  },
+  {
+    separator: true
+  },
+  {
+    label: '退出登录',
+    icon: 'pi pi-sign-out',
+    command: () => console.log('退出登录')
+  }
+])
