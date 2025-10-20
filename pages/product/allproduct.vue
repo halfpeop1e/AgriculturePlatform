@@ -24,9 +24,10 @@
 
 <script setup lang="ts">
 import ProductCard from '~/components/productCard.vue'
-
+import { getProductList } from '~/composables/getProduct'
 definePageMeta({ layout: 'home-page-layout' })
 const loading=false
+const productslist=await getProductList()
 const products = ref([
   {
     name: '绿色有机苹果',
