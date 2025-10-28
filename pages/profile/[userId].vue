@@ -1,7 +1,7 @@
 <template>
-    <section class="min-h-[calc(100vh-120px)] bg-gradient-to-tr from-indigo-500/10 to-emerald-500/10 flex items-center justify-center py-8 px-4">
+    <section class=" bg-gradient-to-tr from-indigo-500/10 to-emerald-500/10 flex items-center justify-center py-8 px-4 h-full">
         <el-card
-            class="w-full max-w-4xl border-none shadow-xl rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg"
+            class="w-full h-full  border-none shadow-xl rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg"
             shadow="hover"
             :body-style="{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }"
         >
@@ -75,7 +75,7 @@
 import { reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Message, Phone, Position, Timer } from '@element-plus/icons-vue'
-definePageMeta({ layout: 'home-page-layout' })
+definePageMeta({ layout: 'profile-page-layout' })
 
 const profile = reactive({
     userId: 2,
