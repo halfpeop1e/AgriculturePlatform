@@ -5,7 +5,7 @@
     <el-divider />
     <div class="flex items-center justify-center">
         <div style="width: 900px;height:350px; margin-top: 20px;">
-        <ImageShow size="350px"/>  
+        <ImageShow size="350px" :images="Imageitem"/>  
         </div> 
         <el-divider direction="vertical" class="h-full"/>
         <el-card style="width: 310px;margin-top: 20px;height: 350px;">

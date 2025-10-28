@@ -3,34 +3,34 @@ export const nav = [
   {
     label: '产品交易',
     items: [
-      { label: '所有商品',routername:'/product/allproduct' },
-      { label: '出售/买入',routername:'/homePage'},
-      { label: '我的订单',routername:'/homePage' },
+      { label: '所有商品',routername:'/product/allproduct',icon: 'pi pi-fw pi-shopping-cart' },
+      { label: '出售/买入',routername:'/homePage',icon: 'pi pi-fw pi-tags' },
+      { label: '我的订单',routername:'/homePage',icon: 'pi pi-fw pi-list' },
     ],
   },
   {
     label: '专家问答',
     items: [
-      { label: '问题汇总',routername:'/homePage' },
-      { label: '联系专家' ,routername:'/homePage'},
-      { label: '提问',routername:'/homePage' },
+      { label: '问题汇总',routername:'/homePage',icon: 'pi pi-fw pi-comments' },
+      { label: '联系专家' ,routername:'/homePage',icon: 'pi pi-fw pi-user-plus'},
+      { label: '提问',routername:'/homePage' ,icon: 'pi pi-fw pi-question-circle' },
     ],
   },
   {
     label: '金融产品',
     items:[
       {
-        label:'贷款产品',routername:'/homePage'
+        label:'贷款产品',routername:'/homePage',icon: 'pi pi-fw pi-wallet'
       },
       {
-        label:'金融产品',routername:'/homePage'
+        label:'金融产品',routername:'/homePage',icon: 'pi pi-fw pi-chart-line'
       },
     ]
   },
   {
     label: '农业知识',
     items: [
-        { label: '农业知识',routername:'/homePage' },
+        { label: '农业知识',routername:'/homePage',icon: 'pi pi-fw pi-book' },
     ],
   },
  
