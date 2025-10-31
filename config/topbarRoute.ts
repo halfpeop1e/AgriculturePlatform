@@ -5,7 +5,7 @@ export const nav = [
     items: [
       { label: '所有商品',routername:'/product/allproduct',icon: 'pi pi-fw pi-shopping-cart' },
       { label: '出售/买入',routername:'/product/sellproduct',icon: 'pi pi-fw pi-tags' },
-      { label: '我的订单',routername:'/homePage',icon: 'pi pi-fw pi-list' },
+      { label: '我的订单',routername:'/product/myorder/my_buy',icon: 'pi pi-fw pi-list' },
     ],
   },
   {
@@ -35,16 +35,17 @@ export const nav = [
   },
  
 ]
-export const menuItems = ref([
+// 导出为纯数据（不包含函数），在运行时由调用方构建带 command 的模型
+export const menuData = [
   {
     label: '个人中心',
     icon: 'pi pi-user',
-    command: () => navigateTo(`/profile/${testprofile.userId}`)
- },
+    to: `/profile/${testprofile.userId}`
+  },
   {
     label: '设置',
     icon: 'pi pi-cog',
-    command: () => navigateTo('/settings')
+    to: '/settings'
   },
   {
     separator: true
@@ -52,6 +53,6 @@ export const menuItems = ref([
   {
     label: '退出登录',
     icon: 'pi pi-sign-out',
-    command: () => console.log('退出登录')
+    action: 'logout'
   }
-])
+]
