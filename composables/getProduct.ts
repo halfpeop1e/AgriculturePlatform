@@ -1,4 +1,4 @@
-import { useAxios } from "./useAxios";
+import { useAxios } from "./useAxios"
 import type{ productResponse } from "~/types/product";
 const useAxiosInstance=useAxios()
 export async function getProductList(){

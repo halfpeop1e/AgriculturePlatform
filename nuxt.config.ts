@@ -2,6 +2,9 @@
 import Aura from '@primeuix/themes/aura';
 
 export default defineNuxtConfig({
+   build: {
+    transpile: ['vuetify'],
+  },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css',
@@ -12,6 +15,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icons',
     '@primevue/nuxt-module',
+    
   ],
   primevue: {
     options: {
