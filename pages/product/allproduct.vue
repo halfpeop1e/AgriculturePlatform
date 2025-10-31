@@ -16,20 +16,27 @@
         :key="index"
         class="product-item"
       >
-        <ProductCard :product="item" />
+        <ProductCard :product="item" @open-dialog="dialogControler.openDialog(item)"/>
       </li>
     </ul>
+     <Comfirmbuy :product="comfirmproduct.product" :show-dialog="showDialog" @close-dialog="dialogControler.closeDialog"/>
   </div>
+  
 </template>
 
 <script setup lang="ts">
+import Comfirmbuy from '~/components/comfirmbuy.vue'
 import ProductCard from '~/components/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
+import { useComfirmBuyStore } from '~/utils/comfirmBuyStore'
 definePageMeta({ layout: 'home-page-layout' })
+const showDialog = ref(false)
+const comfirmproduct=useComfirmBuyStore()
 const loading=false
 const productslist=await getProductList()
 const products = ref([
   {
+    id:'1',
     name: '绿色有机苹果',
     image: '/images/apple.jpg',
     description: '源自无污染果园，新鲜香甜可口，富含维生素C。',
@@ -38,6 +45,7 @@ const products = ref([
     saler: '果园直供'
   },
   {
+    id:'2',
     name: '土鸡蛋',
     image: '/images/egg.jpg',
     description: '农家散养土鸡，新鲜营养不打药。',
@@ -46,6 +54,7 @@ const products = ref([
     saler: '农家直供'
   },
   {
+    id:'3',
     name: '香甜玉米',
     image: '/images/corn.jpg',
     description: '现摘玉米粒饱满，香糯可口。',
@@ -54,7 +63,17 @@ const products = ref([
     saler: '田园直供'
   }
 ])
-
+class dialogControl{
+  openDialog(product:any){
+    comfirmproduct.setProduct(product)
+    showDialog.value=true
+  }
+  closeDialog(){
+    showDialog.value=false
+    comfirmproduct.resetProduct()
+  }
+}
+const dialogControler=new dialogControl()
 // 模拟懒加载
 const load = () => {
   setTimeout(() => {
@@ -62,6 +81,7 @@ const load = () => {
       ...Array(3)
         .fill(0)
         .map((_, i) => ({
+          id: (products.value.length + i + 1).toString(),
           name: `助农产品 ${products.value.length + i + 1}`,
           image: '/testproductimg.jpg',
           description: '助农优质产品，品质保障。',

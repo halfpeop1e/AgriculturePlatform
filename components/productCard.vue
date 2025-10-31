@@ -35,16 +35,26 @@
             剩余：{{ product.stock }} 件
           </div>
         </div>
-         <div class=" text-xl flex-1 leading-relaxed">
+         
+        <div class="flex justify-end mt-2">
+          <div class=" text-xl flex-1 leading-relaxed">
          商户：{{ product.saler }}
+          </div>
+          <el-button type="success" size="default" @click="openBuyDialog">购买</el-button>
         </div>
       </div>
     </div>
   </el-card>
+
+  
+
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 interface Product {
+  id: string
   name: string
   image: string
   description: string
@@ -56,8 +66,16 @@ interface Product {
 const props = defineProps<{
   product: Product
 }>()
-</script>
 
+
+function openBuyDialog() {
+  emit('openDialog')
+}
+const emit = defineEmits<{
+    (e: 'openDialog'): void
+  }>()
+
+</script>
 <style scoped>
 .aspect-\[4\/3\] {
   aspect-ratio: 4 / 3;
