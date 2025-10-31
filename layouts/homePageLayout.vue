@@ -60,13 +60,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import TopBar from '~/components/topBar.vue'
-import { nav } from '~/config/topbarRoute'
+import { nav, menuData } from '~/config/topbarRoute'
 import Menu from 'primevue/menu'
 import Avatar from 'primevue/avatar'
-import { menuItems } from '~/config/topbarRoute'
 const menu = ref()
+
+// 在运行时把纯数据转换为 PrimeVue Menu 所需的 model（包含 command 函数）
+const menuItems = computed(() =>
+    menuData.map((m) => {
+        if ((m as any).separator) return { separator: true }
+        if ((m as any).action === 'logout') {
+            return {
+                label: m.label,
+                icon: m.icon,
+                command: () => console.log('退出登录')
+            }
+        }
+        return {
+            label: m.label,
+            icon: m.icon,
+            command: () => navigateTo((m as any).to)
+        }
+    })
+)
 const handleClick = (routerlink:string) => {
   navigateTo(routerlink)
 }
