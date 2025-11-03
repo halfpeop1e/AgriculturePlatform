@@ -1,8 +1,9 @@
 import { useAxios } from "./useAxios"
-export async function getOrderList(type:string){
+import type{ Order } from "~/types/myOrder";
+export async function getOrderList(){
     try{
         const useAxiosInstance=useAxios()
-        const response=await useAxiosInstance.get(`/order/list/type=${type}`)
+        const response=await useAxiosInstance.get<Order[]>(`/order/list`)
         if(response.status===200){
             console.log('获取订单列表成功',response.data)
             return response.data

@@ -30,7 +30,7 @@ export const nav = [
   {
     label: '农业知识',
     items: [
-        { label: '农业知识',routername:'/homePage',icon: 'pi pi-fw pi-book' },
+        { label: '农业知识',routername:'/knowledge',icon: 'pi pi-fw pi-book' },
     ],
   },
  
