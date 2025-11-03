@@ -1,0 +1,11 @@
+[mainConfig]
+appName = "agriculture-service"
+host = "127.0.0.1"
+port = 8080
+
+[postgreConfig]
+host = "47.94.106.89"
+port = 5432
+user = "postgres"
+password = "123456"
+db = "friday"
