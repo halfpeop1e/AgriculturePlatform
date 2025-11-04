@@ -6,21 +6,6 @@
     <div class="flex flex-col md:flex-row">
       <!-- Image on the left for md+ screens, top for small screens -->
       <div class="flex-shrink-0 bg-gray-100 overflow-hidden" style="width: 300px;">
-        <div class="w-full h-44 md:h-full">
-          <el-image
-            v-if="article.image"
-            :src="article.image"
-            alt="cover"
-            class="w-full h-full object-cover"
-            fit="cover"
-          >
-            <template #error>
-              <div class="w-full h-full flex items-center justify-center bg-gray-100">
-                <el-icon><IconPicture /></el-icon>
-              </div>
-            </template>
-          </el-image>
-        </div>
       </div>
       <!-- Text content -->
       <div class="p-4 flex-1">
@@ -48,7 +33,6 @@
 
 <script setup lang="ts">
 import type { KnowledgeArticle } from '~/types/knowledgeArticle'
-import { Picture as IconPicture } from '@element-plus/icons-vue'
 const props = defineProps<{ article: KnowledgeArticle }>()
 const emit = defineEmits<{
   (e: 'open', id: string): void

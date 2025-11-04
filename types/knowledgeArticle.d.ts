@@ -3,7 +3,6 @@ export interface KnowledgeArticle {
   title: string
   excerpt: string
   content: string
-  image?: string
   tags?: string[]
   author: string
   date: string
