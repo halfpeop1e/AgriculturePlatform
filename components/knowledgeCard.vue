@@ -4,9 +4,6 @@
     @click="$emit('open', article.id)"
   >
     <div class="flex flex-col md:flex-row">
-      <!-- Image on the left for md+ screens, top for small screens -->
-      <div class="flex-shrink-0 bg-gray-100 overflow-hidden" style="width: 300px;">
-      </div>
       <!-- Text content -->
       <div class="p-4 flex-1">
         <div class="flex items-center gap-2 mb-3 flex-wrap">
