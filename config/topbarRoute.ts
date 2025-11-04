@@ -20,10 +20,10 @@ export const nav = [
     label: '金融产品',
     items:[
       {
-        label:'贷款产品',routername:'/homePage',icon: 'pi pi-fw pi-wallet'
+        label:'贷款产品',routername:'/money/loan',icon: 'pi pi-fw pi-wallet'
       },
       {
-        label:'金融产品',routername:'/homePage',icon: 'pi pi-fw pi-chart-line'
+        label:'金融产品',routername:'/money/finance',icon: 'pi pi-fw pi-chart-line'
       },
     ]
   },

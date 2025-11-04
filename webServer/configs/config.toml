@@ -9,3 +9,7 @@ port = 5432
 user = "postgres"
 password = "123456"
 db = "friday"
+
+[staticSrcConfig]
+staticAvatarPath = "E:/nuxt/AgriculturePlatform/webServer/static/avatars"
+staticFilePath = "E:/nuxt/AgriculturePlatform/webServer/static/file"
