@@ -13,6 +13,7 @@
     "@element-plus/icons-vue": "^2.3.2",
     "@element-plus/nuxt": "^1.1.4",
     "@mdi/font": "^7.4.47",
+    "@nuxtjs/tailwindcss": "^6.14.0",
     "@pinia/nuxt": "^0.11.2",
     "@primeuix/themes": "^1.2.5",
     "@primevue/nuxt-module": "^4.4.1",

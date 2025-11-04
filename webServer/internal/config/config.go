@@ -15,9 +15,15 @@ type PostgreConfig struct {
 	Db       string `toml:"db"`
 }
 
+type StaticSrcConfig struct {
+	StaticAvatarPath string `toml:"staticAvatarPath"`
+	StaticFilePath   string `toml:"staticFilePath"`
+}
+
 type Config struct {
-	MainConfig    `toml:"mainConfig"`
-	PostgreConfig `toml:"mysqlConfig"`
+	MainConfig      `toml:"mainConfig"`
+	PostgreConfig   `toml:"mysqlConfig"`
+	StaticSrcConfig `toml:"staticSrcConfig"`
 }
 
 var config *Config

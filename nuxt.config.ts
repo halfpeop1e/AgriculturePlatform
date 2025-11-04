@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icons',
     '@primevue/nuxt-module',
-    
+    '@nuxtjs/tailwindcss'
   ],
   primevue: {
     options: {
