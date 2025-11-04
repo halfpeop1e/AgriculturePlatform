@@ -5,6 +5,13 @@ export interface KnowledgeArticle {
   content: string
   image?: string
   tags?: string[]
-  author?: string
-  date?: string
+  author: string
+  date: string
+}
+export interface KnowledgeArticleContent{
+    id: string
+    title: string
+    content: string
+    author:string
+    date:string
 }

@@ -1,5 +1,6 @@
 import type { KnowledgeArticle } from '@/types/knowledgeArticle'
 import { defineStore } from 'pinia'
+import { getKnowledgeArticleList } from '~/composables/useArticle'
 export const ARTICLES: KnowledgeArticle[] = [
   {
     id: '1',
@@ -37,8 +38,9 @@ export const useKnowledgeDataStore = defineStore('knowledgeDataStore', {
     articles: [] as KnowledgeArticle[]
   }),
   actions: {
-    getArticleById(id: string): KnowledgeArticle | undefined {
-      return this.articles.find(article => article.id === id)
+    setArticles() {
+      const responseList = getKnowledgeArticleList()
+      this.articles = responseList as unknown as KnowledgeArticle[]
     }
   }
 }) 
