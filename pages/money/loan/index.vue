@@ -47,9 +47,12 @@
     </div>
   </div>
   <div
-    class=" h-screen flex items-center justify-center"
+    class=" h-screen flex flex-col gap-10 items-center justify-center"
     ref="section2"
   >
+  <div class="text-center text-3xl mb-11">
+    Ave木吉卡金融 是本平台推出的金融服务，提供贷款功能，为用户带来简约的贷款服务。
+  </div>
     <div
       class="w-1/2 h-1/2 bg-slate-100 rounded-lg grid grid-rows-[100px_1fr] grid-flow-col overflow-hidden gap-1"
     >
@@ -86,8 +89,8 @@
           <el-button type="primary" size="large"> 还款 </el-button>
         </div>
         <div class="col-span-2 px-10">
-          <div class="flex flex-col gap-2 items-center">
-            <span class="text-blue-500 ">{{ nextMonth }}应还(元)</span>
+          <div class="flex flex-col gap-3 items-center">
+            <span class="text-blue-500 ">{{ nextMonth }}月应还(元)</span>
             <span class="text-3xl">已还清</span>
           </div>
         </div>
@@ -116,7 +119,7 @@ const nextPage = () => {
 };
 
 const now = new Date
-const nextMonth = now.getMonth()+1
+const nextMonth = now.getMonth() + 2
 </script>
 
 <style scoped></style>
