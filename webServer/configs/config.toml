@@ -13,3 +13,7 @@ db = "friday"
 [staticSrcConfig]
 staticAvatarPath = "E:/nuxt/AgriculturePlatform/webServer/static/avatars"
 staticFilePath = "E:/nuxt/AgriculturePlatform/webServer/static/file"
+
+[jwtConfig]
+jwtSecret = "bjtu"
+jwtExpireTime = 36000
