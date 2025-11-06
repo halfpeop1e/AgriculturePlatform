@@ -4,7 +4,7 @@ export const useUserStore = defineStore('userStore', {
     state:()=>({
     userinfo:{
     userId: '',
-    nickname:'',
+    nickname:'nickname',
     email:'' ,
     avatar: '',
     bio:  '',
