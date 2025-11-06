@@ -20,10 +20,16 @@ type StaticSrcConfig struct {
 	StaticFilePath   string `toml:"staticFilePath"`
 }
 
+type JwtConfig struct {
+	JwtSecret     string `toml:"jwtSecret"`
+	JwtExpireTime int64  `toml:"jwtExpireTime"`
+}
+
 type Config struct {
 	MainConfig      `toml:"mainConfig"`
 	PostgreConfig   `toml:"mysqlConfig"`
 	StaticSrcConfig `toml:"staticSrcConfig"`
+	JwtConfig       `toml:"jwtConfig"`
 }
 
 var config *Config
