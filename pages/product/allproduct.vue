@@ -1,5 +1,6 @@
 <template>
-    <div v-if="loading">
+    <div>
+      <div v-if="loading">
     <div class="m-10"></div>
     <el-skeleton :rows="4" animated />
     <div class="m-10"></div>
@@ -21,6 +22,7 @@
     </ul>
      <Comfirmbuy :product="comfirmproduct.product" :show-dialog="showDialog" @close-dialog="dialogControler.closeDialog"/>
   </div>
+    </div>
   
 </template>
 
