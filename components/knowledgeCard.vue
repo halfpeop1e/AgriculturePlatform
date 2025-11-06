@@ -1,7 +1,6 @@
 <template>
   <div
     class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer"
-    @click="$emit('open', article.id)"
   >
     <div class="flex flex-col md:flex-row">
       <!-- Text content -->
@@ -31,9 +30,6 @@
 <script setup lang="ts">
 import type { KnowledgeArticle } from '~/types/knowledgeArticle'
 const props = defineProps<{ article: KnowledgeArticle }>()
-const emit = defineEmits<{
-  (e: 'open', id: string): void
-}>()
 </script>
 
 <style scoped>

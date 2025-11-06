@@ -1,5 +1,7 @@
 <template>
-   <div className="min-h-screen flex flex-col items-center pt-10 gap-4">
+   <!-- Single root wrapper required so <Transition> can animate route changes -->
+   <div>
+      <div class="min-h-screen flex flex-col items-center pt-10 gap-4">
          <div class=" bg-slate-500/45 h-[240px] w-2/3 grid grid-cols-[220px_1fr] rounded-lg overflow-hidden items-center">
             <el-image style="width: 200px; height: 240px" :src="farmer1" :fit="'cover'" />
             <div class="grid grid-flow-col grid-rows-[66px_1fr_66px] h-full">
@@ -24,10 +26,11 @@
             </div>
             </div>
          </div>
-    </div>
-    <div class=" bg-red-300 h-screen flex items-center justify-center" ref="section2">
-      to be continued
-    </div>
+      </div>
+      <div class=" bg-red-300 h-screen flex items-center justify-center" ref="section2">
+         to be continued
+      </div>
+   </div>
 
 </template>
 

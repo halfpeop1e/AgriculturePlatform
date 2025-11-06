@@ -1,7 +1,8 @@
 <template>
     <div>
+      <div>
         <ImageShow size='500px' :images="Imageitem"/>
-    </div>
+      </div>
     <el-divider />
     <div class="flex items-center justify-center">
         <div style="width: 900px;height:350px; margin-top: 20px;">
@@ -36,7 +37,7 @@
     <div style="width: 100%; margin-top: 20px;" class="flex justify-center">
         <Contactus/>
     </div>
-
+  </div>
 </template>
 
 <script setup lang="ts">

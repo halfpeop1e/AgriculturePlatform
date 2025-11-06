@@ -42,7 +42,7 @@
           v-for="a in filtered"
           :key="a.id"
           :article="a"
-          @open="openArticle"
+          @click="openArticle(a.id,a.title,a.author,a.date)"
         />
       </div>
 
@@ -81,8 +81,18 @@ const filtered = computed(() => {
   })
 })
 
-function openArticle(id: string) {
-  router.push({ path: `/knowledge/${id}` })
+function openArticle(id: string,title: string,author:string,date:string) {
+  navigateTo({
+    path: `/knowledge/${id}`,
+    state: {
+      articleData: {
+        id,
+        title,
+        author,
+        date,
+      }
+    }
+  })
 }
 
 function clearTags() {

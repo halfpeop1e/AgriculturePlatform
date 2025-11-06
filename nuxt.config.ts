@@ -9,7 +9,14 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css',
     'primeicons/primeicons.css',
+    '~/assets/css/transitions.css',
   ],
+  app: {
+    pageTransition: { 
+      name: 'fade', 
+      mode: 'out-in' 
+    }
+  },
   modules: [
     '@element-plus/nuxt',
     '@pinia/nuxt',
