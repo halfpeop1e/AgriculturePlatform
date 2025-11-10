@@ -18,4 +18,11 @@ func init() {
 	GE.Use(cors.New(corsConfig))
 	GE.Static("/static/avatars", config.GetConfig().StaticAvatarPath)
 	GE.Static("/static/files", config.GetConfig().StaticFilePath)
+
+	private := GE.Group("/api")
+	private.Use(JWTAuthMiddleware())
+	{
+
+	}
+
 }
