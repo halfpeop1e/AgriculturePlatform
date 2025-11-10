@@ -8,7 +8,7 @@
             <button class="text-lg font-bold mr-4" @click="navigateTo('/homePage')">农产品融销一体平台</button>
             </div>
         <nav class="p-6 space-y-8">
-            <div v-for="section in nav" :key="section.label" class="space-y-3">
+            <div v-for="section in porps.nav" :key="section.label" class="space-y-3">
                 <h2 class="text-xl font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                     {{ section.label }}
                 </h2>
@@ -42,12 +42,18 @@
 
 <script setup lang="ts">
 import { ArrowRightBold } from '@element-plus/icons-vue'
+import type{ RouteType } from '~/types/routes'
 import { nav } from '~/config/topbarRoute'
 import buttonStore from "~/utils/buttonStore"
 const buttonstore = buttonStore();
 const visible = ref(true);
 const route = useRoute()
-
+const porps=defineProps({
+    nav:{
+      type:Array as () => RouteType[],
+      required:true,
+    }
+})
 function isActive(path: string) {
     return route.path === path
 }

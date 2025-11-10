@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-screen">
-        <SizeBar />
+        <SizeBar :nav="nav"/>
         <div class="flex-1 overflow-auto h-full">
             <slot />
         </div>
@@ -14,6 +14,7 @@
 import SizeBar from '~/components/sizeBar.vue'
 import buttonStore from "~/utils/buttonStore"
 import { Expand } from '@element-plus/icons-vue'
+import {nav} from '~/config/topbarRoute'
 const buttonstore = buttonStore();
 function toggleSidebar() {
     buttonstore.isvisible = !buttonstore.isvisible;

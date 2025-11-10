@@ -45,7 +45,7 @@ export const menuData = [
   {
     label: '设置',
     icon: 'pi pi-cog',
-    to: '/settings'
+    to: '/setting'
   },
   {
     separator: true
