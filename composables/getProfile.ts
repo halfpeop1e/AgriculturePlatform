@@ -2,10 +2,10 @@ import {useAxios} from '~/composables/useAxios'
 import type { profileResponse } from '~/types/profile'
 import { useUserStore } from '~/utils/userStore'
 const useAxiosInstance=useAxios()
-export async function getUserProfile(email:string){
+export async function getUserProfile(){
     const userStore=useUserStore()
     try{
-        const response=await useAxiosInstance.get<profileResponse>(`/user/profile/${email}`)
+        const response=await useAxiosInstance.get<profileResponse>(`/user/profile/${userStore.userId}`)
         if(response.status===200){
             console.log('获取用户资料成功')
             try{
