@@ -13,7 +13,7 @@ export async function changeUserProfile(profileData:{
 }){
     const userStore=useUserStore()
     try{
-        const response=await useAxiosInstance.post(`/user/profile/${userStore.userinfo.userId}/update`,profileData)
+        const response=await useAxiosInstance.post(`/user/profile/${userStore.userId}/update`,profileData)
         if(response.status===200){
             console.log('修改用户资料成功')
             return true
@@ -34,7 +34,7 @@ export async function securityChangeInfo(securityData:{
 }){
    try{
         const userStore=useUserStore()
-        const response=await useAxiosInstance.post(`/user/security/${userStore.userinfo.userId}/update`,securityData)
+        const response=await useAxiosInstance.post(`/user/security/${userStore.userId}/update`,securityData)
         if(response.status===200){
             console.log('修改用户安全信息成功')
             return true
