@@ -1,5 +1,4 @@
-export interface profileResponse {
-    userId: string;
+export interface profileResponse{
     nickname:string;
     email:string ;
     avatar: string;
