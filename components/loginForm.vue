@@ -3,8 +3,8 @@
         <h3 class="title">登录</h3>
 
         <el-form :model="form" :rules="rules" ref="formRef" label-position="top">
-            <el-form-item label="用户名或邮箱" prop="username">
-                <el-input v-model="form.username" placeholder="请输入用户名或邮箱" clearable class="h-10"/>
+            <el-form-item label="邮箱" prop="useremail">
+                <el-input v-model="form.useremail" placeholder="请输入邮箱" clearable class="h-10"/>
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
@@ -47,17 +47,16 @@ import { ElMessage } from 'element-plus'
 import Wechat from './icons/Wechat.vue';
 import Apple from './icons/Apple.vue';
 const emit = defineEmits<{
-    (e: 'submit', payload: { username: string; password: string; remember: boolean }): void
     (e: 'register'): void;
     (e: 'forgot'): void
 }>()
 
 const formRef = ref<any>(null)
-const form = ref({ username: '', password: '', remember: false })
+const form = ref({ useremail: '', password: '', remember: false })
 const loading = ref(false)
 
 const rules = {
-    username: [{ required: true, message: '请输入用户名或邮箱', trigger: 'blur' }],
+    useremail: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 }
 
@@ -67,9 +66,14 @@ async function onSubmit() {
         if (!valid) return
         loading.value = true
         try {
-            // 模拟异步请求（替换为真实 API）
-            await new Promise((r) => setTimeout(r, 800))
-            emit('submit', { ...form.value })
+            const response=await loginUser({
+                username: form.value.useremail,
+                password: form.value.password,
+            })
+            getUserProfile()
+            if(form.value.remember){
+                setCookie("AuthToken" ,response?.tokens,1)
+            }
             ElMessage.success('登录成功（模拟）')
         } catch (err) {
             ElMessage.error('登录失败')
