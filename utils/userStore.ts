@@ -3,10 +3,8 @@ import type { profileResponse } from '~/types/profile'
 export const useUserStore = defineStore('userStore', {
     state:()=>({
     userinfo:{
-    userId: '',
     nickname:'nickname',
     email:'' ,
-    avatar: '',
     bio:  '',
     tags: [''],
     location:'' ,
@@ -14,15 +12,17 @@ export const useUserStore = defineStore('userStore', {
     phone: '',
     address:'' ,
     lastActive: '',
-    }
-     
+    },
+    userId: '',
+    avatar: '',
+    islogin:false,
+    tokens:'',
     }),
     actions:{
         setUserProfile(profile:profileResponse){
-            this.userinfo.userId=profile.userId
             this.userinfo.nickname=profile.nickname
             this.userinfo.email=profile.email
-            this.userinfo.avatar=profile.avatar
+            this.avatar=profile.avatar
             this.userinfo.bio=profile.bio
             this.userinfo.tags=profile.tags
             this.userinfo.location=profile.location
@@ -30,6 +30,15 @@ export const useUserStore = defineStore('userStore', {
             this.userinfo.phone=profile.phone
             this.userinfo.address=profile.address
             this.userinfo.lastActive=profile.lastActive
+        },
+        LoginSet(){
+            this.islogin=true
+        },
+        LogoutSet(){
+            this.userId=''
+            this.avatar=''
+            this.islogin=false
+            this.tokens=''
         }
     }
 })
