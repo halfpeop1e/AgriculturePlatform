@@ -4,7 +4,7 @@ import axios from "axios";
 // 在 Axios 请求中自动注入 JWT Token（从 cookie 或 localStorage）
 export const useAxios = () => {
   const AxiosInstance = axios.create({
-    baseURL: "http://localhost:3001/", // 对应你 Node.js 后端接口
+    baseURL: "http://47.94.106.89:8080/", // 对应你 Node.js 后端接口
     timeout: 5000,
   });
 

@@ -27,7 +27,7 @@ type JwtConfig struct {
 
 type Config struct {
 	MainConfig      `toml:"mainConfig"`
-	PostgreConfig   `toml:"mysqlConfig"`
+	PostgreConfig   `toml:"postgreConfig"`
 	StaticSrcConfig `toml:"staticSrcConfig"`
 	JwtConfig       `toml:"jwtConfig"`
 }
