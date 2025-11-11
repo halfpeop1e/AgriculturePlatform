@@ -8,7 +8,7 @@ export async function PostProduct(formData:any){
     try{
         const response=await useAxiosInstance.post<postProductRequest>('/product/sell',{
             formData,
-            salerId:UserStore.userinfo.userId
+            salerId:UserStore.userId
         },
         {
             headers:{
