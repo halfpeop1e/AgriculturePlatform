@@ -6,7 +6,7 @@
             :body-style="{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }"
         >
             <div class="flex flex-col gap-6 md:flex-row md:items-center">
-                <el-avatar :size="96" :src="profile.avatar" alt="用户头像">
+                <el-avatar :size="96" :src="userStore.avatar" alt="用户头像">
                     {{ profile.nickname.charAt(0) }}
                 </el-avatar>
                 <div class="flex-1 min-w-[220px] space-y-3">
@@ -76,8 +76,8 @@ import { reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Message, Phone, Position, Timer } from '@element-plus/icons-vue'
 definePageMeta({ layout: 'profile-page-layout' })
-
-const profile = reactive({
+const userStore = useUserStore()
+const profile = userStore.userinfo||reactive({
     userId: 2,
     nickname: 'hyw1',
     email: 'fengzhu@example.com',
