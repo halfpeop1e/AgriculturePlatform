@@ -1,5 +1,5 @@
-import { User } from '@element-plus/icons-vue'
 import {useAxios} from '~/composables/useAxios'
+import moment from 'moment'
 import type { LoginRequest,LoginResponse } from '~/types/login'
 const useAxiosInstance=useAxios()
 export async function loginUser(loginData:LoginRequest){
@@ -10,6 +10,7 @@ export async function loginUser(loginData:LoginRequest){
             console.log('用户登录成功',response.data)
             UserStore.userId=response.data.userId
             UserStore.tokens=response.data.tokens
+            UserStore.islogin=true
             return response.data
         }
         else{

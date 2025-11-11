@@ -11,8 +11,9 @@ export const useUserStore = defineStore('userStore', {
     joinedAt:'' ,
     phone: '',
     address:'' ,
-    lastActive: '',
+    
     },
+    lastActive: '',
     userId: '',
     avatar: '',
     islogin:false,
@@ -29,7 +30,7 @@ export const useUserStore = defineStore('userStore', {
             this.userinfo.joinedAt=profile.joinedAt
             this.userinfo.phone=profile.phone
             this.userinfo.address=profile.address
-            this.userinfo.lastActive=profile.lastActive
+            this.lastActive=profile.lastActive
         },
         LoginSet(){
             this.islogin=true

@@ -24,7 +24,7 @@
 
             <div class="register">
                 还没有账号？ <a @click.prevent="toRegister">注册</a>
-            </div>
+           </div>
         </el-form>
         <el-divider>或者</el-divider>
 
@@ -49,6 +49,7 @@ import Apple from './icons/Apple.vue';
 const emit = defineEmits<{
     (e: 'register'): void;
     (e: 'forgot'): void
+    (e: 'setactivetime'): void;
 }>()
 
 const formRef = ref<any>(null)
@@ -71,6 +72,7 @@ async function onSubmit() {
                 password: form.value.password,
             })
             getUserProfile()
+            emit('setactivetime')
             if(form.value.remember){
                 setCookie("AuthToken" ,response?.tokens,1)
             }

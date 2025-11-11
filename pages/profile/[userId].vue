@@ -60,7 +60,7 @@
                             </li>
                             <li class="flex items-center gap-2 text-slate-600 dark:text-slate-300 text-sm">
                                 <el-icon><Timer /></el-icon>
-                                <span>最近活跃：{{ profile.lastActive }}</span>
+                                <span>最近活跃：{{ userStore.lastActive }}</span>
                             </li>
                         </ul>
                         <el-button class="w-full" type="primary" @click="onContact">联系我</el-button>
