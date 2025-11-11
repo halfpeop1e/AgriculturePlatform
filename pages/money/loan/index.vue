@@ -63,7 +63,7 @@
           class="flex w-full pt-5 pl-8 justify-between relative h-100px z-10"
         >
           <div class="flex">
-            <el-avatar :size="75" :src="userStore.userinfo.avatar || man" />
+            <el-avatar :size="75" :src="userStore.avatar || man" />
             <div class="pl-6 text-lg flex items-center">
               {{ userStore.userinfo.nickname }}
             </div>
