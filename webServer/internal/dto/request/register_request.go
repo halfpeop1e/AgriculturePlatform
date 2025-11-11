@@ -1,0 +1,9 @@
+package request
+
+type RegisterRequest struct {
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	ComPassword string `json:"compassword"`
+	Email       string `json:"email"`
+	Isverified  bool   `json:"isverified"`
+}
