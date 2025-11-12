@@ -24,17 +24,26 @@ func PostProduct(c *gin.Context) {
 		})
 		return
 	}
-	if c.GetString("user_id") != req.SalerId {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    400,
-			"message": "这id是你吗",
-		})
-		return
-	}
+	// if c.GetString("user_id") != req.SalerId {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"code":    400,
+	// 		"message": "这id是你吗",
+	// 	})
+	// 	return
+	// }
 	msg, code := gorm.ProductServer.PostProduct(req)
 	JsonBack(c, msg, code, nil)
 }
 
 func BuyProduct(c *gin.Context) {
-
+	var req request.BuyProductRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "参数解析错误: " + err.Error(),
+		})
+		return
+	}
+	msg, code := gorm.ProductServer.BuyProduct(req, c.GetString("user_id"))
+	JsonBack(c, msg, code, nil)
 }
