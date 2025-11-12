@@ -10,7 +10,7 @@ type User struct {
 	Id       int64          `gorm:"column:id;primarykey;comment:自增id"`
 	Uuid     string         `gorm:"column:uuid;uniqueIndex;type:varchar(20);not null;comment:用户uuid"`
 	Name     string         `gorm:"column:name;index;type:varchar(20);not null;comment:用户名"`
-	Email    string         `gorm:"column:email;type:varchar(20);not null;comment:用户邮箱"`
+	Email    string         `gorm:"column:email;type:varchar(50);not null;comment:用户邮箱"`
 	Phone    string         `gorm:"column:phone;type:varchar(20);comment:用户手机号"`
 	Avatar   string         `gorm:"column:avatar;type:varchar(255);default:'static/avatars/default.png';not null;comment:用户头像"`
 	Password string         `gorm:"column:password;type:varchar(20);not null;comment:用户密码"`

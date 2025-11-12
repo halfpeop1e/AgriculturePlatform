@@ -22,9 +22,12 @@ func init() {
 	GE.Static("/static/files", config.GetConfig().StaticFilePath)
 	GE.POST("/user/register", v1.Register)
 	GE.POST("/user/login", v1.Login)
-	private := GE.Group("/api")
-	private.Use(JWTAuthMiddleware())
+	product := GE.Group("/product")
+	product.Use(JWTAuthMiddleware())
 	{
+		product.GET("/list", v1.GetProductList)
+		product.POST("/sell", v1.PostProduct)
+		product.POST("/buy", v1.BuyProduct)
 	}
 
 }
