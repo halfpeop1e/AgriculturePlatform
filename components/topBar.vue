@@ -1,5 +1,12 @@
+<!--
+    topBar.vue
+    说明：页面顶部导航条布局组件
+    - 提供默认标题和 logo
+    - 暴露默认插槽（左侧）和 name="end" 的插槽（右侧）用于扩展按钮或用户信息
+    用法示例：<top-bar><template #end>...</template></top-bar>
+-->
 <template>
-    <div class="w-full bg-neutral-400 text-white flex items-center justify-between shadow-lg rounded-md border-b border-gray-200">
+        <div class="w-full bg-neutral-400 text-white flex items-center justify-between shadow-lg rounded-md border-b border-gray-200">
         <div class="h-16 flex items-center px-4">
             <img class="h-10 w-10 mr-2" src="/logo.png" alt="Logo" />
             <button class="text-2xl font-bold mr-4" @click="navigateTo('/homePage')">农产品融销一体平台</button>

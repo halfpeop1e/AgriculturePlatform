@@ -1,5 +1,13 @@
+<!--
+    registerform.vue
+    说明：用户注册表单组件，包含邮箱验证码发送与校验逻辑
+    Emits:
+        - submit: 校验并提交注册数据（payload: RegisterRequest）
+        - login: 点击已有账号跳转到登录
+    依赖：调用了 useRegister 组合函数中的 onSendCode / onVerifyCode，请确保实现存在。
+-->
 <template>
-    <el-card class="login-card" :body-style="{ padding: '20px' }">
+        <el-card class="login-card" :body-style="{ padding: '20px' }">
         <h3 class="title">注册</h3>
 
         <el-form :model="form" :rules="rules" ref="formRef" label-position="top">

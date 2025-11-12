@@ -1,3 +1,12 @@
+/*
+  useRegister.ts
+  说明：与用户注册与邮箱验证码相关的请求封装
+  导出函数：
+    - onSendCode(email)：发送邮箱验证码，会更新 loadingStore 并展示消息
+    - onVerifyCode(email, code)：校验验证码，成功时返回状态码 200
+    - onRegister(data)：提交注册信息到后端
+  注意：该模块使用全局的 ElMessage 与 loadingStore 显示消息与加载状态；调用方无需重复展示提示。
+*/
 import {useAxios} from '~/composables/useAxios'
 import type { RegisterRequest } from '~/types/register'
 import { useLoadingStore } from '~/utils/loadingStore'

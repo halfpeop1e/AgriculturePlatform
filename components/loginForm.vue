@@ -1,5 +1,14 @@
+<!--
+    loginForm.vue
+    说明：登录表单组件（含邮箱/密码、第三方登录按钮、记住我功能）
+    Emits:
+        - register: 点击注册时触发（父组件可路由到注册页）
+        - forgot: 忘记密码触发
+        - setactivetime: 登录成功后用于激活会话时间或触发父级更新
+    注意：该组件调用了 loginUser、getUserProfile、setCookie 等外部方法，确保这些函数在全局或父作用域可用。
+-->
 <template>
-    <el-card class="login-card" :body-style="{ padding: '20px' }">
+        <el-card class="login-card" :body-style="{ padding: '20px' }">
         <h3 class="title">登录</h3>
 
         <el-form :model="form" :rules="rules" ref="formRef" label-position="top">

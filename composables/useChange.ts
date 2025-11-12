@@ -1,3 +1,14 @@
+/*
+  useChange.ts
+  说明：包含修改用户资料与安全信息的请求封装
+  导出函数：
+    - changeUserProfile(profileData)：更新用户资料（昵称、简介、头像、位置、电话、地址、标签）
+      返回 true 表示成功，false 表示失败
+    - securityChangeInfo(securityData)：更新安全相关信息（如修改密码）
+      返回 true 表示成功，false 表示失败
+  副作用：函数会读取当前 userStore.userId 作为请求目标，并不会直接更新 store（除非后端返回并且调用方处理）
+  注意：该模块以布尔值表示成功/失败；如果需要错误详情，请改为抛出异常或返回包含错误信息的对象。
+*/
 import {useAxios} from '~/composables/useAxios'
 const useAxiosInstance=useAxios()
 import { useUserStore } from '~/utils/userStore'

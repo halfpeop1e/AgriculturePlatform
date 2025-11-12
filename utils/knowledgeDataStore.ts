@@ -1,3 +1,13 @@
+/*
+  knowledgeDataStore.ts
+  说明：管理知识库文章列表的全局状态（包含静态示例数据 ARTICLES）
+  State:
+    - articles: KnowledgeArticle[] — 文章列表
+  Actions:
+    - setArticles(): 从后端 getKnowledgeArticleList 获取并更新 articles（当前实现需调整以支持异步 await）
+  使用场景：在知识库列表页调用 setArticles() 加载文章；示例数据 ARTICLES 可用于开发/测试
+  注意：ARTICLES 为静态示例，生产环境应从接口获取；setArticles 当前未正确处理 Promise，建议改为 async/await
+*/
 import type { KnowledgeArticle } from '@/types/knowledgeArticle'
 import { defineStore } from 'pinia'
 import { getKnowledgeArticleList } from '~/composables/useArticle'

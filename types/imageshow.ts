@@ -1,3 +1,9 @@
+/*
+  imageshow.ts
+  说明：首页轮播图配置数据（静态数组）
+  结构：每个元素包含 url（图片路径）与 text（覆盖文本）
+  使用场景：传递给 imageShow 组件的 images prop
+*/
 export const Imageitem = [
 { url: '/showImage/img1.jpeg', text: '数字赋能 · 智慧助农' },
 { url: '/showImage/img2.jpeg', text: '买农品 · 助农心' },

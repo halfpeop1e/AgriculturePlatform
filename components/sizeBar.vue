@@ -1,5 +1,13 @@
+<!--
+    sizeBar.vue
+    说明：应用的侧边导航（抽屉式）组件
+    Props:
+        - nav: 路由分组数组（类型 RouteType[]），每个分组包含 label 与 items
+    功能：显示分组导航、根据当前路由高亮当前项并支持点击跳转（navigateTo）
+    依赖：使用了全局的 buttonStore 用于控制 Drawer 的可见性。
+-->
 <template>
-    <Drawer v-model:visible="buttonstore.isvisible">
+        <Drawer v-model:visible="buttonstore.isvisible">
         <aside
         class="w-64 min-h-full bg-white/80 dark:bg-slate-900/80 border-r border-slate-200/70 dark:border-slate-700/60 backdrop-blur-lg"
     >   

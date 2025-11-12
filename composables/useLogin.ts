@@ -1,3 +1,11 @@
+/*
+  useLogin.ts
+  说明：用户登录相关的封装
+  导出函数：
+    - loginUser(loginData): 请求登录接口并更新本地 UserStore（userId, tokens, islogin）
+  返回：成功时返回后端的 LoginResponse 数据（包含 userId、tokens 等），失败时在控制台输出错误并返回 undefined
+  注意：该函数会直接修改全局 UserStore（因此调用方无需再次写入 store），若需替换为纯函数请修改实现。
+*/
 import {useAxios} from '~/composables/useAxios'
 import moment from 'moment'
 import type { LoginRequest,LoginResponse } from '~/types/login'

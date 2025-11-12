@@ -1,3 +1,10 @@
+<!--
+  icons/Wechat.vue
+  说明：WeChat 图标 SVG 组件
+  Props:
+    - size: 图标尺寸（string | number），默认 24
+    - customClass: 额外的 class 名称用于样式定制
+-->
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
