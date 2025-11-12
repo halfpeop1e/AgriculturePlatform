@@ -136,17 +136,50 @@ func (p *productServer) BuyProduct(req request.BuyProductRequest, user_id string
 	}
 	order := model.Order{
 		Uuid:       util.GenerateUUID(),
-		Name:       buyUser.Name,
+		Name:       product.Name,
 		Quantity:   int64(req.Quantity),
 		Totalprice: float64(req.Totalprice),
-		Status:     "成功",
-		Ordertype:  product.Category,
+		Status:     "已完成",
+		Ordertype:  "buy",
 		ProductId:  product.Id,
 		UserId:     user_id,
+		CreatAt:    time.Now(),
+	}
+	dao.GormDB.Create(&order)
+	order = model.Order{
+		Uuid:       util.GenerateUUID(),
+		Name:       product.Name,
+		Quantity:   int64(req.Quantity),
+		Totalprice: float64(req.Totalprice),
+		Status:     "已完成",
+		Ordertype:  "sell",
+		ProductId:  product.Id,
+		UserId:     product.SalerId,
 		CreatAt:    time.Now(),
 	}
 	dao.GormDB.Create(&order)
 	product.Stock -= int64(req.Quantity)
 	dao.GormDB.Save(&product)
 	return "购买成功", 0
+}
+
+func (p *productServer) GetOrderList() (string, int, *respond.OrderListRespond) {
+	var orders []model.Order
+	if res := dao.GormDB.Find(&orders); res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "查询失败", -1, nil
+	}
+	orderList := &respond.OrderListRespond{}
+	for _, order := range orders {
+		newOrder := respond.Order{
+			OrderId:    order.Uuid,
+			Name:       order.Name,
+			Quantity:   int(order.Quantity),
+			Totalprice: int(order.Totalprice),
+			Status:     order.Status,
+			Type:       order.Ordertype,
+		}
+		orderList.Orders = append(orderList.Orders, newOrder)
+	}
+	return "获取成功", 0, orderList
 }
