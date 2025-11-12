@@ -14,7 +14,6 @@ func main() {
 	host := conf.MainConfig.Host
 	port := conf.MainConfig.Port
 	go func() {
-		// Win10本地部署
 		if err := httpserver.GE.Run(fmt.Sprintf("%s:%d", host, port)); err != nil {
 			return
 		}

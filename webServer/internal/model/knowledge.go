@@ -15,6 +15,6 @@ type Knowledge struct {
 	Image    string         `gorm:"column:image;type:varchar(255);default:'static/avatars/default.png';comment:知识图片"`
 	Tags     []string       `gorm:"column:tags;type:json;comment:知识标签"`
 	Author   string         `gorm:"column:author;type:varchar(20);not null;comment:知识作者"`
-	UpdateAt time.Time      `gorm:"column:update_at;type:datetime;not null;comment:更新时间"`
-	DeleteAt gorm.DeletedAt `gorm:"column:delete_at;type:datetime;comment:删除时间"`
+	UpdateAt time.Time      `gorm:"column:update_at;type:timestamp;not null;comment:更新时间"`
+	DeleteAt gorm.DeletedAt `gorm:"column:delete_at;type:timestamp;comment:删除时间"`
 }

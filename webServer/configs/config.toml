@@ -1,6 +1,6 @@
 [mainConfig]
 appName = "agriculture-service"
-host = "127.0.0.1"
+host = "0.0.0.0"
 port = 8080
 
 [postgreConfig]
@@ -11,8 +11,8 @@ password = "123456"
 db = "friday"
 
 [staticSrcConfig]
-staticAvatarPath = "E:/nuxt/AgriculturePlatform/webServer/static/avatars"
-staticFilePath = "E:/nuxt/AgriculturePlatform/webServer/static/file"
+staticAvatarPath = "/opt/agriculture_go/static/avatars"
+staticFilePath = "/opt/agriculture_go/static/file"
 
 [jwtConfig]
 jwtSecret = "bjtu"
