@@ -2,6 +2,7 @@ package gorm
 
 import (
 	"encoding/json"
+	"fmt"
 	"go-agriculture/internal/config"
 	"go-agriculture/internal/dao"
 	"go-agriculture/internal/dto/request"
@@ -30,7 +31,7 @@ func (p *productServer) PostProduct(req request.PostProductRequest) (string, int
 	if res := dao.GormDB.Where("name = ? AND saler_id = ?", req.Name, req.SalerId).First(&newProduct); res.Error == nil {
 		return "商品已存在", -1
 	}
-	allImages := make([]string, len(req.Images))
+	allImages := make([]string, 0)
 	for _, file := range req.Images {
 		if file != nil {
 			beforePath := config.GetConfig().StaticFilePath
@@ -63,8 +64,7 @@ func (p *productServer) PostProduct(req request.PostProductRequest) (string, int
 			if _, err := io.Copy(dst, src); err != nil {
 				continue
 			}
-			savePath := "/static/files/" + filename
-			allImages = append(allImages, savePath)
+			allImages = append(allImages, filename)
 		}
 	}
 	imagesJSON, err := json.Marshal(allImages)
@@ -101,17 +101,52 @@ func (p *productServer) GetProductList() (string, *respond.ProductListRespond, i
 		} else if err := json.Unmarshal([]byte(product.Images), &images); err != nil {
 			images = []string{}
 		}
+		for i, image := range images {
+			images[i] = "http://" + fmt.Sprint(config.GetConfig().MainConfig.ServerIP) + ":" + fmt.Sprint(config.GetConfig().MainConfig.Port) + "/static/files/" + image
+		}
 		newProduct := respond.ProductRespond{
-			Id:       product.Id,
-			Name:     product.Name,
-			Image:    images,
-			Price:    product.Price,
-			Stock:    product.Stock,
-			Category: product.Category,
-			Saler:    product.Saler,
-			SalerId:  product.SalerId,
+			Id:          product.Id,
+			Name:        product.Name,
+			Image:       images,
+			Price:       product.Price,
+			Stock:       product.Stock,
+			Category:    product.Category,
+			Saler:       product.Saler,
+			SalerId:     product.SalerId,
+			Description: product.Description,
 		}
 		productList.ProductList = append(productList.ProductList, newProduct)
 	}
 	return "获取成功", productList, 0
+}
+
+func (p *productServer) BuyProduct(req request.BuyProductRequest, user_id string) (string, int) {
+	var product model.Product
+	if res := dao.GormDB.Where("id = ?", req.ProductId).First(&product); res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "查询失败", -1
+	}
+	if product.Stock < int64(req.Quantity) {
+		return "库存不足", -1
+	}
+	var buyUser model.User
+	if res := dao.GormDB.Where("uuid = ?", user_id).First(&buyUser); res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "用户查询失败", -1
+	}
+	order := model.Order{
+		Uuid:       util.GenerateUUID(),
+		Name:       buyUser.Name,
+		Quantity:   int64(req.Quantity),
+		Totalprice: float64(req.Totalprice),
+		Status:     "成功",
+		Ordertype:  product.Category,
+		ProductId:  product.Id,
+		UserId:     user_id,
+		CreatAt:    time.Now(),
+	}
+	dao.GormDB.Create(&order)
+	product.Stock -= int64(req.Quantity)
+	dao.GormDB.Save(&product)
+	return "购买成功", 0
 }

@@ -18,10 +18,14 @@ func init() {
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
 	GE.Use(cors.New(corsConfig))
-	GE.Static("/static/avatars", config.GetConfig().StaticAvatarPath)
-	GE.Static("/static/files", config.GetConfig().StaticFilePath)
 	GE.POST("/user/register", v1.Register)
 	GE.POST("/user/login", v1.Login)
+	static := GE.Group("")
+	static.Use()
+	{
+		static.Static("/static/avatars", config.GetConfig().StaticAvatarPath)
+		static.Static("/static/files", config.GetConfig().StaticFilePath)
+	}
 	product := GE.Group("/product")
 	product.Use(JWTAuthMiddleware())
 	{

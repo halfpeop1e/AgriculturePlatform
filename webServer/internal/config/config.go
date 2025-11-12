@@ -3,9 +3,10 @@ package config
 import "github.com/BurntSushi/toml"
 
 type MainConfig struct {
-	AppName string `toml:"appName"`
-	Host    string `toml:"host"`
-	Port    int    `toml:"port"`
+	AppName  string `toml:"appName"`
+	Host     string `toml:"host"`
+	Port     int    `toml:"port"`
+	ServerIP string `toml:"serverIP"`
 }
 type PostgreConfig struct {
 	Host     string `toml:"host"`

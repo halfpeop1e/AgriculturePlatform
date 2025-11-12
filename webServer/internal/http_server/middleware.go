@@ -19,6 +19,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		tokenParts := strings.Split(authHeader, " ")
 		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
 			v1.JsonBack(c, "无效的Token", -2, nil)
+			c.Abort()
 			return
 		}
 
@@ -26,6 +27,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		claims, err := util.ParseToken(tokenParts[1])
 		if err != nil {
 			v1.JsonBack(c, "无效的Token", -2, nil)
+			c.Abort()
 			return
 		}
 
