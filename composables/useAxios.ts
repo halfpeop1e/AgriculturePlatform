@@ -1,7 +1,16 @@
+/*
+  useAxios.ts
+  说明：创建并返回一个 Axios 实例，封装常用的请求拦截与响应拦截逻辑：
+    - 从 cookie / localStorage / Nuxt 的 useCookie 中读取 token 并注入 Authorization header
+    - 简单检查 JWT 的 exp 字段，若过期则清理 token 并在客户端跳转到 /login
+    - 全局捕获 401 响应并清理 token 后跳转登录
+  注意：
+    - 该实现为轻量客户端处理，不会校验签名或自动刷新 token；若后端支持 refresh token，可扩展此处
+    - 在 SSR 环境使用时请注意跳转逻辑（window 不存在），已做简化兼容处理
+*/
 // composables/useAxios.ts
 import axios from "axios";
 
-// 在 Axios 请求中自动注入 JWT Token（从 cookie 或 localStorage）
 export const useAxios = () => {
   const AxiosInstance = axios.create({
     baseURL: "http://localhost:3001/", // 对应你 Node.js 后端接口
@@ -24,10 +33,10 @@ export const useAxios = () => {
 
     try {
       if (typeof window !== "undefined") {
-        const local = localStorage.getItem("AuthToken");
-        if (local) return local;
-  const m = document.cookie.match(/(?:^|; )authToken=([^;]+)/);
-  if (m && m[1]) return decodeURIComponent(m[1]);
+    const local = localStorage.getItem("AuthToken");
+    if (local) return local;
+    const m = document.cookie.match(/(?:^|; )authToken=([^;]+)/);
+    if (m && m[1]) return decodeURIComponent(m[1]);
       }
     } catch (e) {
       // ignore

@@ -1,3 +1,11 @@
+/*
+  useProduct.ts
+  说明：与商品发布/购买相关的请求封装
+  导出函数：
+    - PostProduct(formData)：发布商品（multipart/form-data），会向后端提交表单并弹出提示
+    - BuyProduct(productId, quantity, totalprice)：下单购买，内部会生成订单号并调用后端
+  注意：函数内部使用了全局 UserStore、ElMessage 等全局对象；若在测试环境使用请提供替代实现或 mock。
+*/
 import { useAxios } from "./useAxios";
 import type{ postProductRequest } from "~/types/product";
 import{v4 as uuidv4} from 'uuid'

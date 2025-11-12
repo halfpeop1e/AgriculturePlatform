@@ -1,3 +1,13 @@
+<!--
+    homePageLayout.vue
+    说明：应用首页的布局组件
+    布局职责：
+        - 渲染顶部导航栏（TopBar），并通过默认插槽在左侧渲染导航项
+        - 提供右侧命名插槽 `end` 用于放置登录/用户菜单等操作项
+        - 主内容通过默认 slot 插入（位于页面中间、带滚动）
+    设计要点：TopBar 与 PrimeVue/Element 组件混用；导航数据来自 `~/config/topbarRoute`。
+    注意：组件内部会把纯数据 menuData 映射成 PrimeVue Menu 所需的 model，command 使用 navigateTo 进行路由跳转。
+-->
 <template>
     <div class="flex-col h-screen ">
         <div class="h-16">

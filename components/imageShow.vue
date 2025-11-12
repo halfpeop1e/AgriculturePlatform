@@ -1,3 +1,11 @@
+<!--
+  imageShow.vue
+  说明：轮播展示组件（基于 Element Plus 的 el-carousel）
+  Props:
+    - size: 轮播高度，例如 '350px'
+    - images: 数组，元素形如 { url: string, text: string }
+  行为：在每个轮播项上渲染背景图与覆盖文本，适合首页大图轮播。
+-->
 <template>
     <el-carousel :interval="4000" :height="props.size">
          <el-carousel-item

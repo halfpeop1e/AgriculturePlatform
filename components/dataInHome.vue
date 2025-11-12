@@ -1,3 +1,11 @@
+<!--
+  dataInHome.vue
+  说明：首页统计卡片集合组件（展示销售额、新增客户、转化率、订单数等）
+  实现要点：
+    - 使用 Element Plus 的 el-card 渲染每个统计卡片
+    - icons 从 Element Plus icon 集合引入
+    - stats 数组为静态示例数据，可替换为接口返回的数据
+-->
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
     <el-card

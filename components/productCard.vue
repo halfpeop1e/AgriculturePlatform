@@ -1,3 +1,12 @@
+<!--
+  productCard.vue
+  说明：产品展示卡片，包含图片、简介、价格、库存与购买入口
+  Props:
+    - product: 产品对象（id, name, image, description, price, stock, saler）
+  Emits:
+    - openDialog: 点击购买时触发，父组件可打开购买弹窗并传入 product
+  注意点：图片使用 object-cover 保持封面显示，购买按钮触发 openDialog 事件。
+-->
 <template>
   <el-card class="w-full hover:shadow-lg transition-shadow duration-300 ease-in-out">
     <div class="flex gap-6">

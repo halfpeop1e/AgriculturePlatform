@@ -1,3 +1,14 @@
+<!--
+  comfirmbuy.vue
+  说明：购买确认弹窗组件（使用 Element Plus 的 el-dialog）
+  Props:
+    - product: 产品对象（id, name, price, stock, saler 等）
+    - showDialog: 是否显示弹窗（由父组件控制）
+  Emits:
+    - closeDialog: 关闭弹窗事件（父组件需监听以隐藏弹窗）
+  行为：校验购买数量、调用 BuyProduct 下单并显示消息提示；出现错误时显示失败提示。
+  注意：BuyProduct 为外部可用的 API/函数（请确保在父作用域或全局导入）。
+-->
 <template>
     <!-- 购买弹窗 -->
   <el-dialog :model-value="showDialog" width="420px" title="确认购买">

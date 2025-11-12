@@ -1,3 +1,9 @@
+<!--
+  Contactus.vue
+  说明：页面底部联系方式和快速链接组件（静态展示）
+  结构：三列布局（联系我们、快速链接、社交媒体）
+  无 props / emits，纯展示组件；样式使用 Tailwind + Element/内联图标。
+-->
 <template>
   <footer class=" py-10 px-8 w-full">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
