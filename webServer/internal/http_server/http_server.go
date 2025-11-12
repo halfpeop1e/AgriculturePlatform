@@ -33,5 +33,9 @@ func init() {
 		product.POST("/sell", v1.PostProduct)
 		product.POST("/buy", v1.BuyProduct)
 	}
-
+	order := GE.Group("/order")
+	order.Use(JWTAuthMiddleware())
+	{
+		order.GET("/list", v1.GetOrderList)
+	}
 }

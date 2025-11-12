@@ -47,3 +47,8 @@ func BuyProduct(c *gin.Context) {
 	msg, code := gorm.ProductServer.BuyProduct(req, c.GetString("user_id"))
 	JsonBack(c, msg, code, nil)
 }
+
+func GetOrderList(c *gin.Context) {
+	msg, code, data := gorm.ProductServer.GetOrderList()
+	JsonBack(c, msg, code, data)
+}
