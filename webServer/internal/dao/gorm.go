@@ -18,8 +18,9 @@ func init() {
 	password := conf.PostgreConfig.Password
 	host := conf.PostgreConfig.Host
 	port := conf.PostgreConfig.Port
-	appName := conf.PostgreConfig.Db
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, appName)
+	dbName := conf.PostgreConfig.Db
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, dbName)
+	log.Println(dsn)
 	// dsn := fmt.Sprintf("%s@unix(/var/run/mysqld/mysqld.sock)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, appName)
 	var err error
 	GormDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
