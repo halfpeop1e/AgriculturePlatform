@@ -1,4 +1,4 @@
-package userinfo
+package gorm
 
 import (
 	"errors"
@@ -65,8 +65,8 @@ func (u *userInfoService) Register(registerReq request.RegisterRequest) (string,
 	if len(registerReq.Username) == 0 || len(registerReq.Password) == 0 {
 		return "用户名或密码不能为空", nil, -1
 	}
-	if len(registerReq.Username) > 50 || len(registerReq.Password) > 50 {
-		return "用户名或密码长度超过限制", nil, -1
+	if len(registerReq.Username) > 20 || len(registerReq.Password) > 20 || len(registerReq.Email) > 50 {
+		return "长度超过限制", nil, -1
 	}
 	if registerReq.Password != registerReq.ComPassword {
 
