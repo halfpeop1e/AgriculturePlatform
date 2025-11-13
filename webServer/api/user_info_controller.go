@@ -33,3 +33,16 @@ func Register(c *gin.Context) {
 	msg, resp, code := gorm.UserInfoService.Register(req)
 	JsonBack(c, msg, code, resp)
 }
+
+func GetUserInfo(c *gin.Context) {
+	userId := c.Param("userId")
+	// if c.GetString("user_id") != userId {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"code":    400,
+	// 		"message": "这id是你吗",
+	// 	})
+	// 	return
+	// }
+	msg, resp, code := gorm.UserInfoService.GetUserInfo(userId)
+	JsonBack(c, msg, code, resp)
+}

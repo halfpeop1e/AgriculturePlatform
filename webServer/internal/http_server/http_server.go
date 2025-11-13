@@ -38,4 +38,9 @@ func init() {
 	{
 		order.GET("/list", v1.GetOrderList)
 	}
+	user := GE.Group("/user")
+	user.Use(JWTAuthMiddleware())
+	{
+		user.GET("/profile/:userId", v1.GetUserInfo)
+	}
 }
