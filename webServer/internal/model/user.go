@@ -14,7 +14,7 @@ type User struct {
 	Phone      string         `gorm:"column:phone;type:varchar(20);comment:用户手机号"`
 	Avatar     string         `gorm:"column:avatar;type:varchar(255);default:'default.png';not null;comment:用户头像"`
 	Password   string         `gorm:"column:password;type:varchar(20);not null;comment:用户密码"`
-	Tags       string         `gorm:"column:tags;type:json;comment:用户标签"`
+	Tags       string         `gorm:"column:tags;type:json;default:'[]';comment:用户标签"`
 	Location   string         `gorm:"column:location;type:varchar(50);comment:用户位置"`
 	Adress     string         `gorm:"column:adress;type:varchar(50);comment:用户地址"`
 	Bio        string         `gorm:"column:bio;type:varchar(255);default:'褪色者成为混沌之王，燃烧了一切，交界地陷入一片火海之中。梅琳娜表示自己将找到褪色者，给予他命定之死。';comment:用户简介"`
