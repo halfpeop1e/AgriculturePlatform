@@ -42,5 +42,7 @@ func init() {
 	user.Use(JWTAuthMiddleware())
 	{
 		user.GET("/profile/:userId", v1.GetUserInfo)
+		user.POST("/profile/:userId/update", v1.UpdateUserInfo)
+		user.POST("/security/:userId/update", v1.SafeUpdateInfo)
 	}
 }

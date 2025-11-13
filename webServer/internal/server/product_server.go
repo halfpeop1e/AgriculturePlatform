@@ -9,10 +9,7 @@ import (
 	"go-agriculture/internal/dto/respond"
 	"go-agriculture/internal/model"
 	"go-agriculture/internal/util"
-	"io"
 	"log"
-	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -31,42 +28,7 @@ func (p *productServer) PostProduct(req request.PostProductRequest) (string, int
 	if res := dao.GormDB.Where("name = ? AND saler_id = ?", req.Name, req.SalerId).First(&newProduct); res.Error == nil {
 		return "商品已存在", -1
 	}
-	allImages := make([]string, 0)
-	for _, file := range req.Images {
-		if file != nil {
-			beforePath := config.GetConfig().StaticFilePath
-			ext := filepath.Ext(file.Filename)
-			if ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".webp" {
-				log.Printf("图片格式不支持")
-				continue
-			}
-			if file.Size > 1920*1080*10 {
-				log.Printf("图片大小超过限制")
-				continue
-			}
-			filename := util.GenerateUUID() + ext
-			file.Filename = filename
-			filePath := beforePath + "/" + filename
-			// 打开上传的文件
-			src, err := file.Open()
-			if err != nil {
-				continue
-			}
-			defer src.Close()
-
-			// 创建目标文件
-			dst, err := os.Create(filePath)
-			if err != nil {
-				continue
-			}
-			defer dst.Close()
-			// 保存文件
-			if _, err := io.Copy(dst, src); err != nil {
-				continue
-			}
-			allImages = append(allImages, filename)
-		}
-	}
+	allImages := util.FileReceiverUtil(req.Images, util.IsFileType)
 	imagesJSON, err := json.Marshal(allImages)
 	if err != nil {
 		return "图片序列化失败", -1

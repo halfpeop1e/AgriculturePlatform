@@ -11,6 +11,7 @@ import (
 	"go-agriculture/internal/model"
 	"go-agriculture/internal/util"
 	"log"
+	"mime/multipart"
 	"time"
 
 	"gorm.io/gorm"
@@ -133,4 +134,96 @@ func (u *userInfoService) GetUserInfo(userId string) (string, *respond.UserInfoR
 		LastActive: user.ActiveTime.Format("2006年01月02日 15:04:05"),
 	}
 	return "获取用户信息成功", userInfoResp, 0
+}
+
+func (u *userInfoService) UpdateUserInfo(userId string, updateReq request.UpdateUserInfoRequest) (string, int) {
+	if len(updateReq.Nickname) > 20 {
+		return "昵称长度超过限制", -1
+	}
+	if len(updateReq.Bio) > 255 {
+		return "简介长度超过限制", -1
+	}
+	if len(updateReq.Phone) > 20 {
+		return "手机号长度超过限制", -1
+	}
+	if len(updateReq.Address) > 50 {
+		return "地址长度超过限制", -1
+	}
+	if len(updateReq.Location) > 50 {
+		return "地址长度超过限制", -1
+	}
+
+	var user model.User
+	res := dao.GormDB.Where("uuid = ?", userId).First(&user)
+	if res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return "用户不存在", -1
+		}
+		return "查询用户信息失败", -1
+	}
+	if updateReq.Nickname != "" {
+		user.Name = updateReq.Nickname
+	}
+	if updateReq.Bio != "" {
+		user.Bio = updateReq.Bio
+	}
+	if updateReq.Avatar != nil {
+		util.FileDeleteUtil(user.Avatar, util.IsAvatarType)
+		files := make([]*multipart.FileHeader, 1)
+		files[0] = updateReq.Avatar
+		user.Avatar = util.FileReceiverUtil(files, util.IsAvatarType)[0]
+	}
+	if updateReq.Location != "" {
+		user.Location = updateReq.Location
+	}
+	if updateReq.Phone != "" {
+		user.Phone = updateReq.Phone
+	}
+	if updateReq.Address != "" {
+		user.Adress = updateReq.Address
+	}
+	if updateReq.Tags != nil {
+		tags, err := json.Marshal(updateReq.Tags)
+		if err != nil {
+			log.Printf("json转换失败: %v", err)
+			return "json转换失败", -1
+		}
+		user.Tags = string(tags)
+	}
+	user.ActiveTime = time.Now()
+	dao.GormDB.Save(&user)
+	return "更新用户信息成功", 0
+}
+
+func (u *userInfoService) SafeUpdateInfo(userId string, req request.SafeUpdateUserInfoRequest) (string, int) {
+	if len(req.Currentpassword) > 20 || len(req.Newpassword) > 20 {
+		return "密码长度超过限制", -1
+	}
+	if len(req.Email) > 50 {
+		return "邮箱长度错误", -1
+	}
+	var user model.User
+	if res := dao.GormDB.Where("uuid = ?", userId).First(&user); res != nil {
+		log.Printf("Database error: %v", res.Error)
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return "用户不存在", -1
+		}
+		return "查询用户信息失败", -1
+	}
+	if user.Password != req.Currentpassword {
+		return "旧密码错误", -1
+	}
+	if req.Newpassword == req.Currentpassword {
+		return "两次密码一致", -1
+	}
+	if len(req.Newpassword) != 0 {
+		user.Password = req.Newpassword
+	}
+	if len(req.Email) != 0 {
+		user.Email = req.Email
+
+	}
+	dao.GormDB.Save(&user)
+	return "更新用户信息成功", 0
 }
