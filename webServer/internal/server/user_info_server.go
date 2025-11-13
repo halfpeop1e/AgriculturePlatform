@@ -1,7 +1,10 @@
 package gorm
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"go-agriculture/internal/config"
 	"go-agriculture/internal/dao"
 	"go-agriculture/internal/dto/request"
 	"go-agriculture/internal/dto/respond"
@@ -38,6 +41,8 @@ func (u *userInfoService) Login(loginReq request.LoginRequest) (string, *respond
 	if user.Password != password {
 		return "密码错误", nil, -1
 	}
+	user.ActiveTime = time.Now()
+	dao.GormDB.Save(&user)
 	token, err := util.GenerateToken(user.Uuid)
 	if err != nil {
 		return "生成token失败", nil, -1
@@ -87,10 +92,45 @@ func (u *userInfoService) Register(registerReq request.RegisterRequest) (string,
 	user.Email = registerReq.Email
 	user.Uuid = util.GenerateUUID()
 	user.CreatAt = time.Now()
-	user.Avatar = "static/avatars/default.png"
-	res := dao.GormDB.Create(&user)
-	if res.Error != nil {
+	user.Avatar = "default.png"
+	if res := dao.GormDB.Create(&user); res.Error != nil {
 		return "注册失败", nil, -1
 	}
 	return "注册成功", nil, 0
+}
+
+func (u *userInfoService) GetUserInfo(userId string) (string, *respond.UserInfoRespond, int) {
+	var user model.User
+	res := dao.GormDB.Where("uuid = ?", userId).First(&user)
+	if res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return "用户不存在", nil, -1
+		}
+		return "查询用户信息失败", nil, -1
+	}
+	var jsonTags []string
+	if user.Tags == "" {
+		jsonTags = []string{}
+	} else {
+		if err := json.Unmarshal([]byte(user.Tags), &jsonTags); err != nil {
+			log.Printf("json转换失败: %v", err)
+			return "json转换失败", nil, -1
+		}
+	}
+
+	avatarUrl := "http://" + fmt.Sprint(config.GetConfig().MainConfig.ServerIP) + ":" + fmt.Sprint(config.GetConfig().MainConfig.Port) + "/static/avatars/" + user.Avatar
+	userInfoResp := &respond.UserInfoRespond{
+		Nickname:   user.Name,
+		Email:      user.Email,
+		Avatar:     avatarUrl,
+		Bio:        user.Bio,
+		Tags:       jsonTags,
+		Location:   user.Location,
+		JoinedAt:   user.CreatAt.Format("2006年01月02日 15:04:05"),
+		Phone:      user.Phone,
+		Address:    user.Adress,
+		LastActive: user.ActiveTime.Format("2006年01月02日 15:04:05"),
+	}
+	return "获取用户信息成功", userInfoResp, 0
 }
