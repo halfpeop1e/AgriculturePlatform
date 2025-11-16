@@ -25,3 +25,6 @@ logs
 
 #exe
 webServer/agrgo
+
+#config
+webServer/configs/*.toml
