@@ -50,12 +50,23 @@ export const useUserStore = defineStore('userStore', {
         },
         LoginSet(){
             this.islogin=true
+            console.log('用户登录状态已设置为 true',this.islogin)
         },
         LogoutSet(){
             this.userId=''
             this.avatar=''
             this.islogin=false
             this.tokens=''
+            this.userinfo={
+                nickname:'nickname',
+                email:'' ,
+                bio:  '',
+                tags: [''],
+                location:'' ,
+                joinedAt:'' ,
+                phone: '',
+                address:'' ,  
+            }
         }
-    }
+      }
 })
