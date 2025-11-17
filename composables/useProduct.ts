@@ -9,14 +9,13 @@
 import { useAxios } from "./useAxios";
 import type{ postProductRequest } from "~/types/product";
 import{v4 as uuidv4} from 'uuid'
+import type { comfirmOrderRequest } from "~/types/comfirmOrder";
 
 const useAxiosInstance=useAxios()
 export async function PostProduct(formData:any){
-    const UserStore=useUserStore()
     try{
         const response=await useAxiosInstance.post<postProductRequest>('/product/sell',{
             formData,
-            salerId:UserStore.userId
         },
         {
             headers:{
@@ -36,15 +35,10 @@ export async function PostProduct(formData:any){
         console.error('发布产品失败',err)
     }
 }
-export async function BuyProduct(productId:number,quantity:number,totalprice:number){
+export async function BuyProduct(order:comfirmOrderRequest){
     try{
         const response=await useAxiosInstance.post('/product/buy',{
-            orderId:uuidv4(),
-            productId:productId,
-            quantity:quantity,
-            totalprice:totalprice
-            // buyer:useUserStore().userinfo.userId,
-            // saler:从商品的发布者信息中获取
+           order
         })
         if(response.status===200){
             console.log('购买产品成功',response.data)
