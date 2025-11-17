@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css',
     'primeicons/primeicons.css',
     '~/assets/css/transitions.css',
+    'cropperjs/dist/cropper.css'
   ],
   app: {
     pageTransition: { 

@@ -23,6 +23,7 @@ export interface postProductRequest {
     description:string;
     price:number;
     stock:number;
+    contactEmail:string;
     saler:string;
     salerId:string;
 }
