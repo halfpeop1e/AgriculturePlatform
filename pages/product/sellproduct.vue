@@ -38,11 +38,6 @@
                             <InputNumber v-model="form.stock" :min="1" class="w-full" />
                             <p v-if="errors.stock" class="text-red-500 text-sm mt-1">{{ errors.stock }}</p>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">卖家名称</label>
-                            <InputText v-model="form.saler" placeholder="用于买家联系" class="w-full" />
-                            <p v-if="errors.saler" class="text-red-500 text-sm mt-1">{{ errors.saler }}</p>
-                        </div>
                         <!-- 联系邮箱 -->
                         <div>
                             <label class="block text-sm font-medium mb-1">联系方式（邮箱）</label>
@@ -81,13 +76,14 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import type { postProductRequest } from '@/types/product'
 definePageMeta({ layout: 'home-page-layout' })
 
 const toast = useToast()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
-const form = reactive({
+const form = reactive<postProductRequest>({
     name: '',
     category: '' as string,
     price: 0 as number,
@@ -95,7 +91,8 @@ const form = reactive({
     description: '',
     images: [] as string[],
     saler:'' as string ,
-    contactEmail: ''
+    contactEmail: '',
+    salerId:''
 })
 
 const categories = [
@@ -169,8 +166,8 @@ function onFilesChange(e: Event) {
             toast.add({ severity: 'error', summary: '文件错误', detail: '仅支持图片文件', life: 3000 })
             return
         }
-        if (file.size / 1024 / 1024 >= 2) {
-            toast.add({ severity: 'error', summary: '文件过大', detail: '每张图片需小于 2MB', life: 3000 })
+        if (file.size / 1024 / 1024 >= 10) {
+            toast.add({ severity: 'error', summary: '文件过大', detail: '每张图片需小于 10MB', life: 3000 })
             return
         }
 
@@ -208,7 +205,11 @@ async function onSubmit() {
     }
 
     try {
+        const userStore = useUserStore()
         toast.add({ severity: 'info', summary: '提交中', detail: '正在上架商品...', life: 2000 })
+        form.saler=userStore.userinfo.nickname
+        form.salerId=userStore.userId
+        console.log('提交的商品信息：', form)
         const response=await PostProduct(form)
         if(response?.status!==200){
             throw new Error('商品上架失败，请稍后重试')

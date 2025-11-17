@@ -1,5 +1,6 @@
 <template>
     <div>
+       <el-card style="border-radius: 20px;background-color: rgba(255, 255, 255, 0.244);">
       <div>
         <ImageShow size='500px' :images="Imageitem"/>
       </div>
@@ -37,6 +38,7 @@
     <div style="width: 100%; margin-top: 20px;" class="flex justify-center">
         <Contactus/>
     </div>
+    </el-card>
   </div>
 </template>
 
