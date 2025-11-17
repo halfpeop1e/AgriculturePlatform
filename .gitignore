@@ -22,3 +22,9 @@ logs
 .env
 .env.*
 !.env.example
+
+#exe
+webServer/agrgo
+
+#config
+webServer/configs/*.toml

@@ -1,5 +1,6 @@
 [mainConfig]
 appName = "agriculture-service"
+serverIp = "47.94.106.89"
 host = "0.0.0.0"
 port = 8080
 
