@@ -10,6 +10,9 @@ export interface LoginRequest {
   password: string;
 }
 export interface LoginResponse {
+  code: number;
+  data:{
   userId: string;
   tokens: string;
+  }
 }

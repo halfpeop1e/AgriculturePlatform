@@ -35,7 +35,7 @@
                 还没有账号？ <a @click.prevent="toRegister">注册</a>
            </div>
         </el-form>
-        <el-divider>或者</el-divider>
+        <el-divider></el-divider>
 
         <div class="flex-col items-center">
             <el-button type="success" :loading="loading" @click="onWechatLogin" style="width:100%;margin: 0;" plain>
@@ -83,7 +83,7 @@ async function onSubmit() {
             getUserProfile()
             emit('setactivetime')
             if(form.value.remember){
-                setCookie("AuthToken" ,response?.tokens,1)
+                setCookie("AuthToken" ,response?.data.tokens,1)
             }
             ElMessage.success('登录成功（模拟）')
         } catch (err) {
