@@ -10,7 +10,7 @@ type Product struct {
 	Id          int64          `gorm:"column:id;primarykey;comment:自增id"`
 	Uuid        string         `gorm:"column:uuid;uniqueIndex;type:varchar(36);not null;comment:商品uuid"`
 	Name        string         `gorm:"column:name;index;type:varchar(200);not null;comment:商品名称"`
-	Images      string         `gorm:"column:images;type:json;not null;comment:商品图片列表"`
+	Images      string         `gorm:"column:images;type:json;default:'[]';comment:商品图片列表"`
 	Category    string         `gorm:"column:category;index;type:varchar(50);not null;comment:商品分类"`
 	Description string         `gorm:"column:description;type:text;comment:商品描述"`
 	Price       float64        `gorm:"column:price;type:decimal(10,2);not null;comment:商品价格"`
