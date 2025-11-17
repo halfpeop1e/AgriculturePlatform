@@ -16,4 +16,4 @@ export interface comfirmOrderRequest {
     totalprice:number,
     buyer:string
     saler:string
-}//目前未使用这个接口
+}
