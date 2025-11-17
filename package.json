@@ -19,6 +19,7 @@
     "@primevue/nuxt-module": "^4.4.1",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.12.2",
+    "cropperjs": "1.5.13",
     "element-plus": "^2.11.4",
     "js-cookie": "^3.0.5",
     "moment": "^2.30.1",
@@ -27,7 +28,9 @@
     "pinia": "^3.0.3",
     "primeicons": "^7.0.0",
     "primevue": "^4.4.1",
+    "three": "^0.181.1",
     "uuid": "^13.0.0",
+    "vanta": "^0.5.24",
     "vue": "^3.5.21",
     "vue-router": "^4.5.1"
   },
