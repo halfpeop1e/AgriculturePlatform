@@ -99,9 +99,9 @@ async function onSubmit() {
                         throw new Error('验证码错误或已过期')
                 }
                 else{
-                        form.value.isverified=true
+                      emit('submit', { ...form.value })
                 }
-                emit('submit', { ...form.value })
+                
         } catch (err) {
                 ElMessage.error('注册失败')
         } finally {
