@@ -10,10 +10,6 @@
         @close="handleClose"
         style="width: 250px; height: 300px"
       >
-        <el-menu-item index="person">
-          <el-icon><icon-menu /></el-icon>
-          <span class="text-lg">个人中心</span>
-        </el-menu-item>
         <el-menu-item index="product">
           <el-icon><icon-menu /></el-icon>
           <span class="text-lg">金融产品</span>

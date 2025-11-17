@@ -5,5 +5,4 @@ type RegisterRequest struct {
 	Password    string `json:"password"`
 	ComPassword string `json:"compassword"`
 	Email       string `json:"email"`
-	Isverified  bool   `json:"isverified"`
 }
