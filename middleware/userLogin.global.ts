@@ -9,8 +9,8 @@
 */
 export default defineNuxtRouteMiddleware((to) => {
     // 允许访问的公开路径
-    const publicPaths = ['/','/homePage', '/login', '/register']
-
+    const publicPaths = ['/','/homePage', '/login', '/register','/css','/setting/profile','/product/sellproduct']
+    const userStore = useUserStore()
     // 如果是公开路径，直接放行
     if (publicPaths.includes(to.path)) {
       return
@@ -19,8 +19,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const authToken = useCookie('AuthToken')?.value
 
     // 如果没有登录凭证，重定向到登录页
-    if (!authToken) {
-      ElMessage.error('请先登录')
+    if (!authToken&&!userStore.tokens) {
       return navigateTo('/login')
     }
 })
