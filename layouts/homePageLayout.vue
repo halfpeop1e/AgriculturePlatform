@@ -45,7 +45,7 @@
             <!-- 命名插槽 end：放置在右侧 -->
             <template #end>
                 <div class="flex items-center gap-5">
-                   <el-button type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
+                   <el-button v-if="!userStore.islogin" type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
                   <Avatar
       image="https://avatars.githubusercontent.com/u/9919?s=280&v=4"
       shape="circle"
@@ -75,6 +75,7 @@ import TopBar from '~/components/topBar.vue'
 import { nav, menuData } from '~/config/topbarRoute'
 import Menu from 'primevue/menu'
 import Avatar from 'primevue/avatar'
+const userStore = useUserStore()
 const menu = ref()
 
 // 在运行时把纯数据转换为 PrimeVue Menu 所需的 model（包含 command 函数）

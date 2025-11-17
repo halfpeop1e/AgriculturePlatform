@@ -101,7 +101,7 @@ const load = () => {
   height: 890px;
   overflow-y: auto;
   padding: 16px;
-  background-color: #f9fafb; /* 淡灰底，显平面感 */
+  background-color: rgba(255, 255, 255, 0.244);
   border-radius: 12px;
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05); /* 内阴影，轻柔分层 */
 }
