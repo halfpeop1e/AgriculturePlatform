@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import type { comfirmOrderRequest } from '~/types/comfirmOrder'
+import {v4 as uuidv4} from 'uuid'
 const emit = defineEmits<{
     (e: 'closeDialog'): void
   }>()
@@ -62,8 +64,16 @@ const props=defineProps<{
 function closeDialog() {
   emit('closeDialog')
 }
-
+const order = ref<comfirmOrderRequest>({
+    orderId: '',
+    productId: '',
+    quantity: 0,
+    totalprice: 0,
+    buyer: '',
+    saler: ''
+})
 function confirmOrder() {
+  const userStore=useUserStore()
   const stock = props.product.stock
   const qty = Number(orderQuantity.value || 0)
   const totalprice = props.product.price * qty
@@ -77,8 +87,14 @@ function confirmOrder() {
   }
 
   try {
-    const pid = Number(props.product.id)
-    BuyProduct(pid, qty,totalprice).then(() => {
+    //const pid = Number(props.product.id)
+    order.value.orderId=uuidv4()
+    order.value.productId = props.product.id
+    order.value.quantity = qty
+    order.value.totalprice = totalprice
+    order.value.buyer=userStore.userinfo.nickname
+    order.value.saler=props.product.saler
+    BuyProduct(order.value).then(() => {
       ElMessage.success(`已下单：${props.product.name} × ${qty}`)
       emit('closeDialog')
     }).catch((err) => {
