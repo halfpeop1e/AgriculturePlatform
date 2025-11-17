@@ -8,15 +8,17 @@
   注意：该模块使用全局的 ElMessage 与 loadingStore 显示消息与加载状态；调用方无需重复展示提示。
 */
 import {useAxios} from '~/composables/useAxios'
+import { useEmailAxios } from './useEmailAxios'
 import type { RegisterRequest } from '~/types/register'
 import { useLoadingStore } from '~/utils/loadingStore'
 
 const useAxiosInstance=useAxios()
+const useEmailAxiosInstance=useEmailAxios()
 export async function onSendCode(email:string){
     const LodingStore=useLoadingStore()
     LodingStore.setLoading(true)
     try{
-      const respone=await useAxiosInstance.post('/email/sendCode',{email:email})
+      const respone=await useEmailAxiosInstance.post('/email/sendCode',{email:email})
         console.log('服务器响应：',respone.data)
       if(respone.status===200){
         ElMessage.success('发送成功')
@@ -33,7 +35,7 @@ export async function onSendCode(email:string){
 }
 export async function onVerifyCode(email:string,code:string){
     try{
-        const respone=await useAxiosInstance.post('/email/verify',{email:email,code:code})
+        const respone=await useEmailAxiosInstance.post('/email/verify',{email:email,code:code})
         console.log('服务器响应：',respone.status)
         if(respone.status===200){
           ElMessage.success('验证成功')
@@ -53,6 +55,8 @@ export async function onRegister(data:RegisterRequest){
         const respone=await useAxiosInstance.post('/user/register',data)
         if(respone.status===200){
             ElMessage.success('注册成功')
+            console.log('注册成功，返回数据：',respone.data)
+            return respone.data
         }
         else{
             throw new Error('注册失败')

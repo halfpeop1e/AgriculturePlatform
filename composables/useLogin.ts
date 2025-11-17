@@ -7,7 +7,7 @@
   注意：该函数会直接修改全局 UserStore（因此调用方无需再次写入 store），若需替换为纯函数请修改实现。
 */
 import {useAxios} from '~/composables/useAxios'
-import moment from 'moment'
+import Cookies from 'js-cookie'
 import type { LoginRequest,LoginResponse } from '~/types/login'
 const useAxiosInstance=useAxios()
 export async function loginUser(loginData:LoginRequest){
@@ -15,10 +15,12 @@ export async function loginUser(loginData:LoginRequest){
         const UserStore=useUserStore()
         const response=await useAxiosInstance.post<LoginResponse>('/user/login',loginData)
         if(response.status===200){
-            console.log('用户登录成功',response.data)
-            UserStore.userId=response.data.userId
-            UserStore.tokens=response.data.tokens
-            UserStore.islogin=true
+            //console.log('用户登录成功',response)
+            UserStore.userId=response.data.data.userId
+            //console.log("userId:",UserStore.userId)
+            UserStore.tokens=response.data.data.tokens
+            UserStore.LoginSet()
+            navigateTo('/')
             return response.data
         }
         else{
@@ -28,4 +30,11 @@ export async function loginUser(loginData:LoginRequest){
     catch(err){
         console.error('用户登录失败',err)
     }
+}
+
+export function logoutUser(){
+    const userStore=useUserStore()
+    userStore.LogoutSet
+    Cookies.remove('AuthToken')
+    console.log('用户已登出，清除本地状态')
 }
