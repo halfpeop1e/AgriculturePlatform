@@ -14,4 +14,8 @@ type ProductRespond struct {
 
 type ProductListRespond struct {
 	ProductList []ProductRespond `json:"productList"`
+	Total       int64            `json:"total"`
+	Page        int              `json:"page"`
+	PageSize    int              `json:"pageSize"`
+	HasMore     bool             `json:"hasMore"`
 }

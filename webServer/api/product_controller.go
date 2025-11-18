@@ -1,16 +1,32 @@
 package v1
 
 import (
+	"net/http"
+	"strconv"
+
 	"go-agriculture/internal/dto/request"
 	gorm "go-agriculture/internal/server"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetProductList(c *gin.Context) {
+	pageStr := c.DefaultQuery("page", "1")
+	pageSizeStr := c.DefaultQuery("pageSize", "10")
 
-	msg, data, code := gorm.ProductServer.GetProductList()
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		page = 1
+	}
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil || pageSize < 1 {
+		pageSize = 10
+	}
+	if pageSize > 50 {
+		pageSize = 50
+	}
+
+	msg, data, code := gorm.ProductServer.GetProductList(page, pageSize)
 
 	JsonBack(c, msg, code, data)
 }
