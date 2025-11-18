@@ -49,13 +49,36 @@ func (p *productServer) PostProduct(req request.PostProductRequest) (string, int
 	return "提交成功", 0
 }
 
-func (p *productServer) GetProductList() (string, *respond.ProductListRespond, int) {
-	var products []model.Product
-	if res := dao.GormDB.Where("status = ?", "1").Find(&products); res.Error != nil {
+func (p *productServer) GetProductList(page, pageSize int) (string, *respond.ProductListRespond, int) {
+	var total int64
+	if res := dao.GormDB.Model(&model.Product{}).Where("status = ?", "1").Count(&total); res.Error != nil {
 		log.Printf("Database error: %v", res.Error)
 		return "查询失败", nil, -1
 	}
-	productList := &respond.ProductListRespond{}
+
+	productList := &respond.ProductListRespond{
+		ProductList: make([]respond.ProductRespond, 0),
+		Total:       total,
+		Page:        page,
+		PageSize:    pageSize,
+		HasMore:     int64(page*pageSize) < total,
+	}
+
+	if total == 0 {
+		return "获取成功", productList, 0
+	}
+
+	offset := (page - 1) * pageSize
+	if offset < 0 {
+		offset = 0
+	}
+
+	var products []model.Product
+	if res := dao.GormDB.Where("status = ?", "1").Order("create_at DESC").Limit(pageSize).Offset(offset).Find(&products); res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "查询失败", nil, -1
+	}
+
 	for _, product := range products {
 		images := make([]string, 0)
 		if product.Images == "" {
@@ -78,6 +101,12 @@ func (p *productServer) GetProductList() (string, *respond.ProductListRespond, i
 			Description: product.Description,
 		}
 		productList.ProductList = append(productList.ProductList, newProduct)
+	}
+
+	if len(productList.ProductList) == 0 {
+		productList.HasMore = false
+	} else {
+		productList.HasMore = int64(page*pageSize) < total
 	}
 	return "获取成功", productList, 0
 }
