@@ -6,7 +6,7 @@
       </div>
     <el-divider />
     <div class="flex items-center justify-center">
-        <div style="width: 900px;height:350px; margin-top: 20px;">
+        <div style="width: 1000px;height:350px; margin-top: 20px;">
         <ImageShow size="350px" :images="Imageitem"/>  
         </div> 
         <el-divider direction="vertical" class="h-full"/>
@@ -31,7 +31,7 @@
         </div>
     
     <el-divider />
-    <div style="width: 100%; margin-top: 20px;" class="flex justify-center">
+    <div style="width: 100%;" class="flex justify-center">
     <DataInHome />      
     </div>
     <el-divider />
