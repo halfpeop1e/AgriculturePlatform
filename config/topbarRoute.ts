@@ -23,7 +23,7 @@ export const nav = [
         label:'贷款产品',routername:'/money/loan',icon: 'pi pi-fw pi-wallet'
       },
       {
-        label:'金融产品',routername:'/money/finance/person',icon: 'pi pi-fw pi-chart-line'
+        label:'金融产品',routername:'/money/finance/product',icon: 'pi pi-fw pi-chart-line'
       },
     ]
   },

@@ -10,10 +10,6 @@
         @close="handleClose"
         style="width: 250px; height: 300px"
       >
-        <el-menu-item index="person">
-          <el-icon><icon-menu /></el-icon>
-          <span class="text-lg">个人中心</span>
-        </el-menu-item>
         <el-menu-item index="product">
           <el-icon><icon-menu /></el-icon>
           <span class="text-lg">金融产品</span>
@@ -26,74 +22,338 @@
     </div>
 
     <div class="overflow-y-auto col-start-2">
-      <div class="grid grid-cols-4 gap-5">
-        <el-card style="max-width: 480px">
-          <template #header>
-            <div class="grid grid-cols-2 items-center gap-2">
-              <div>产品1</div>
-              <img
-                class="w-20"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+      <div class="flex flex-col gap-6">
+        <div class="flex gap-4 mt-20 flex-wrap">
+          <div class="w-200 flex gap-1 items-center ">
+            <span>请输入贷款金额:</span>
+            <el-input
+              v-model="input"
+              style="width: 200px"
+              :formatter="(value : any) => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+              :parser="(value : any) => value.replace(/[^\d]/g, '')"
+              maxlength="15"
+            />
+          </div>
+          <div>
+            <span>业务范围:</span>
+            <el-select
+              multiple
+              v-model="value"
+              clearable
+              placeholder="Select"
+              style="width: 250px"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               />
-            </div>
-          </template>
-          <span>描述</span>
-        </el-card>
-        <el-card style="max-width: 480px">
-          <template #header>
-            <div class="grid grid-cols-2 items-center gap-2">
-              <div>产品1</div>
-              <img
-                class="w-20"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              />
-            </div>
-          </template>
-          <span>描述</span>
-        </el-card>
-        <el-card style="max-width: 480px">
-          <template #header>
-            <div class="grid grid-cols-2 items-center gap-2">
-              <div>产品1</div>
-              <img
-                class="w-20"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              />
-            </div>
-          </template>
-          <span>描述</span>
-        </el-card>
-        <el-card style="max-width: 480px">
-          <template #header>
-            <div class="grid grid-cols-2 items-center gap-2">
-              <div>产品1</div>
-              <img
-                class="w-20"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              />
-            </div>
-          </template>
-          <span>描述</span>
-        </el-card>
-        <el-card style="max-width: 480px">
-          <template #header>
-            <div class="grid grid-cols-2 items-center gap-2">
-              <div>产品1</div>
-              <img
-                class="w-20"
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              />
-            </div>
-          </template>
-          <span>描述</span>
-        </el-card>
+            </el-select>
+          </div>
+          <div>
+            <span>担保要求：</span>
+            <el-select v-model="danbao" placeholder="Select" style="width: 240px">
+    <el-option
+      v-for="item in danbaoOptions"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
+          </div>
+          <div>
+            <span>征信要求：</span>
+            <el-select v-model="trust" placeholder="Select" style="width: 240px">
+    <el-option
+      v-for="item in trustOptions"
+      :key="item.value"
+      :label="item.description"
+      :value="item.value"
+    />
+  </el-select>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-5">
+          <div
+            v-for="(product, index) in productStore.orderList"
+            :key="index"
+            class="w-full"
+          >
+            <el-card style="max-width: 480px">
+              <template #header>
+                <div class="grid grid-cols-2 items-center gap-2">
+                  <div class="text-xl font-bold">{{ product.productName }}</div>
+                  <img
+                    class="w-20"
+                    :src="
+                      product.productAvatar ||
+                      `https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png`
+                    "
+                  />
+                </div>
+              </template>
+              <span class="block mb-2"
+                >贷款额度(元)：{{ product.loanAmountRange.min }} -
+                {{ product.loanAmountRange.max }}</span
+              >
+              <div class="flex gap-2">
+                <span>业务范围:</span>
+                <el-tag
+                  v-if="product.supportedPurposes.production"
+                  type="success"
+                  >农业生产</el-tag
+                >
+                <el-tag
+                  v-if="product.supportedPurposes.equipment"
+                  type="success"
+                  >设备购置</el-tag
+                >
+                <el-tag v-if="product.supportedPurposes.land" type="success"
+                  >土地流转/租赁</el-tag
+                >
+                <el-tag
+                  v-if="product.supportedPurposes.operating"
+                  type="success"
+                  >经营周转</el-tag
+                >
+                <el-tag
+                  v-if="product.supportedPurposes.infrastructure"
+                  type="success"
+                  >设施建设</el-tag
+                >
+              </div>
+
+              <span class="block mb-2"
+                >生效日期：{{ product.effectiveDate.toLocaleDateString() }} -
+                {{ product.expiryDate ?? "长期" }}</span
+              >
+              <template #footer>
+                <div class="grid grid-cols-2 items-center gap-2">
+                  <el-button
+                    type="info"
+                    @click="
+                      {
+                        centerDialogVisible = true;
+                        selectedProduct = product;
+                      }
+                    "
+                    >查看详情</el-button
+                  >
+                  <el-button type="primary">申请</el-button>
+                </div>
+              </template>
+            </el-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <el-dialog
+    v-model="centerDialogVisible"
+    title="产品详情"
+    width="600"
+    align-center
+  >
+    <div v-if="selectedProduct" class="space-y-4">
+      <!-- 产品基本信息 -->
+      <div class="flex items-center gap-4 pb-4 border-b">
+        <img
+          :src="
+            selectedProduct.productAvatar ||
+            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png'
+          "
+          alt="产品图片"
+          class="w-20 h-20 object-cover rounded"
+        />
+        <div>
+          <h3 class="text-xl font-semibold">
+            {{ selectedProduct.productName }}
+          </h3>
+          <p class="text-gray-500">产品编号: {{ selectedProduct.productId }}</p>
+        </div>
+      </div>
+
+      <!-- 银行信息 -->
+       <div>
+        <h4 class="font-medium mb-3 text-lg">银行信息</h4>
+         <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
+          <div>
+            <span>银行名称:{{ selectedProduct.financialInstitution.name }}</span>
+          </div>
+          <div>
+            <span>客服电话:{{ selectedProduct.financialInstitution.customerService }}</span>
+          </div>
+         </div>
+       </div>
+      <!-- 融资条款 -->
+      <div>
+        <h4 class="font-medium mb-3 text-lg">融资条款</h4>
+        <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
+          <div>
+            <span class="text-gray-600">贷款金额范围：</span>
+            <span class="font-medium"
+              >{{ selectedProduct.loanAmountRange.min }} -
+              {{ selectedProduct.loanAmountRange.max }}</span
+            >
+          </div>
+          <div>
+            <span class="text-gray-600">年利率：</span>
+            <span class="font-medium"
+              >{{
+                (selectedProduct.interestRate.finalRate * 100).toFixed(2)
+              }}%</span
+            >
+            <span class="text-xs text-gray-500"
+              >({{
+                selectedProduct.interestRate.type === 0 ? "固定" : "浮动"
+              }}利率)</span
+            >
+          </div>
+          <div>
+            <span class="text-gray-600">贷款期限：</span>
+            <span class="font-medium"
+              >{{ selectedProduct.loanTerm.minMonths }} -
+              {{ selectedProduct.loanTerm.maxMonths }} 个月</span
+            >
+          </div>
+          <div>
+            <span class="text-gray-600">预计审批时间：</span>
+            <span class="font-medium">{{ selectedProduct.estimatedTime }}</span>
+          </div>
+        </div>
+
+        <div
+          v-if="selectedProduct.interestRate.discountDescription"
+          class="mt-2 p-3 bg-blue-50 rounded text-sm"
+        >
+          <span class="text-blue-700"
+            >😲 利率优惠：{{
+              selectedProduct.interestRate.discountDescription
+            }}</span
+          >
+        </div>
+      </div>
+
+      <!-- 申请条件 -->
+      <div>
+        <h4 class="font-medium mb-3 text-lg">申请条件</h4>
+        <div class="bg-gray-50 p-4 rounded space-y-2">
+          <div>
+            <span class="text-gray-600">最低经营年限：</span>
+            <span>{{ selectedProduct.eligibility.minOperatingYears }} 年</span>
+          </div>
+          <div>
+            <span class="text-gray-600">征信要求：</span>
+            <span>{{ selectedProduct.eligibility.creditRequirement }}</span>
+          </div>
+          <div v-if="selectedProduct.eligibility.collateralRequirements">
+            <span class="text-gray-600">担保要求：</span>
+            <span>{{
+              selectedProduct.eligibility.collateralRequirements
+            }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 支持的业务范围 -->
+      <div>
+        <h4 class="font-medium mb-3 text-lg">支持的业务范围</h4>
+        <div class="flex flex-wrap gap-2">
+          <el-tag
+            v-if="selectedProduct.supportedPurposes.production"
+            type="success"
+            >农业生产</el-tag
+          >
+          <el-tag
+            v-if="selectedProduct.supportedPurposes.equipment"
+            type="success"
+            >设备购置</el-tag
+          >
+          <el-tag v-if="selectedProduct.supportedPurposes.land" type="success"
+            >土地流转/租赁</el-tag
+          >
+          <el-tag
+            v-if="selectedProduct.supportedPurposes.operating"
+            type="success"
+            >经营周转</el-tag
+          >
+          <el-tag
+            v-if="selectedProduct.supportedPurposes.infrastructure"
+            type="success"
+            >设施建设</el-tag
+          >
+        </div>
+      </div>
+
+      <!-- 有效期信息 -->
+      <div class="text-sm text-gray-500 pt-2 border-t">
+        生效日期：{{ selectedProduct.effectiveDate.toLocaleDateString() }}
+        <span v-if="selectedProduct.expiryDate">
+          至 {{ selectedProduct.expiryDate.toLocaleDateString() }}
+        </span>
+        <span v-else> (长期有效) </span>
+      </div>
+    </div>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">关闭</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
+import type { AgriculturalLoanProduct } from "~/types/loanProduct";
+
 definePageMeta({ layout: "home-page-layout" });
+onMounted(async () => {
+  const data = await getLoanProductList();
+  productStore.setOrder(data ?? [createDefaultProduct()]);
+});
+const createDefaultProduct = (): AgriculturalLoanProduct => {
+  return {
+    productId: "default-001",
+    productName: "农业小额贷款",
+    productAvatar:
+      "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+      financialInstitution:{
+        id: "001",
+        name: "农业银行",
+        customerService: "1234567890",
+      },
+    loanAmountRange: {
+      min: 10000,
+      max: 500000,
+    },
+    interestRate: {
+      type: 0,
+      finalRate: 0.05,
+      discountDescription: "首年利率优惠0.5%",
+    },
+    loanTerm: {
+      minMonths: 6,
+      maxMonths: 36,
+    },
+    eligibility: {
+      minOperatingYears: 1,
+      creditRequirement: "信用记录良好",
+      collateralRequirements: "无需抵押",
+    },
+    supportedPurposes: {
+      production: true,
+      equipment: true,
+      land: false,
+      operating: true,
+      infrastructure: false,
+    },
+    estimatedTime: "3-5个工作日",
+    updateTime: new Date(),
+    effectiveDate: new Date(),
+  };
+};
+const productStore = useLoanStore();
 const router = useRouter();
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
@@ -102,6 +362,141 @@ const handleOpen = (key: string, keyPath: string[]) => {
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
 };
+const centerDialogVisible = ref(false);
+const selectedProduct = ref<AgriculturalLoanProduct | null>(null);
+const value = ref<string[]>();
+const input = ref("");
+const danbao = ref("")
+const trust = ref("")
+const options = [
+  {
+    value: "Option1",
+    label: "农业生产",
+  },
+  {
+    value: "Option2",
+    label: "设备购置",
+  },
+  {
+    value: "Option3",
+    label: "土地流转/租赁",
+  },
+  {
+    value: "Option4",
+    label: "经营周转",
+  },
+  {
+    value: "Option5",
+    label: "设施建设",
+  },
+];
+const danbaoOptions = [
+  {
+    value: "no_collateral",
+    label: "无需抵押",
+  },
+  {
+    value: "rural_homestead",
+    label: "农村宅基地使用权",
+  },
+  {
+    value: "agricultural_facilities",
+    label: "农业设施",
+  },
+  {
+    value: "machinery_equipment",
+    label: "机械设备",
+  },
+  {
+    value: "greenhouse",
+    label: "温室大棚",
+  },
+  {
+    value: "time_deposit",
+    label: "定期存单",
+  },
+  {
+    value: "insurance_policy",
+    label: "保险保单",
+  },
+  {
+    value: "accounts_receivable",
+    label: "应收账款",
+  },
+  {
+    value: "government_fund",
+    label: "政府风险补偿基金",
+  },
+  {
+    value: "guarantee_company",
+    label: "融资担保公司",
+  },
+  {
+    value: "enterprise_guarantee",
+    label: "龙头企业担保",
+  },
+  {
+    value: "cooperative_joint_guarantee",
+    label: "合作社联保",
+  },
+  {
+    value: "land_management_rights",
+    label: "土地经营权",
+  },
+  {
+    value: "aquaculture_water_surface",
+    label: "养殖水面使用权",
+  },
+  {
+    value: "forestry_rights",
+    label: "林权",
+  },
+  {
+    value: "agricultural_futures_warehouse",
+    label: "农产品期货仓单",
+  },
+  {
+    value: "living_assets",
+    label: "活体抵押（牲畜、水产等）",
+  },
+  {
+    value: "intellectual_property",
+    label: "知识产权（农产品品牌、专利等）",
+  }
+];
+
+const trustOptions = [
+  {
+    value: "strict",
+    label: "严格",
+    description: "近2年内无不良信用记录，当前无逾期"
+  },
+  {
+    value: "standard", 
+    label: "标准",
+    description: "近1年无30天以上逾期，累计逾期不超过3次"
+  },
+  {
+    value: "lenient",
+    label: "宽松", 
+    description: "当前无重大不良记录，轻微逾期已结清可接受"
+  },
+  {
+    value: "government_guaranteed",
+    label: "政府增信",
+    description: "无恶意逃废债记录，政府增信项目可适当放宽"
+  },
+  {
+    value: "very_strict",
+    label: "非常严格",
+    description: "近5年内无任何不良信用记录，征信完美"
+  },
+  {
+    value: "flexible",
+    label: "灵活",
+    description: "接受近期有轻微逾期，重点关注经营状况和还款能力"
+  }
+];
 </script>
 
 <style scoped></style>
