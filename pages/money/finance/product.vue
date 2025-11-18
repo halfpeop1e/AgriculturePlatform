@@ -24,7 +24,7 @@
     <div class="overflow-y-auto col-start-2">
       <div class="flex flex-col gap-6">
         <div class="flex gap-4 mt-20 flex-wrap">
-          <div class="w-200 flex gap-1 items-center ">
+          <div class="w-200 flex gap-1 items-center">
             <span>请输入贷款金额:</span>
             <el-input
               v-model="input"
@@ -53,25 +53,33 @@
           </div>
           <div>
             <span>担保要求：</span>
-            <el-select v-model="danbao" placeholder="Select" style="width: 240px">
-    <el-option
-      v-for="item in danbaoOptions"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    />
-  </el-select>
+            <el-select
+              v-model="danbao"
+              placeholder="Select"
+              style="width: 240px"
+            >
+              <el-option
+                v-for="item in danbaoOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </div>
           <div>
             <span>征信要求：</span>
-            <el-select v-model="trust" placeholder="Select" style="width: 240px">
-    <el-option
-      v-for="item in trustOptions"
-      :key="item.value"
-      :label="item.description"
-      :value="item.value"
-    />
-  </el-select>
+            <el-select
+              v-model="trust"
+              placeholder="Select"
+              style="width: 240px"
+            >
+              <el-option
+                v-for="item in trustOptions"
+                :key="item.value"
+                :label="item.description"
+                :value="item.value"
+              />
+            </el-select>
           </div>
         </div>
         <div class="grid grid-cols-4 gap-5">
@@ -80,7 +88,7 @@
             :key="index"
             class="w-full"
           >
-            <el-card style="max-width: 480px">
+            <el-card style="max-width: 480px" v-if="handleSelect(product)">
               <template #header>
                 <div class="grid grid-cols-2 items-center gap-2">
                   <div class="text-xl font-bold">{{ product.productName }}</div>
@@ -175,17 +183,23 @@
       </div>
 
       <!-- 银行信息 -->
-       <div>
+      <div>
         <h4 class="font-medium mb-3 text-lg">银行信息</h4>
-         <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
+        <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
           <div>
-            <span>银行名称:{{ selectedProduct.financialInstitution.name }}</span>
+            <span
+              >银行名称:{{ selectedProduct.financialInstitution.name }}</span
+            >
           </div>
           <div>
-            <span>客服电话:{{ selectedProduct.financialInstitution.customerService }}</span>
+            <span
+              >客服电话:{{
+                selectedProduct.financialInstitution.customerService
+              }}</span
+            >
           </div>
-         </div>
-       </div>
+        </div>
+      </div>
       <!-- 融资条款 -->
       <div>
         <h4 class="font-medium mb-3 text-lg">融资条款</h4>
@@ -318,11 +332,11 @@ const createDefaultProduct = (): AgriculturalLoanProduct => {
     productName: "农业小额贷款",
     productAvatar:
       "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-      financialInstitution:{
-        id: "001",
-        name: "农业银行",
-        customerService: "1234567890",
-      },
+    financialInstitution: {
+      id: "001",
+      name: "农业银行",
+      customerService: "1234567890",
+    },
     loanAmountRange: {
       min: 10000,
       max: 500000,
@@ -338,7 +352,7 @@ const createDefaultProduct = (): AgriculturalLoanProduct => {
     },
     eligibility: {
       minOperatingYears: 1,
-      creditRequirement: "信用记录良好",
+      creditRequirement: "近2年内无不良信用记录，当前无逾期",
       collateralRequirements: "无需抵押",
     },
     supportedPurposes: {
@@ -364,139 +378,155 @@ const handleClose = (key: string, keyPath: string[]) => {
 };
 const centerDialogVisible = ref(false);
 const selectedProduct = ref<AgriculturalLoanProduct | null>(null);
-const value = ref<string[]>();
+const value = ref<string[]>([]);
 const input = ref("");
-const danbao = ref("")
-const trust = ref("")
+const danbao = ref("");
+const trust = ref("");
 const options = [
   {
-    value: "Option1",
+    value: "production",
     label: "农业生产",
   },
   {
-    value: "Option2",
+    value: "equipment",
     label: "设备购置",
   },
   {
-    value: "Option3",
+    value: "land",
     label: "土地流转/租赁",
   },
   {
-    value: "Option4",
+    value: "operating",
     label: "经营周转",
   },
   {
-    value: "Option5",
+    value: "infrastructure",
     label: "设施建设",
   },
 ];
 const danbaoOptions = [
   {
-    value: "no_collateral",
+    value: "无需抵押",
     label: "无需抵押",
   },
   {
-    value: "rural_homestead",
+    value: "农村宅基地使用权",
     label: "农村宅基地使用权",
   },
   {
-    value: "agricultural_facilities",
+    value: "农业设施",
     label: "农业设施",
   },
   {
-    value: "machinery_equipment",
+    value: "机械设备",
     label: "机械设备",
   },
   {
-    value: "greenhouse",
+    value: "温室大棚",
     label: "温室大棚",
   },
   {
-    value: "time_deposit",
+    value: "定期存单",
     label: "定期存单",
   },
   {
-    value: "insurance_policy",
+    value: "保险保单",
     label: "保险保单",
   },
   {
-    value: "accounts_receivable",
+    value: "应收账款",
     label: "应收账款",
   },
   {
-    value: "government_fund",
+    value: "政府风险补偿基金",
     label: "政府风险补偿基金",
   },
   {
-    value: "guarantee_company",
+    value: "融资担保公司",
     label: "融资担保公司",
   },
   {
-    value: "enterprise_guarantee",
+    value: "龙头企业担保",
     label: "龙头企业担保",
   },
   {
-    value: "cooperative_joint_guarantee",
+    value: "合作社联保",
     label: "合作社联保",
   },
   {
-    value: "land_management_rights",
+    value: "土地经营权",
     label: "土地经营权",
   },
   {
-    value: "aquaculture_water_surface",
+    value: "养殖水面使用权",
     label: "养殖水面使用权",
   },
   {
-    value: "forestry_rights",
+    value: "林权",
     label: "林权",
   },
   {
-    value: "agricultural_futures_warehouse",
+    value: "农产品期货仓单",
     label: "农产品期货仓单",
   },
   {
-    value: "living_assets",
+    value: "活体抵押（牲畜、水产等）",
     label: "活体抵押（牲畜、水产等）",
   },
   {
-    value: "intellectual_property",
+    value: "知识产权（农产品品牌、专利等）",
     label: "知识产权（农产品品牌、专利等）",
-  }
+  },
 ];
 
 const trustOptions = [
   {
-    value: "strict",
+    value: "近2年内无不良信用记录，当前无逾期",
     label: "严格",
-    description: "近2年内无不良信用记录，当前无逾期"
+    description: "近2年内无不良信用记录，当前无逾期",
   },
   {
-    value: "standard", 
+    value: "近1年无30天以上逾期，累计逾期不超过3次",
     label: "标准",
-    description: "近1年无30天以上逾期，累计逾期不超过3次"
+    description: "近1年无30天以上逾期，累计逾期不超过3次",
   },
   {
-    value: "lenient",
-    label: "宽松", 
-    description: "当前无重大不良记录，轻微逾期已结清可接受"
+    value: "当前无重大不良记录，轻微逾期已结清可接受",
+    label: "宽松",
+    description: "当前无重大不良记录，轻微逾期已结清可接受",
   },
   {
-    value: "government_guaranteed",
+    value: "无恶意逃废债记录，政府增信项目可适当放宽",
     label: "政府增信",
-    description: "无恶意逃废债记录，政府增信项目可适当放宽"
+    description: "无恶意逃废债记录，政府增信项目可适当放宽",
   },
   {
-    value: "very_strict",
+    value: "近5年内无任何不良信用记录，征信完美",
     label: "非常严格",
-    description: "近5年内无任何不良信用记录，征信完美"
+    description: "近5年内无任何不良信用记录，征信完美",
   },
   {
-    value: "flexible",
+    value: "接受近期有轻微逾期，重点关注经营状况和还款能力",
     label: "灵活",
-    description: "接受近期有轻微逾期，重点关注经营状况和还款能力"
-  }
+    description: "接受近期有轻微逾期，重点关注经营状况和还款能力",
+  },
 ];
+const handleSelect = (product: AgriculturalLoanProduct) => {
+  if(input.value !== "" && (parseFloat(input.value) <  product.loanAmountRange.min || parseFloat(input.value) > product.loanAmountRange.max)){
+    return false
+  }
+  if(danbao.value !== "" && product.eligibility.collateralRequirements !== danbao.value){
+    return false
+  }
+  if(trust.value !== "" && product.eligibility.creditRequirement !== trust.value){
+    return false  
+  }
+  if( value.value.length > 0 && value.value.some(item => (product.supportedPurposes as any)[item] === false) ){
+    
+    return false
+  }
+  return true
+}
 </script>
 
 <style scoped></style>
