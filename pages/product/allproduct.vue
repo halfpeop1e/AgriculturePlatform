@@ -1,99 +1,128 @@
 <template>
-    <div>
-      <div v-if="loading">
-    <div class="m-10"></div>
-    <el-skeleton :rows="4" animated />
-    <div class="m-10"></div>
-    <el-skeleton :rows="4" animated />
-    <div class="m-10"></div>
-    <el-skeleton :rows="4" animated />
-    <div class="m-10"></div>
-    <el-skeleton :rows="4" animated />      
+  <div>
+    <div v-if="initialLoading" class="space-y-6">
+      <div class="m-10"></div>
+      <el-skeleton :rows="4" animated />
+      <div class="m-10"></div>
+      <el-skeleton :rows="4" animated />
+      <div class="m-10"></div>
+      <el-skeleton :rows="4" animated />
+      <div class="m-10"></div>
+      <el-skeleton :rows="4" animated />
     </div>
-    <div class="product-list-container">
-    <ul v-infinite-scroll="load" class="product-list">
-      <li
-        v-for="(item, index) in products"
-        :key="index"
-        class="product-item"
+
+    <div v-else class="product-list-container">
+      <ul
+        v-infinite-scroll="loadMore"
+        class="product-list"
+        :infinite-scroll-disabled="loading || finished"
+        infinite-scroll-distance="160"
       >
-        <ProductCard :product="item" @open-dialog="dialogControler.openDialog(item)"/>
-      </li>
-    </ul>
-     <Comfirmbuy :product="comfirmproduct.product" :show-dialog="showDialog" @close-dialog="dialogControler.closeDialog"/>
-  </div>
+        <li
+          v-for="(item, index) in products"
+          :key="item.id || index"
+          class="product-item"
+        >
+          <ProductCard :product="item" @open-dialog="dialogControler.openDialog(item)" />
+        </li>
+      </ul>
+
+      <el-empty
+        v-if="!products.length && !loading"
+        description="暂时没有上架的助农产品"
+        class="mt-6"
+      />
+
+      <el-skeleton
+        v-else-if="loading"
+        :rows="3"
+        animated
+        class="mt-6"
+      />
+
+      <div
+        v-else-if="finished && products.length"
+        class="text-center text-gray-400 mt-4 text-sm"
+      >
+        已加载全部 {{ total }} 件商品
+      </div>
     </div>
-  
+
+    <Comfirmbuy
+      :product="comfirmproduct.product"
+      :show-dialog="showDialog"
+      @close-dialog="dialogControler.closeDialog"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { runWithBackoff } from '~/composables/useBackoff'
 import Comfirmbuy from '~/components/comfirmbuy.vue'
 import ProductCard from '~/components/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
 import { useComfirmBuyStore } from '~/utils/comfirmBuyStore'
+import type { productResponse } from '~/types/product'
 definePageMeta({ layout: 'home-page-layout' })
 const showDialog = ref(false)
-const comfirmproduct=useComfirmBuyStore()
-const loading=false
-const productslist=await getProductList()
-const products = ref([
-  {
-    id:'1',
-    name: '绿色有机苹果',
-    image: '/images/apple.jpg',
-    description: '源自无污染果园，新鲜香甜可口，富含维生素C。',
-    price: 12.8,
-    stock: 56,
-    saler: '果园直供'
-  },
-  {
-    id:'2',
-    name: '土鸡蛋',
-    image: '/images/egg.jpg',
-    description: '农家散养土鸡，新鲜营养不打药。',
-    price: 8.5,
-    stock: 120,
-    saler: '农家直供'
-  },
-  {
-    id:'3',
-    name: '香甜玉米',
-    image: '/images/corn.jpg',
-    description: '现摘玉米粒饱满，香糯可口。',
-    price: 3.5,
-    stock: 300,
-    saler: '田园直供'
-  }
-])
-class dialogControl{
-  openDialog(product:any){
+const comfirmproduct = useComfirmBuyStore()
+
+const products = ref<productResponse[]>([])
+const loading = ref(false)
+const initialLoading = ref(true)
+const finished = ref(false)
+const total = ref(0)
+const page = ref(1)
+const pageSize = 9
+// 重试计数：如果连续发生多次失败，停止重试以避免无限请求
+const retryCount = ref(0)
+const maxRetries = 3
+
+class dialogControl {
+  openDialog(product: productResponse) {
     comfirmproduct.setProduct(product)
-    showDialog.value=true
+    showDialog.value = true
   }
-  closeDialog(){
-    showDialog.value=false
+  closeDialog() {
+    showDialog.value = false
     comfirmproduct.resetProduct()
   }
 }
-const dialogControler=new dialogControl()
-// 模拟懒加载
-const load = () => {
-  setTimeout(() => {
-    products.value.push(
-      ...Array(3)
-        .fill(0)
-        .map((_, i) => ({
-          id: (products.value.length + i + 1).toString(),
-          name: `助农产品 ${products.value.length + i + 1}`,
-          image: '/testproductimg.jpg',
-          description: '助农优质产品，品质保障。',
-          price: 10 + Math.random() * 5,
-          stock: 50 + Math.floor(Math.random() * 100),
-          saler: '助农直供'
-        }))
-    )
-  }, 800)
+const dialogControler = new dialogControl()
+
+const loadMore = async () => {
+  if (loading.value || finished.value) return
+  loading.value = true
+  try {
+    // 使用通用的指数退避重试助手，runWithBackoff 会在内部处理重试与延迟
+    const result = await runWithBackoff(() => getProductList({ page: page.value, pageSize }), {
+      retries: 3,
+      baseDelay: 600,
+    })
+
+    // result 肯定是有值或会被上层抛出
+    products.value.push(...result.list)
+    total.value = result.total
+    finished.value = !result.hasMore
+    if (result.hasMore) {
+      page.value += 1
+    }
+  } catch (error) {
+    // runWithBackoff 超出重试次数会抛出错误到这里
+    console.error('加载产品列表最终失败：', error)
+    finished.value = true // 停止自动再试，交由用户手动刷新或重试按钮
+    ElMessage.error('加载产品列表失败，请检查网络或稍后刷新')
+  } finally {
+    loading.value = false
+    initialLoading.value = false
+  }
 }
+
+onMounted(async () => {
+  await loadMore()
+})
 </script>
 
 <style scoped>
