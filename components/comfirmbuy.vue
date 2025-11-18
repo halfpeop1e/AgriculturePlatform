@@ -53,7 +53,7 @@ const props=defineProps<{
   product: {
     id: string
     name: string
-    image: string
+    image:{ url: string}[]
     description: string
     price: number
     stock: number
