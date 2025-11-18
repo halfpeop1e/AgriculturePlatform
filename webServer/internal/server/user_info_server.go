@@ -79,9 +79,6 @@ func (u *userInfoService) Register(registerReq request.RegisterRequest) (string,
 		return "两次密码不一致", nil, -1
 
 	}
-	if !registerReq.Isverified {
-		return "请先验证邮箱", nil, -1
-	}
 
 	var user model.User
 	message, ret := u.checkNameExist(registerReq.Username, registerReq.Email)
