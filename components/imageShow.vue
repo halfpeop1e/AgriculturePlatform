@@ -22,6 +22,7 @@
 
       <!-- 居中文字 -->
       <div
+        v-if="item.text"
         class="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-5xl font-semibold"
       >
         {{ item.text }}
@@ -33,19 +34,23 @@
 <script setup lang="ts">
 interface ImageItem {
   url: string
-  text: string
+  // 文本是可选的：某些轮播项可能只展示图片不需要覆盖文字
+  text?: string
 }
+import type { PropType } from 'vue'
+
 const props = defineProps({
-   size: {
+  size: {
     type: String,
     default: '350px',
   },
   images: {
-    type: Array as () => ImageItem[],
+    type: Array as PropType<ImageItem[]>,
+    default: () => [] as ImageItem[],
     // 示例结构：
     // [
     //   { url: 'https://example.com/1.jpg', text: '图片一描述' },
-    //   { url: 'https://example.com/2.jpg', text: '图片二描述' },
+    //   { url: 'https://example.com/2.jpg' }, // 没有 text 时也能正常展示
     // ]
   },
 })

@@ -12,11 +12,7 @@
     <div class="flex gap-6">
       <!-- 左侧产品图片 -->
       <div class="w-48 aspect-[4/3] overflow-hidden rounded-lg">
-        <img
-          :src="product.image"
-          alt="product"
-          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
-        />
+        <imageShow :images="product.image"/>
       </div>
 
       <!-- 右侧信息 -->
@@ -65,7 +61,7 @@ import { ref } from 'vue'
 interface Product {
   id: string
   name: string
-  image: string
+  image:{ url: string}[]
   description: string
   price: number
   stock: number
