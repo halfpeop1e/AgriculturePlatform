@@ -9,7 +9,7 @@
 */
 export default defineNuxtRouteMiddleware((to) => {
     // 允许访问的公开路径
-    const publicPaths = ['/','/homePage', '/login', '/register','/css','/setting/profile','/product/sellproduct']
+    const publicPaths = ['/','/homePage', '/login', '/register','/css','/setting/profile','/product/sellproduct','/product/allproduct']
     const userStore = useUserStore()
     // 如果是公开路径，直接放行
     if (publicPaths.includes(to.path)) {
