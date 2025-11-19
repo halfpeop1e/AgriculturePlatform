@@ -86,7 +86,10 @@ const menuItems = computed(() =>
             return {
                 label: m.label,
                 icon: m.icon,
-                command: () => console.log('退出登录')
+                command: () => {
+                  logoutUser()
+                  navigateTo('/homePage')
+                }
             }
         }
         return {
