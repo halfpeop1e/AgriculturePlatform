@@ -102,6 +102,7 @@ function saveProfile() {
     .map((t) => t.trim())
     .filter((t) => t.length > 0)
   // TODO: 调用 API 保存
+  changeUserProfile(profile.value)
   console.log('保存的个人信息：', profile.value)
   notice.value = { type: 'success', text: '个人信息已保存' }
 }
