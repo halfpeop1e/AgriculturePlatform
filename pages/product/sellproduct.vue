@@ -140,10 +140,6 @@ function validate() {
         errors.description = '请填写商品描述'
         ok = false
     }
-    if (!form.saler || !form.saler.trim()) {
-        errors.saler = '请填写商家名称'
-        ok = false
-    }
     if (!form.contactEmail || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.contactEmail)) {
         errors.contactEmail = '请输入有效邮箱'
         ok = false
