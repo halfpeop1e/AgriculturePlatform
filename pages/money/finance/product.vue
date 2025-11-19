@@ -22,6 +22,7 @@
     </div>
 
     <div class="overflow-y-auto col-start-2">
+      <Button label="添加" @click="openAdd = true" severity="help" />
       <div class="flex flex-col gap-6">
         <div class="flex gap-4 mt-20 flex-wrap">
           <div class="w-200 flex gap-1 items-center">
@@ -88,6 +89,7 @@
             :key="index"
             class="w-full"
           >
+          {{ console.log(product) }}
             <el-card style="max-width: 480px" v-if="handleSelect(product)">
               <template #header>
                 <div class="grid grid-cols-2 items-center gap-2">
@@ -133,8 +135,7 @@
               </div>
 
               <span class="block mb-2"
-                >生效日期：{{ product.effectiveDate.toLocaleDateString() }} -
-                {{ product.expiryDate ?? "长期" }}</span
+                >生效日期：{{ new Date(product.effectiveDate).toLocaleDateString()}}</span
               >
               <template #footer>
                 <div class="grid grid-cols-2 items-center gap-2">
@@ -302,9 +303,9 @@
 
       <!-- 有效期信息 -->
       <div class="text-sm text-gray-500 pt-2 border-t">
-        生效日期：{{ selectedProduct.effectiveDate.toLocaleDateString() }}
+        生效日期：{{ new Date(selectedProduct.effectiveDate).toLocaleDateString() }}
         <span v-if="selectedProduct.expiryDate">
-          至 {{ selectedProduct.expiryDate.toLocaleDateString() }}
+          至 {{new Date(selectedProduct.expiryDate).toLocaleDateString() }} 
         </span>
         <span v-else> (长期有效) </span>
       </div>
@@ -316,16 +317,22 @@
       </div>
     </template>
   </el-dialog>
+    <el-dialog v-model="openAdd" title="产品详情" width="600" align-center>
+      <AddLoanProduct />
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
 import type { AgriculturalLoanProduct } from "~/types/loanProduct";
-
+import { reactive, ref, computed } from "vue";
 definePageMeta({ layout: "home-page-layout" });
 onMounted(async () => {
   const data = await getLoanProductList();
-  productStore.setOrder(data ?? [createDefaultProduct()]);
+  productStore.setPaginationInfo(data?.total ?? 0, data?.page ?? 1, data?.pageSize ?? 10, data?.hasmore ?? false);
+  console.log(data?.loanProductList);
+  productStore.setOrder(data?.loanProductList ?? [createDefaultProduct()]);
 });
+const openAdd = ref(false);
 const createDefaultProduct = (): AgriculturalLoanProduct => {
   return {
     productId: "default-001",
@@ -512,21 +519,36 @@ const trustOptions = [
   },
 ];
 const handleSelect = (product: AgriculturalLoanProduct) => {
-  if(input.value !== "" && (parseFloat(input.value) <  product.loanAmountRange.min || parseFloat(input.value) > product.loanAmountRange.max)){
-    return false
+  if (
+    input.value !== "" &&
+    (parseFloat(input.value) < product.loanAmountRange.min ||
+      parseFloat(input.value) > product.loanAmountRange.max)
+  ) {
+    return false;
   }
-  if(danbao.value !== "" && product.eligibility.collateralRequirements !== danbao.value){
-    return false
+  if (
+    danbao.value !== "" &&
+    product.eligibility.collateralRequirements !== danbao.value
+  ) {
+    return false;
   }
-  if(trust.value !== "" && product.eligibility.creditRequirement !== trust.value){
-    return false  
+  if (
+    trust.value !== "" &&
+    product.eligibility.creditRequirement !== trust.value
+  ) {
+    return false;
   }
-  if( value.value.length > 0 && value.value.some(item => (product.supportedPurposes as any)[item] === false) ){
-    
-    return false
+  if (
+    value.value.length > 0 &&
+    value.value.some(
+      (item) => (product.supportedPurposes as any)[item] === false
+    )
+  ) {
+    return false;
   }
-  return true
-}
+  return true;
+};
+
 </script>
 
 <style scoped></style>

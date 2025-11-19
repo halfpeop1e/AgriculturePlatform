@@ -6,6 +6,7 @@ import (
 	"go-agriculture/internal/dto/request"
 	"go-agriculture/internal/dto/respond"
 	"go-agriculture/internal/model"
+	"go-agriculture/internal/util"
 )
 
 func GetLoanProductList(page, pageSize int) (string, *respond.LoanProductListRespond, int) {
@@ -70,7 +71,7 @@ func AddLoanProduct(req request.AddLoanProductRequest) (string, int) {
 	var product model.LoanProduct
 
 	// 产品基础信息
-	product.ProductID = req.ProductID
+	product.ProductID = util.GenerateUUID()
 	product.ProductName = req.ProductName
 	product.ProductAvatar = req.ProductAvatar
 

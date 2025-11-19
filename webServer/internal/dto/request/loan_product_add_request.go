@@ -4,7 +4,6 @@ import "time"
 
 type AddLoanProductRequest struct {
 	// 产品基础信息
-	ProductID     string `json:"productId" binding:"required"`   // 产品唯一标识
 	ProductName   string `json:"productName" binding:"required"` // 产品名称
 	ProductAvatar string `json:"productAvatar"`                  // 产品头像URL
 
@@ -17,14 +16,14 @@ type AddLoanProductRequest struct {
 
 	// 融资条款
 	LoanAmountRange struct {
-		Min int64 `json:"min" binding:"required,gt=0"` // 最低贷款额
-		Max int64 `json:"max" binding:"required,gt=0"` // 最高贷款额
+		Min float64 `json:"min" binding:"required,min=0"` // 最低贷款额
+		Max float64 `json:"max" binding:"required,gt=0"`  // 最高贷款额
 	} `json:"loanAmountRange" binding:"required"`
 
 	InterestRate struct {
-		Type                int8   `json:"type" binding:"required,oneof=0 1"` // 0固定/1浮动利率
-		FinalRate           string `json:"finalRate" binding:"required"`      // 最终执行利率
-		DiscountDescription string `json:"discountDescription"`               // 利率优惠说明
+		Type                int8    `json:"type"`                // 0固定/1浮动利率
+		FinalRate           float64 `json:"finalRate"`           // 最终执行利率
+		DiscountDescription string  `json:"discountDescription"` // 利率优惠说明
 	} `json:"interestRate" binding:"required"`
 
 	LoanTerm struct {

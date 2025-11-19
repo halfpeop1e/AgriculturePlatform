@@ -19,7 +19,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const authToken = useCookie('AuthToken')?.value
 
     // 如果没有登录凭证，重定向到登录页
-    if (!authToken&&!userStore.tokens) {
-      return navigateTo('/login')
-    }
+    // if (!authToken&&!userStore.tokens) {
+    //   return navigateTo('/login')
+    // }
 })
