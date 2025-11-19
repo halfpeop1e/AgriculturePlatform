@@ -101,7 +101,7 @@ const loadMore = async () => {
       retries: 3,
       baseDelay: 600,
     })
-
+    console.log('加载到的产品列表：', result)
     // result 肯定是有值或会被上层抛出
     products.value.push(...result.list)
     total.value = result.total
