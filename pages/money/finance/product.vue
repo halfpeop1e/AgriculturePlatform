@@ -83,14 +83,14 @@
             </el-select>
           </div>
         </div>
-        <div class="grid grid-cols-4 gap-5">
+        <div class="grid grid-cols-3 gap-5 grid-rows-3 ">
           <div
-            v-for="(product, index) in productStore.orderList"
+            v-for="(product, index) in filteredProducts"
             :key="index"
-            class="w-full"
+            class="w-full overflow-auto"
+            
           >
-          {{ console.log(product) }}
-            <el-card style="max-width: 480px" v-if="handleSelect(product)">
+            <el-card style="max-width: 480px">
               <template #header>
                 <div class="grid grid-cols-2 items-center gap-2">
                   <div class="text-xl font-bold">{{ product.productName }}</div>
@@ -320,18 +320,43 @@
     <el-dialog v-model="openAdd" title="产品详情" width="600" align-center>
       <AddLoanProduct />
     </el-dialog>
+<div class="flex justify-center mt-4">
+    <el-pagination background :current-page="current" @current-change="handlePageChange"  layout="prev, pager, next" :total="productStore.total" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { AgriculturalLoanProduct } from "~/types/loanProduct";
 import { reactive, ref, computed } from "vue";
 definePageMeta({ layout: "home-page-layout" });
+const current = ref(1)
+
+// 加载数据的函数
+const loadLoanProducts = async (page = 1, pageSize = 9) => {
+  const data = await getLoanProductList(page, pageSize);
+  
+  if (data) {
+    productStore.setPaginationInfo(
+      data.total ?? 0, 
+      data.page ?? page, 
+      data.pageSize ?? pageSize, 
+      data.hasmore ?? false
+    );
+    
+    productStore.setOrder(data.loanProductList ?? [createDefaultProduct()]);
+    console.log('加载产品列表:', data?.loanProductList);
+  }
+};
+// 首次加载数据
 onMounted(async () => {
-  const data = await getLoanProductList();
-  productStore.setPaginationInfo(data?.total ?? 0, data?.page ?? 1, data?.pageSize ?? 10, data?.hasmore ?? false);
-  console.log(data?.loanProductList);
-  productStore.setOrder(data?.loanProductList ?? [createDefaultProduct()]);
+  await loadLoanProducts(current.value, 9);
 });
+// 分页变化处理函数
+const handlePageChange = async (newPage: number) => {
+  current.value = newPage;
+  await loadLoanProducts(newPage, 9);
+};
+
 const openAdd = ref(false);
 const createDefaultProduct = (): AgriculturalLoanProduct => {
   return {
@@ -389,6 +414,42 @@ const value = ref<string[]>([]);
 const input = ref("");
 const danbao = ref("");
 const trust = ref("");
+const filteredProducts = computed(() => {
+  return productStore.orderList.filter(product => {
+    // 金额筛选
+    if (
+      input.value !== "" &&
+      (parseFloat(input.value) < product.loanAmountRange.min ||
+        parseFloat(input.value) > product.loanAmountRange.max)
+    ) {
+      return false;
+    }
+    // 担保要求筛选
+    if (
+      danbao.value !== "" &&
+      product.eligibility.collateralRequirements !== danbao.value
+    ) {
+      return false;
+    }
+    // 征信要求筛选
+    if (
+      trust.value !== "" &&
+      product.eligibility.creditRequirement !== trust.value
+    ) {
+      return false;
+    }
+    // 业务范围筛选
+    if (
+      value.value.length > 0 &&
+      value.value.some(
+        (item) => (product.supportedPurposes as any)[item] === false
+      )
+    ) {
+      return false;
+    }
+    return true;
+  });
+});
 const options = [
   {
     value: "production",
@@ -485,7 +546,6 @@ const danbaoOptions = [
     label: "知识产权（农产品品牌、专利等）",
   },
 ];
-
 const trustOptions = [
   {
     value: "近2年内无不良信用记录，当前无逾期",
@@ -518,36 +578,6 @@ const trustOptions = [
     description: "接受近期有轻微逾期，重点关注经营状况和还款能力",
   },
 ];
-const handleSelect = (product: AgriculturalLoanProduct) => {
-  if (
-    input.value !== "" &&
-    (parseFloat(input.value) < product.loanAmountRange.min ||
-      parseFloat(input.value) > product.loanAmountRange.max)
-  ) {
-    return false;
-  }
-  if (
-    danbao.value !== "" &&
-    product.eligibility.collateralRequirements !== danbao.value
-  ) {
-    return false;
-  }
-  if (
-    trust.value !== "" &&
-    product.eligibility.creditRequirement !== trust.value
-  ) {
-    return false;
-  }
-  if (
-    value.value.length > 0 &&
-    value.value.some(
-      (item) => (product.supportedPurposes as any)[item] === false
-    )
-  ) {
-    return false;
-  }
-  return true;
-};
 
 </script>
 
