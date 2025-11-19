@@ -27,14 +27,14 @@ type LoanProductRespond struct {
 
 	// 融资条款
 	LoanAmountRange struct {
-		Min int64 `json:"min"` // 最低贷款额
-		Max int64 `json:"max"` // 最高贷款额
+		Min float64 `json:"min"` // 最低贷款额
+		Max float64 `json:"max"` // 最高贷款额
 	} `json:"loanAmountRange"`
 
 	InterestRate struct {
-		Type                int8   `json:"type"`                // 0固定/1浮动利率
-		FinalRate           string `json:"finalRate"`           // 最终执行利率，使用字符串存储避免精度问题
-		DiscountDescription string `json:"discountDescription"` // 利率优惠说明
+		Type                int8    `json:"type"`                // 0固定/1浮动利率
+		FinalRate           float64 `json:"finalRate"`           // 最终执行利率，使用字符串存储避免精度问题
+		DiscountDescription string  `json:"discountDescription"` // 利率优惠说明
 	} `json:"interestRate"`
 
 	LoanTerm struct {
