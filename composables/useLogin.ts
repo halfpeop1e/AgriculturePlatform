@@ -34,7 +34,7 @@ export async function loginUser(loginData:LoginRequest){
 
 export function logoutUser(){
     const userStore=useUserStore()
-    userStore.LogoutSet
+    userStore.LogoutSet()
     Cookies.remove('AuthToken')
     console.log('用户已登出，清除本地状态')
 }
