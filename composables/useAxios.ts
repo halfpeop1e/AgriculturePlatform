@@ -33,10 +33,11 @@ export const useAxios = () => {
 
     try {
       if (typeof window !== "undefined") {
-    const local = localStorage.getItem("AuthToken");
-    if (local) return local;
-    const m = document.cookie.match(/(?:^|; )authToken=([^;]+)/);
-    if (m && m[1]) return decodeURIComponent(m[1]);
+        const local = localStorage.getItem("AuthToken");
+        if (local) return local;
+        // 兼容性读取：document.cookie 中可能用小写或大小写不一致，使用 case-insensitive 查找
+        const m = document.cookie.match(/(?:^|; )(?:(?:AuthToken|authToken))=([^;]+)/i);
+        if (m && m[1]) return decodeURIComponent(m[1]);
       }
     } catch (e) {
       // ignore
@@ -97,17 +98,27 @@ export const useAxios = () => {
             // @ts-ignore
             if (typeof useCookie !== "undefined") {
               // @ts-ignore
-              useCookie("authToken").value = null;
+              useCookie("AuthToken").value = null;
             }
           } catch (e) {
             // ignore
           }
           if (typeof window !== "undefined") {
             try {
-              localStorage.removeItem("authToken");
+              localStorage.removeItem("AuthToken");
             } catch (e) {}
-            // 直接跳转到登录页（不带 Nuxt 全局 API，保证在任何环境都能工作）
-            window.location.href = "/login";
+            // 在客户端尽量使用 Nuxt 的导航以避免硬刷新；若不可用，才回退到 location
+            try {
+              // @ts-ignore
+              if (typeof navigateTo !== 'undefined') {
+                // @ts-ignore
+                navigateTo('/login')
+              } else {
+                window.location.href = '/login'
+              }
+            } catch (e) {
+              window.location.href = '/login'
+            }
           }
           return Promise.reject(new Error("JWT expired"));
         }
@@ -129,19 +140,29 @@ export const useAxios = () => {
       try {
         const status = error?.response?.status;
         if (status === 401) {
-          // 清理 token 并跳转登录
+          // 清理 token 并跳转登录（尽量使用 Nuxt 导航）
           try {
             // @ts-ignore
             if (typeof useCookie !== "undefined") {
               // @ts-ignore
-              useCookie("authToken").value = null;
+              useCookie("AuthToken").value = null;
             }
           } catch (e) {}
           if (typeof window !== "undefined") {
             try {
-              localStorage.removeItem("authToken");
+              localStorage.removeItem("AuthToken");
             } catch (e) {}
-            window.location.href = "/login";
+            try {
+              // @ts-ignore
+              if (typeof navigateTo !== 'undefined') {
+                // @ts-ignore
+                navigateTo('/login')
+              } else {
+                window.location.href = '/login'
+              }
+            } catch (e) {
+              window.location.href = '/login'
+            }
           }
         }
       } catch (e) {
