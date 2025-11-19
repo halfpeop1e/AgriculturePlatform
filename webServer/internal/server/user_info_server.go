@@ -11,7 +11,6 @@ import (
 	"go-agriculture/internal/model"
 	"go-agriculture/internal/util"
 	"log"
-	"mime/multipart"
 	"time"
 
 	"gorm.io/gorm"
@@ -165,11 +164,15 @@ func (u *userInfoService) UpdateUserInfo(userId string, updateReq request.Update
 	if updateReq.Bio != "" {
 		user.Bio = updateReq.Bio
 	}
-	if updateReq.Avatar != nil {
+	if updateReq.Avatar != "" {
 		util.FileDeleteUtil(user.Avatar, util.IsAvatarType)
-		files := make([]*multipart.FileHeader, 1)
+		files := make([]string, 1)
 		files[0] = updateReq.Avatar
-		user.Avatar = util.FileReceiverUtil(files, util.IsAvatarType)[0]
+		newAvatar, err := util.FileReceiverBase64Util(files, util.IsAvatarType)
+		if err != nil {
+			return "文件上传失败", -1
+		}
+		user.Avatar = newAvatar[0]
 	}
 	if updateReq.Location != "" {
 		user.Location = updateReq.Location
