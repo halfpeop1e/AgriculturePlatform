@@ -30,7 +30,7 @@ export interface AgriculturalLoanProduct {
   eligibility: {                       // 申请条件
     minOperatingYears: number;         // 最低经营年限
     creditRequirement: string;         // 征信要求
-    collateralRequirements?: string;   // 担保要求
+    collateralRequirements: string;   // 担保要求
   };
   
   // 支持的业务范围

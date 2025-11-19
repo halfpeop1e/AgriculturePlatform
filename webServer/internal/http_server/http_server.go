@@ -45,4 +45,10 @@ func init() {
 		user.POST("/profile/:userId/update", v1.UpdateUserInfo)
 		user.POST("/security/:userId/update", v1.SafeUpdateInfo)
 	}
+	loan := GE.Group("/loan")
+	loan.Use(JWTAuthMiddleware())
+	{
+		loan.GET("/list", v1.GetLoanProductList)
+		loan.POST("/add", v1.AddLoanProduct)
+	}
 }
