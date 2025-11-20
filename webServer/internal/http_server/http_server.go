@@ -48,7 +48,9 @@ func init() {
 	loan := GE.Group("/loan")
 	loan.Use(JWTAuthMiddleware())
 	{
+		loan.GET("/apply/list", v1.GetApplyList)
 		loan.GET("/list", v1.GetLoanProductList)
 		loan.POST("/add", v1.AddLoanProduct)
+		loan.POST("/apply", v1.ApplyLoan)
 	}
 }

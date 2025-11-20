@@ -23,15 +23,15 @@
 
     <div class="overflow-y-auto col-start-2">
       <div class="flex flex-col justify-between h-screen py-20">
-        <div class="flex gap-5 items-center">
+        <div class="flex gap-5 items-center bg-teal-200  rounded-sm " v-for="value in datas">
           <img
-            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+            :src="value.avatar"
             alt="pic"
-            class="w-20"
+            class="w-24"
           />
           <div class="grid grid-cols-3 w-full">
-            <span>产品名称</span>
-            <span>产品状态</span>
+            <span>{{ value.product_name }}</span>
+            <span>{{ value.status }}</span>
             <span>查看详情</span>
           </div>
         </div>
@@ -44,6 +44,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ApplyListRespond } from '~/types/loanApply';
+
 definePageMeta({ layout: "home-page-layout" });
 const router = useRouter();
 const handleOpen = (key: string, keyPath: string[]) => {
@@ -53,6 +55,14 @@ const handleOpen = (key: string, keyPath: string[]) => {
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
 };
+
+onMounted(
+  async () => {
+    const res = await getLoanApplyList(useUserStore().userId)
+    datas.push(...res!)
+  }
+)
+const datas: ApplyListRespond[] = []
 const activeName = ref("1");
 </script>
 
