@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
+	"math"
 	"time"
 )
 
@@ -59,8 +60,8 @@ func (f FinancialInstitution) Value() (driver.Value, error) {
 }
 
 type LoanAmountRange struct {
-	Min int64 `json:"min"` // 最低贷款额
-	Max int64 `json:"max"` // 最高贷款额
+	Min float64 `json:"min"` // 最低贷款额
+	Max float64 `json:"max"` // 最高贷款额
 }
 
 func (l *LoanAmountRange) Scan(value interface{}) error {
@@ -72,13 +73,17 @@ func (l *LoanAmountRange) Scan(value interface{}) error {
 }
 
 func (l LoanAmountRange) Value() (driver.Value, error) {
-	return json.Marshal(l)
+	copied := LoanAmountRange{
+		Min: math.Round(l.Min*100) / 100,
+		Max: math.Round(l.Max*100) / 100,
+	}
+	return json.Marshal(copied)
 }
 
 type InterestRate struct {
-	Type                int8   `json:"type"`                // 0固定/1浮动利率
-	FinalRate           string `json:"finalRate"`           // 最终执行利率，使用字符串存储避免精度问题
-	DiscountDescription string `json:"discountDescription"` // 利率优惠说明
+	Type                int8    `json:"type"`                // 0固定/1浮动利率
+	FinalRate           float64 `json:"finalRate"`           // 最终执行利率，使用字符串存储避免精度问题
+	DiscountDescription string  `json:"discountDescription"` // 利率优惠说明
 }
 
 func (i *InterestRate) Scan(value interface{}) error {
@@ -90,7 +95,13 @@ func (i *InterestRate) Scan(value interface{}) error {
 }
 
 func (i InterestRate) Value() (driver.Value, error) {
-	return json.Marshal(i)
+	// 创建副本并确保FinalRate保留2位小数
+	copied := InterestRate{
+		Type:                i.Type,
+		FinalRate:           math.Round(i.FinalRate*100) / 100, // 保留2位小数
+		DiscountDescription: i.DiscountDescription,
+	}
+	return json.Marshal(copied)
 }
 
 type LoanTerm struct {
