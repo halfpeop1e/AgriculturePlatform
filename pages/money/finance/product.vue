@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen grid grid-cols-[300px_1fr]">
+  <div>
+    <div class="min-h-screen grid grid-cols-[300px_1fr]">
     <div
       class="w-[300px] h-screen overflow-y-auto flex flex-col items-center gap-8"
     >
@@ -11,11 +12,11 @@
         style="width: 250px; height: 300px"
       >
         <el-menu-item index="product">
-          <el-icon><icon-menu /></el-icon>
+          <el-icon><Menu /></el-icon>
           <span class="text-lg">金融产品</span>
         </el-menu-item>
         <el-menu-item index="process">
-          <el-icon><setting /></el-icon>
+          <el-icon><Setting /></el-icon>
           <span class="text-lg">进度查询</span>
         </el-menu-item>
       </el-menu>
@@ -301,13 +302,13 @@
       </div>
 
       <!-- 有效期信息 -->
-      <div class="text-sm text-gray-500 pt-2 border-t">
+     <!--  <div class="text-sm text-gray-500 pt-2 border-t">
         生效日期：{{ selectedProduct.effectiveDate.toLocaleDateString() }}
         <span v-if="selectedProduct.expiryDate">
           至 {{ selectedProduct.expiryDate.toLocaleDateString() }}
         </span>
         <span v-else> (长期有效) </span>
-      </div>
+      </div> -->
     </div>
 
     <template #footer>
@@ -316,15 +317,18 @@
       </div>
     </template>
   </el-dialog>
+  </div>
+  
 </template>
 
 <script setup lang="ts">
 import type { AgriculturalLoanProduct } from "~/types/loanProduct";
-
+import { Setting } from "@element-plus/icons-vue";
 definePageMeta({ layout: "home-page-layout" });
 onMounted(async () => {
   const data = await getLoanProductList();
   productStore.setOrder(data ?? [createDefaultProduct()]);
+  console.log("贷款产品数据：", productStore);
 });
 const createDefaultProduct = (): AgriculturalLoanProduct => {
   return {

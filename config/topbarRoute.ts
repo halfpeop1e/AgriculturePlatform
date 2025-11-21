@@ -4,8 +4,9 @@ export const nav = [
     label: '产品交易',
     items: [
       { label: '所有商品',routername:'/product/allproduct',icon: 'pi pi-fw pi-shopping-cart' },
-      { label: '出售/买入',routername:'/product/sellproduct',icon: 'pi pi-fw pi-tags' },
+      { label: '出售商品',routername:'/product/sellproduct',icon: 'pi pi-fw pi-tags' },
       { label: '我的订单',routername:'/product/myorder/my_buy',icon: 'pi pi-fw pi-list' },
+      { label: '我的发布',routername:'/product/myrelease',icon: 'pi pi-fw pi-money' },
     ],
   },
   {
