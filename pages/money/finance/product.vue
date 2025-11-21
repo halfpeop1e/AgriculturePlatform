@@ -324,6 +324,7 @@
 <div class="flex justify-center mt-4">
     <el-pagination background :current-page="current" @current-change="handlePageChange"  layout="prev, pager, next" :total="productStore.total" />
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
