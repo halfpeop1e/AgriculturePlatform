@@ -48,3 +48,11 @@ export interface AgriculturalLoanProduct {
   effectiveDate: Date;                 // 生效日期
   expiryDate?: Date;                   // 失效日期
 }
+
+export interface AgriculturalLoanProductList {
+  hasmore: boolean;
+  loanProductList: AgriculturalLoanProduct[];
+  page: number;
+  pageSize: number;
+  total: number;
+}

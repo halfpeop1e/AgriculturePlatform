@@ -6,6 +6,8 @@ import (
 	"go-agriculture/internal/dto/request"
 	"go-agriculture/internal/dto/respond"
 	"go-agriculture/internal/model"
+	"go-agriculture/internal/util"
+	"time"
 )
 
 func GetLoanProductList(page, pageSize int) (string, *respond.LoanProductListRespond, int) {
@@ -70,7 +72,7 @@ func AddLoanProduct(req request.AddLoanProductRequest) (string, int) {
 	var product model.LoanProduct
 
 	// 产品基础信息
-	product.ProductID = req.ProductID
+	product.ProductID = util.GenerateUUID()
 	product.ProductName = req.ProductName
 	product.ProductAvatar = req.ProductAvatar
 
@@ -190,4 +192,67 @@ func StringToCollateralRequirementType(req string) (model.CollateralRequirementT
 	default:
 		return 0, errors.New("未知的担保要求")
 	}
+}
+
+func ApllyLoanProduct(req request.ApplyLoanRequest) (string, int) {
+	var apply model.Loan
+	var total int64
+	if err := dao.GormDB.Where("product_id = ? AND user_id = ?", req.ProductID, req.UserID).Count(&total).Error; err != nil {
+		return "查询失败", -1
+	}
+	if total > 0 {
+		return "您已经申请过该产品", -1
+	}
+	apply.Uuid = util.GenerateUUID()
+	apply.ProductID = req.ProductID
+	apply.UserId = req.UserID
+	apply.Status = 0
+	apply.Amount = req.Amount
+	apply.Deadline = req.Deadline
+	apply.CreatAt = time.Now()
+	dao.GormDB.Create(&apply)
+	return "申请成功", 0
+}
+
+func GetApplyList(userId string) (string, int, *[]respond.ApplyListRespond) {
+
+	statusToS := func(status int) string {
+		switch status {
+		case 0:
+			return "申请中"
+		case 1:
+			return "已通过"
+		case 2:
+			return "已拒绝"
+		case 3:
+			return "已撤销"
+		case 4:
+			return "已还款"
+		default:
+			return "未知状态"
+		}
+	}
+
+	var responds []respond.ApplyListRespond
+	var applys []model.Loan
+	if res := dao.GormDB.Model(&model.Loan{}).Where("user_id = ?", userId).Find(&applys); res.Error != nil {
+		return "查询失败", -1, nil
+	}
+	for _, apply := range applys {
+		var product model.LoanProduct
+		if res := dao.GormDB.Model(&model.LoanProduct{}).Where("product_id = ?", apply.ProductID).First(&product); res.Error != nil {
+			continue
+		}
+		respondItem := respond.ApplyListRespond{
+			Id:          apply.Id,
+			Uuid:        apply.Uuid,
+			UserId:      apply.UserId,
+			ProductID:   apply.ProductID,
+			Avatar:      product.ProductAvatar,
+			ProductName: product.ProductName,
+			Status:      statusToS(int(apply.Status)),
+		}
+		responds = append(responds, respondItem)
+	}
+	return "获取成功", 0, &responds
 }

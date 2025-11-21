@@ -25,10 +25,16 @@ func (p *productServer) PostProduct(req request.PostProductRequest) (string, int
 		return "数量错误", -1
 	}
 	var newProduct model.Product
-	if res := dao.GormDB.Where("name = ? AND saler_id = ?", req.Name, req.SalerId).First(&newProduct); res.Error == nil {
+	var count int64
+	res := dao.GormDB.Model(&model.Product{}).Where("name = ? AND saler_id = ?", req.Name, req.SalerId).Count(&count)
+	if res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "查询失败", -1
+	}
+	if count > 0 {
 		return "商品已存在", -1
 	}
-	allImages := util.FileReceiverUtil(req.Images, util.IsFileType)
+	allImages, _ := util.FileReceiverBase64Util(req.Images, util.IsFileType)
 	imagesJSON, err := json.Marshal(allImages)
 	if err != nil {
 		return "图片序列化失败", -1
