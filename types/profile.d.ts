@@ -5,15 +5,19 @@
   使用场景：getUserProfile 返回此类型；userStore 的 setUserProfile 接受此类型
 */
 export interface profileResponse{
-    nickname:string;
-    email:string ;
-    avatar: string;
-    bio:  string;
-    tags: string[];
-    location:string ;
-    joinedAt:string ;
-    phone: string;
-    address:string ;
-    lastActive: string; 
+    code:number;
+    data:{
+    Nickname:string;
+    Email:string ;
+    Avatar: string;
+    Bio:  string;
+    Tags: string[];
+    Location:string ;
+    JoinedAt:string ;
+    Phone: string;
+    Address:string ;
+    LastActive: string; 
+    }
+    message:string;
 }
 

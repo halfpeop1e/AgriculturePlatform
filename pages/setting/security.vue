@@ -10,8 +10,8 @@
     <div>
       <label class="block mb-2">邮箱地址</label>
       <div class="flex justify-between w-full">
-                <input v-model="security.email" class="w-full border rounded p-2" placeholder="请输入验证码"/>
-                <el-button type="success" size="large" :loading="LodingStore.sendLoading" @click="onSendCode(security.email),Countdown(60)" plain>发送验证码</el-button>
+                <input v-model="security.email" class="w-full border rounded p-2" placeholder="请输入邮箱"/>
+                <el-button type="success" size="large" :loading="LodingStore.sendLoading" @click="onSendCode(security.email,'修改安全信息'),Countdown(60)" plain>发送验证码</el-button>
       </div>
       <div v-if="LodingStore.sendLoading" class="flex items-center">请在{{ count }}秒后重试</div>
       <label class="block mt-3 mb-2">验证码</label>

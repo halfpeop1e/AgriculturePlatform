@@ -26,7 +26,7 @@
             <el-form-item label="验证邮箱" prop="comemail">
                 <div class="flex justify-between w-full">
                 <el-input v-model="comemail" style="width: 70%;" placeholder="请输入验证码"/>
-                <el-button type="success" :loading="LodingStore.sendLoading" @click="onSendCode(form.email),Countdown(60)" plain>发送验证码</el-button>
+                <el-button type="success" :loading="LodingStore.sendLoading" @click="onSendCode(form.email,'注册账号'),Countdown(60)" plain>发送验证码</el-button>
                 </div>
                 <div v-if="LodingStore.sendLoading" class="flex items-center">请在{{ count }}秒后重试</div>
             </el-form-item>

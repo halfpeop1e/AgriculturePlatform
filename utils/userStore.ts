@@ -37,16 +37,17 @@ export const useUserStore = defineStore('userStore', {
     }),
     actions:{
         setUserProfile(profile:profileResponse){
-            this.userinfo.nickname=profile.nickname
-            this.userinfo.email=profile.email
-            this.avatar=profile.avatar
-            this.userinfo.bio=profile.bio
-            this.userinfo.tags=profile.tags
-            this.userinfo.location=profile.location
-            this.userinfo.joinedAt=profile.joinedAt
-            this.userinfo.phone=profile.phone
-            this.userinfo.address=profile.address
-            this.lastActive=profile.lastActive
+            this.userinfo.nickname=profile.data.Nickname
+            console.log('设置用户昵称为',profile.data.Nickname)
+            this.userinfo.email=profile.data.Email
+            this.avatar=profile.data.Avatar
+            this.userinfo.bio=profile.data.Bio
+            this.userinfo.tags=profile.data.Tags
+            this.userinfo.location=profile.data.Location
+            this.userinfo.joinedAt=profile.data.JoinedAt
+            this.userinfo.phone=profile.data.Phone
+            this.userinfo.address=profile.data.Address
+            this.lastActive=profile.data.LastActive
         },
         LoginSet(){
             this.islogin=true

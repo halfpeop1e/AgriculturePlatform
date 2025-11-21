@@ -3,13 +3,13 @@ import { sendMail } from "../services/mail.service";
 import { codeStore } from "../utils/codeStore";
 
 export const sendVerificationEmail = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email,action } = req.body;
   if (!email) return res.status(400).json({ message: "缺少邮箱地址" });
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   codeStore.set(email, code);
   try {
-    await sendMail(email,`您好\n您的验证码是：${code}\n,请在5分钟内使用该验证码完成验证。\n如果这不是你在操作，请忽略该邮件。\n\n谢谢`);
+    await sendMail(email,`您好\n您的验证码是：${code}\n,请在5分钟内使用该验证码完成验证。\n如果这不是你在操作，请忽略该邮件。\n\n谢谢`,code,action);
     res.status(200).json({ message: "验证码已发送，请检查邮箱" });
   } catch (err) {
     console.error(err);

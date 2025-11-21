@@ -47,7 +47,7 @@
                 <div class="flex items-center gap-5">
                    <el-button v-if="!userStore.islogin" type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
                   <Avatar
-      image="https://avatars.githubusercontent.com/u/9919?s=280&v=4"
+      :image="userStore.avatar"
       shape="circle"
       size="large"
       class="cursor-pointer border border-gray-300 hover:ring-2 hover:ring-gray-300 transition-all"

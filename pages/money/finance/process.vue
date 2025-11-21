@@ -11,11 +11,11 @@
         style="width: 250px; height: 300px"
       >
         <el-menu-item index="product">
-          <el-icon><icon-menu /></el-icon>
+          <el-icon><Menu/></el-icon>
           <span class="text-lg">金融产品</span>
         </el-menu-item>
         <el-menu-item index="process">
-          <el-icon><setting /></el-icon>
+          <el-icon><Setting /></el-icon>
           <span class="text-lg">进度查询</span>
         </el-menu-item>
       </el-menu>
@@ -93,6 +93,7 @@
 </template>
 
 <script setup lang="ts">
+import { Setting } from '@element-plus/icons-vue';
 definePageMeta({ layout: "home-page-layout" });
 const router = useRouter();
 const handleOpen = (key: string, keyPath: string[]) => {

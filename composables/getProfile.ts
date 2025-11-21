@@ -16,9 +16,10 @@ export async function getUserProfile(){
     try{
         const response=await useAxiosInstance.get<profileResponse>(`/user/profile/${userStore.userId}`)
         if(response.status===200){
-            console.log('获取用户资料成功')
+            console.log('获取用户资料成功',response.data.data)
             try{
                 userStore.setUserProfile(response.data)
+                console.log('设置用户资料成功',userStore.userinfo)
             }
             catch(err){
                 console.error('设置用户资料失败',err)

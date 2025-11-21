@@ -7,7 +7,8 @@
     使用场景：用户个人中心、设置页等需要侧边导航的页面。
 -->
 <template>
-        <div class="flex h-screen">
+  <div>
+<div class="flex h-screen">
         <SizeBar :nav="nav"/>
         <div class="flex-1 overflow-auto h-full">
             <slot />
@@ -16,6 +17,8 @@
     <div class="absolute top-0 left-4">
         <el-button :icon="Expand" @click="toggleSidebar" />
     </div>
+  </div>
+        
 </template>
 
 <script setup lang="ts">

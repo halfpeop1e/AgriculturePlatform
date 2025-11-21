@@ -7,7 +7,7 @@
         >
             <div class="flex flex-col gap-6 md:flex-row md:items-center">
                 <el-avatar :size="96" :src="userStore.avatar" alt="用户头像">
-                    {{ profile.nickname.charAt(0) }}
+                    {{ profile.nickname }}
                 </el-avatar>
                 <div class="flex-1 min-w-[220px] space-y-3">
                     <h2 class="text-3xl font-semibold text-slate-900 dark:text-slate-100">{{ profile.nickname }}</h2>
@@ -77,19 +77,7 @@ import { ElMessage } from 'element-plus'
 import { Message, Phone, Position, Timer } from '@element-plus/icons-vue'
 definePageMeta({ layout: 'profile-page-layout' })
 const userStore = useUserStore()
-const profile = userStore.userinfo||reactive({
-    userId: 2,
-    nickname: 'hyw1',
-    email: 'fengzhu@example.com',
-    avatar: '/logo.png',
-    bio: '热爱农业科技与前端开发，正在打造智慧农业平台。',
-    tags: ['前端工程师', '农业物联网', 'Nuxt3'],
-    location: '中国 · 北京',
-    joinedAt: '2023-06-18',
-    phone: '+86 138-0000-0000',
-    address: '北京市通州区智慧农业示范园',
-    lastActive: '2025-10-15 14:05'
-})
+const profile = userStore.userinfo
 
 function onContact() {
     window.open(`mailto:${profile.email}`, '_blank')

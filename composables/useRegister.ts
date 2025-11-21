@@ -14,11 +14,11 @@ import { useLoadingStore } from '~/utils/loadingStore'
 
 const useAxiosInstance=useAxios()
 const useEmailAxiosInstance=useEmailAxios()
-export async function onSendCode(email:string){
+export async function onSendCode(email:string,action:string){
     const LodingStore=useLoadingStore()
     LodingStore.setLoading(true)
     try{
-      const respone=await useEmailAxiosInstance.post('/email/sendCode',{email:email})
+      const respone=await useEmailAxiosInstance.post('/email/sendCode',{email:email,action:action})
         console.log('服务器响应：',respone.data)
       if(respone.status===200){
         ElMessage.success('发送成功')

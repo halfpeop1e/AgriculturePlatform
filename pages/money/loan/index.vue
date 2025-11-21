@@ -1,5 +1,6 @@
 <template>
-  <div className="min-h-screen flex flex-col items-center pt-10 gap-4">
+  <div>
+    <div className="min-h-screen flex flex-col items-center pt-10 gap-4">
     <div
       class="bg-slate-500/45 h-[240px] w-2/3 grid grid-cols-[220px_1fr] rounded-lg overflow-hidden items-center"
     >
@@ -98,6 +99,8 @@
       </div>
     </div>
   </div>
+  </div>
+  
 </template>
 
 <script setup lang="ts">
