@@ -12,7 +12,7 @@
         style="width: 250px; height: 300px"
       >
         <el-menu-item index="product">
-          <el-icon><Menu /></el-icon>
+          <el-icon><Menu/></el-icon>
           <span class="text-lg">金融产品</span>
         </el-menu-item>
         <el-menu-item index="process">
@@ -329,7 +329,8 @@
 
 <script setup lang="ts">
 import type { AgriculturalLoanProduct } from "~/types/loanProduct";
-import { reactive, ref, computed } from "vue";import { Setting } from "@element-plus/icons-vue";
+import { ref, computed } from "vue";
+import { Setting,Menu } from "@element-plus/icons-vue";
 definePageMeta({ layout: "home-page-layout" });
 const current = ref(1)
 

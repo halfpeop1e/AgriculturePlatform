@@ -12,20 +12,12 @@
       <el-alert title="买入订单" type="info" show-icon />
       <ul class="mt-3 space-y-3">
         <li v-for="o in buyOrders" :key="o.orderId">
-          <el-card>
-            <div class="flex justify-between items-center">
-              <div class="font-medium">{{ o.name }} × {{ o.quantity }}</div>
-              <div class="text-sm text-gray-500">状态：{{ o.status }}</div>
-            </div>
-            <div class="flex items-center mt-2">
-              <div class="text-sm mr-2">订单价格：</div>
-              <div class="text-green-600 text-xl font-bold mr-1">{{ o.totalprice }}</div>
-              <div class="text-sm">元</div>
-            </div>
-          </el-card>
+          <OrderCard :order="o" @view="openDialog" />
         </li>
         <li v-if="buyOrders.length === 0" class="text-gray-500">暂无买入订单</li>
       </ul>
+      <!-- 订单详情对话框 -->
+      <order-info-dialog v-model="dialogVisible" :order="selectedOrder" @pay="handlePay" />
     </div>
 </template>
 
@@ -34,9 +26,26 @@ definePageMeta({ layout: 'home-page-layout' })
 import { useRoute } from 'nuxt/app'
 import { ref, computed } from 'vue'
 import type { Order } from '@/types/myOrder'
+import OrderCard from '~/components/OrderCard.vue'
+import OrderInfoDialog from '~/components/orderInfoDialog.vue'
+
+const selectedOrder = ref<Order | null>(null)
+const dialogVisible = ref(false)
+
+function openDialog(orderId: string) {
+  const found = orders.value.find((x) => x.orderId === orderId) || null
+  selectedOrder.value = found
+  dialogVisible.value = true
+}
+
+function handlePay(orderId: string) {
+  console.log('触发支付，orderId=', orderId)
+  // 这里可以调用支付流程或重定向到支付页
+  dialogVisible.value = false
+}
 
 const orders = ref<Order[]>([
-  { orderId: 'b1', name: '绿色有机苹果', quantity: 2, totalprice: 1000, status: '已支付', type: 'buy' },
+  { orderId: 'b1', name: '绿色有机苹果', quantity: 2, totalprice: 1000, status: '未支付', type: 'buy' },
   { orderId: 'b2', name: '香甜玉米', quantity: 5, totalprice: 1000, status: '待收货', type: 'buy' },
   { orderId: 's1', name: '土鸡蛋', quantity: 10, totalprice: 1000, status: '待发货', type: 'sell' }
 ])

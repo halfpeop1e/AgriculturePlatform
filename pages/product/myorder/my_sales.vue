@@ -12,17 +12,7 @@
         <el-alert title="卖出订单" type="warning" show-icon />
         <ul class="mt-3 space-y-3">
             <li v-for="o in sellOrders" :key="o.orderId">
-                <el-card>
-                    <div class="flex justify-between items-center">
-                        <div class="font-medium">{{ o.name }} × {{ o.quantity }}</div>
-                        <div class="text-sm text-gray-500">状态：{{ o.status }}</div>
-                    </div>
-                    <div class="flex items-center mt-2">
-                        <div class="text-sm mr-2">订单价格：</div>
-                        <div class="text-green-600 text-xl font-bold mr-1">{{ o.totalprice }}</div>
-                        <div class="text-sm">元</div>
-                    </div>
-                </el-card>
+              <OrderCard :order="o"/>
             </li>
             <li v-if="sellOrders.length === 0" class="text-gray-500">暂无卖出订单</li>
         </ul>

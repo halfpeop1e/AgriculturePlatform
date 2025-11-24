@@ -29,10 +29,10 @@
 
       <el-empty
         v-if="!products.length && !loading"
-        description="暂时没有上架的助农产品"
+        description="暂时没有您发布的助农产品"
         class="mt-6"
       />
-
+      
       <el-skeleton
         v-else-if="loading"
         :rows="3"
@@ -47,12 +47,6 @@
         已加载全部 {{ total }} 件商品
       </div>
     </div>
-
-    <Comfirmbuy
-      :product="comfirmproduct.product"
-      :show-dialog="showDialog"
-      @close-dialog="dialogControler.closeDialog"
-    />
   </div>
 </template>
 
@@ -60,7 +54,6 @@
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { runWithBackoff } from '~/composables/useBackoff'
-import Comfirmbuy from '~/components/comfirmbuy.vue'
 import ProductCard from '~/components/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
 import { useComfirmBuyStore } from '~/utils/comfirmBuyStore'
@@ -76,15 +69,11 @@ const finished = ref(false)
 const total = ref(0)
 const page = ref(1)
 const pageSize = 9
-// 重试计数：如果连续发生多次失败，停止重试以避免无限请求
-const retryCount = ref(0)
-const maxRetries = 3
 
 class dialogControl {
   openDialog(product: productResponse) {
     comfirmproduct.setProduct(product)
     showDialog.value = true
-    console.log('打开对话框，产品ID=', product.id)
   }
   closeDialog() {
     showDialog.value = false
@@ -96,9 +85,10 @@ const dialogControler = new dialogControl()
 const loadMore = async () => {
   if (loading.value || finished.value) return
   loading.value = true
+  const userStore = useUserStore()
   try {
     // 使用通用的指数退避重试助手，runWithBackoff 会在内部处理重试与延迟
-    const result = await runWithBackoff(() => getProductList({ page: page.value, pageSize }), {
+    const result = await runWithBackoff(() => getProductList({ page: page.value, pageSize,salerId:userStore.userId }), {
       retries: 3,
       baseDelay: 600,
     })
@@ -127,44 +117,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.product-list-container {
-  height: 890px;
-  overflow-y: auto;
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 0.244);
-  border-radius: 12px;
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05); /* 内阴影，轻柔分层 */
-}
 
-/* 自定义滚动条（平面风） */
-.product-list-container::-webkit-scrollbar {
-  width: 8px;
-}
-.product-list-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-.product-list-container::-webkit-scrollbar-thumb {
-  background-color: #cfd8dc;
-  border-radius: 4px;
-}
-.product-list-container::-webkit-scrollbar-thumb:hover {
-  background-color: #90a4ae;
-}
-
-.product-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* 每个商品卡片项 */
-.product-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.product-item:hover {
-  transform: scale(1.01);
-}
 </style>
