@@ -25,7 +25,7 @@
 
       <div>
         <label class="block text-sm text-gray-700 mb-1">购买数量</label>
-        <el-input-number v-model="orderQuantity" :min="1" :max="product.stock" class="w-full" />
+        <el-input-number v-model="orderQuantity" :min="0" :max="product.stock" class="w-full" />
         <div class="text-xs text-gray-400 mt-1">库存：{{ product.stock }} 件</div>
       </div>
 
