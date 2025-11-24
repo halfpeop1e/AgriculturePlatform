@@ -72,7 +72,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Message, Phone, Position, Timer } from '@element-plus/icons-vue'
 definePageMeta({ layout: 'profile-page-layout' })
@@ -83,4 +82,7 @@ function onContact() {
     window.open(`mailto:${profile.email}`, '_blank')
     ElMessage.success('已打开邮件客户端~')
 }
+onMounted(() => {
+    getUserProfile()
+})
 </script>
