@@ -14,6 +14,7 @@ const useAxiosInstance = useAxios()
 export interface GetProductListOptions {
     page?: number
     pageSize?: number
+    salerId?:string
 }
 
 interface ProductListApiResponse {
@@ -23,12 +24,13 @@ interface ProductListApiResponse {
 }
 
 export async function getProductList(options: GetProductListOptions = {}): Promise<ProductListResult> {
-    const { page = 1, pageSize = 10 } = options
+    const { page = 1, pageSize = 10,salerId='all' } = options
     try {
         const response = await useAxiosInstance.get<ProductListApiResponse>("/product/list", {
             params: {
                 page,
-                pageSize
+                pageSize,
+                salerId
             }
         })
 
