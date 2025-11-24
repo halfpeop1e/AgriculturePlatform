@@ -45,7 +45,13 @@
           <div class=" text-xl flex-1 leading-relaxed">
          商户：{{ product.saler }}
           </div>
-          <el-button type="success" size="default" @click="openBuyDialog">购买</el-button>
+          <div v-if="!routedivided(route.path)">
+            <el-button type="success" size="default" @click="openBuyDialog">购买</el-button>
+          </div>
+          <div class="flex" v-if="routedivided(route.path)">
+          <el-button type="primary" size="default" @click="openBuyDialog">编辑</el-button>
+          <el-button type="danger" size="default" @click="openBuyDialog">删除</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -56,8 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
+const route = useRoute()
 interface Product {
   id: string
   name: string
@@ -79,7 +84,13 @@ function openBuyDialog() {
 const emit = defineEmits<{
     (e: 'openDialog'): void
   }>()
-
+function routedivided(route:string){
+    const r=(route || '').toLowerCase()
+    if(r.includes('myrelease')){
+      return true
+    }
+    return false
+}
 </script>
 <style scoped>
 .aspect-\[4\/3\] {
