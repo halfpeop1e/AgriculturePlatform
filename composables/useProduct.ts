@@ -18,7 +18,7 @@ export async function PostProduct(formData:any){
         },
         {
             headers:{
-                'Content-Type':'multipart/form-data'
+                'Content-Type':'multipart/json'
             }
         })
         if(response.status===200){
