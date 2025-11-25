@@ -33,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { error } from 'console';
 import { ref } from 'vue'
 const security = ref({ email:'',code:'',current: '', new: '', confirm: '' })
 const notice = ref<{ type: string; text: string } | null>(null)
@@ -67,8 +68,21 @@ async function changePassword() {
     notice.value = { type: 'warning', text: '验证码错误或已过期' }
     return
   }
-  // TODO: 调用 API 修改密码
-  notice.value = { type: 'success', text: '密码修改成功（模拟）' }
+  try{
+  const response= await securityChangeInfo({
+      email:security.value.email,
+      currentpassword:security.value.current, 
+      newpassword:security.value.new
+    })
+    if(!response){
+      throw new Error('修改密码失败')
+    }
+  }
+  catch(err){
+    notice.value = { type: 'warning', text: '修改密码失败，请检查当前密码是否正确' }
+    return
+  }
+  notice.value = { type: 'success', text: '密码修改成功' }
   security.value = {email:'',code:'',current: '', new: '', confirm: '' }
 }
 </script>
