@@ -1,17 +1,18 @@
 <template>
-  <Dialog :visible="visibleLocal" :modal="true" @hide="onClose()">
+  <Dialog v-model:visible="visibleLocal" :modal="true">
     <Card class="order-info-card">
       <template #title>
         <div class="flex items-center justify-between">
-          <div>
+          <div class="flex flex-col">
             <div class="text-lg font-semibold">订单详情</div>
-            <small class="text-gray-500">订单号: {{ order?.orderId || '-' }}</small>
+            <small class="text-gray-500"><strong>订单号: </strong>{{ order?.orderId || '-' }}</small>
+            <small class="text-gray-500"><strong>卖家: </strong>{{ order?.saler || '-' }}</small>
           </div>
           <Tag :value="order?.status || '未知'" :severity="statusSeverity(order?.status || '')" />
         </div>
       </template>
-
-      <div class="mt-4 grid grid-cols-2 gap-4">
+      <template #content>
+          <div class="mt-4 grid grid-cols-2 gap-4">
         <div>
           <div class="text-sm text-gray-600">商品名称</div>
           <div class="font-medium">{{ order?.name || '-' }}</div>
@@ -35,6 +36,8 @@
           <div class="font-medium">{{ note }}</div>
         </div>
       </div>
+      </template>
+      
 
       <template #footer>
         <div class="flex justify-end gap-2">
@@ -69,6 +72,7 @@ const note = computed(() => props.note || '-')
 
 const onClose = () => {
   visibleLocal.value = false
+  console.log('Dialog closed')
 }
 
 const onPay = () => {
@@ -80,21 +84,8 @@ const canPay = computed(() => {
   return s.includes('未支付') || s.includes('待支付') || s.includes('pending')
 })
 
-function formatCurrency(v: number) {
-  try {
-    return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY' }).format(v)
-  } catch (e) {
-    return `¥ ${v}`
-  }
-}
 
-function statusSeverity(status: string) {
-  const s = (status || '').toLowerCase()
-  if (s.includes('已完成') || s.includes('完成') || s.includes('success') || s.includes('已付')) return 'success'
-  if (s.includes('待支付') || s.includes('未支付') || s.includes('pending')) return 'warning'
-  if (s.includes('已取消') || s.includes('取消') || s.includes('cancel')) return 'danger'
-  return 'info'
-}
+
 </script>
 
 <style scoped>
