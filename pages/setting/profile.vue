@@ -71,6 +71,7 @@ import FileUpload from 'primevue/fileupload'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import 'cropperjs/dist/cropper.css'
+import { ca } from 'element-plus/es/locales.mjs'
 // cropperjs will be dynamically imported when needed
 
 const profile = ref({ nickname: '', bio: '', avatar: '', location: '', phone: '', address: '', tags: [] as string[] })
@@ -90,7 +91,7 @@ const notice = ref<{ type: string; text: string } | null>(null)
 
 
 
-function saveProfile() {
+async function saveProfile() {
   if (!profile.value.nickname) {
     notice.value = { type: 'warning', text: '昵称不能为空' }
     return
@@ -101,8 +102,16 @@ function saveProfile() {
     .split(',')
     .map((t) => t.trim())
     .filter((t) => t.length > 0)
-  // TODO: 调用 API 保存
-  changeUserProfile(profile.value)
+    try{
+      const response= await changeUserProfile(profile.value)
+      if(!response){
+        throw new Error('保存个人信息失败')
+      }
+    }
+    catch(err){
+      notice.value = { type: 'warning', text: '保存个人信息失败，请稍后重试' }
+      return
+    }
   console.log('保存的个人信息：', profile.value)
   notice.value = { type: 'success', text: '个人信息已保存' }
 }
