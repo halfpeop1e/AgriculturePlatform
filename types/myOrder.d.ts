@@ -15,5 +15,7 @@ export interface Order {
     quantity: number
     totalprice: number
     status: string
+    buyer:string
+    saler:string
     type: 'buy' | 'sell'
 }
