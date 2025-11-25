@@ -25,9 +25,9 @@ import { ref, computed } from 'vue'
 import type { Order } from '@/types/myOrder'
 
 const orders = ref<Order[]>([
-    { orderId: 'b1', name: '绿色有机苹果', quantity: 2,totalprice:1000, status: '已支付', type: 'buy' },
-    { orderId: 'b2', name: '香甜玉米', quantity: 5, totalprice:1000,status: '待收货', type: 'buy' },
-    { orderId: 's1', name: '土鸡蛋', quantity: 10,totalprice:1000, status: '待发货', type: 'sell' }
+  { orderId: 'b1', name: '绿色有机苹果', quantity: 2, totalprice: 1000, status: '未支付', type: 'buy', buyer:'张三',saler:'水果商户' },
+  { orderId: 'b2', name: '香甜玉米', quantity: 5, totalprice: 1000, status: '待收货', type: 'buy' ,buyer:'李四',saler:'玉米商户'},
+  { orderId: 's1', name: '土鸡蛋', quantity: 10, totalprice: 1000, status: '待发货', type: 'sell', buyer:'王五',saler:'蛋商户' }
 ])
 
 const sellOrders = computed(() => orders.value.filter((o) => o.type === 'sell'))
