@@ -1,0 +1,276 @@
+{
+  "repo_notes": [
+    {
+      "content": "使用中文生成文档主要内容"
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "Introduce the AgriculturePlatform repository, explaining its purpose as an agricultural e-commerce platform with product trading, financial services, and knowledge base features",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Architecture",
+      "purpose": "Explain the overall system architecture, including the separation between frontend (Nuxt.js) and backend (Go/Gin), and how they communicate",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Technology Stack",
+      "purpose": "Detail the technologies used: Nuxt.js 4.x, Vue 3, Element Plus, PrimeVue, Pinia, Go with Gin framework, GORM, and supporting libraries",
+      "parent": "Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Frontend Architecture",
+      "purpose": "Describe the frontend structure including pages, components, composables, stores, layouts, and middleware patterns",
+      "parent": "Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Backend Architecture",
+      "purpose": "Explain the backend layered architecture with controllers, services, and data access patterns using GORM",
+      "parent": "Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Product Management System",
+      "purpose": "Overview of the most important feature: the complete product lifecycle from creation to purchase and order tracking",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Product Listing & Discovery",
+      "purpose": "Explain how users browse products with infinite scrolling, filtering, and search functionality",
+      "parent": "Product Management System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Product Creation & Selling",
+      "purpose": "Detail the product creation flow including form validation, image uploads with Base64 encoding, and backend persistence",
+      "parent": "Product Management System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Purchase Confirmation Flow",
+      "purpose": "Describe the purchase process through the ComfirmBuy dialog, including quantity validation and dual-order creation",
+      "parent": "Product Management System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Order Management",
+      "purpose": "Explain how users view their buy orders, sell orders, and manage their product listings",
+      "parent": "Product Management System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Financial Products & Loans",
+      "purpose": "Document the loan product discovery, filtering, and application tracking system",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Loan Product Discovery",
+      "purpose": "Detail the sophisticated filtering system for agricultural loans (amount, purpose, collateral, credit requirements)",
+      "parent": "Financial Products & Loans",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Loan Application Management",
+      "purpose": "Explain the loan application process and status tracking interface",
+      "parent": "Financial Products & Loans",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "User Authentication & Management",
+      "purpose": "Document the complete user lifecycle including registration with email verification, login, and profile management",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Registration Flow",
+      "purpose": "Detail the multi-step registration process with email verification codes and validation",
+      "parent": "User Authentication & Management",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Authentication & Sessions",
+      "purpose": "Explain login flow, JWT token generation, cookie-based session management, and route protection middleware",
+      "parent": "User Authentication & Management",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Profile Management",
+      "purpose": "Document user profile editing including avatar uploads with cropping, and security settings",
+      "parent": "User Authentication & Management",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Knowledge Base System",
+      "purpose": "Explain the agricultural knowledge article system with search and tag filtering",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "State Management",
+      "purpose": "Document the Pinia store architecture and key stores: userStore, loanStore, comfirmBuyStore, knowledgeDataStore",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "UI Components Library",
+      "purpose": "Document reusable components including ProductCard, KnowledgeCard, OrderCard, ComfirmBuy, ImageShow, and form components",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Layouts & Navigation",
+      "purpose": "Explain the layout system (homePageLayout, profilePageLayout) and navigation configuration",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Backend API Reference",
+      "purpose": "Comprehensive API documentation including all endpoints, request/response formats, and authentication requirements",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Product API Endpoints",
+      "purpose": "Document product-related endpoints: listing, creation, purchase, and order retrieval",
+      "parent": "Backend API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "User API Endpoints",
+      "purpose": "Document user authentication, registration, and profile management endpoints",
+      "parent": "Backend API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Email Verification API",
+      "purpose": "Document the email verification endpoints for registration and security operations",
+      "parent": "Backend API Reference",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Data Models & Types",
+      "purpose": "Document key TypeScript interfaces and Go structs including Product, User, Order, LoanProduct, and their relationships",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Security Considerations",
+      "purpose": "Document authentication mechanisms, identify security gaps (commented JWT middleware, plaintext passwords), and provide recommendations",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Development Guide",
+      "purpose": "Provide setup instructions, development workflow, build configuration, and deployment considerations",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    }
+  ]
+}The content has been copied to your clipboard. Please paste it here to complete the file creation.
