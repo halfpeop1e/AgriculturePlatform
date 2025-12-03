@@ -48,5 +48,15 @@ export default defineNuxtConfig({
         noEmit: true // 避免生成多余文件
       }
     }
+  },
+  nitro: {
+    externals: {
+      inline: ['@vue/devtools-kit']
+    }
+  },
+  vite: {
+    optimizeDeps: {
+      exclude: ['@vue/devtools-kit']
+    }
   }
 })
