@@ -23,6 +23,12 @@
             <el-form-item label="确认密码" prop="compassword">
                 <el-input v-model="form.compassword" type="password" placeholder="请确认密码" show-password />
             </el-form-item>
+            <el-form-item label="选择角色" prop="role">
+              <el-radio-group v-model="form.role">
+                <el-radio value="normal" size="large" border>普通人员</el-radio>
+                <el-radio value="finance" size="large" border>财务人员</el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="验证邮箱" prop="comemail">
                 <div class="flex justify-between w-full">
                 <el-input v-model="comemail" style="width: 70%;" placeholder="请输入验证码"/>
@@ -56,7 +62,7 @@ const emit = defineEmits<{
 }>()
 const LodingStore=useLoadingStore()
 const formRef = ref<any>(null)
-const form = ref({ username: '',email:'', password: '',compassword:'',isverified:false })
+const form = ref({ username: '',email:'', password: '',compassword:'',isverified:false,role:'normal' })
 const comemail=ref<string>('')
 const loading = ref(false)
 const rules:  FormRules = {
