@@ -42,7 +42,7 @@
           v-for="a in filtered"
           :key="a.id"
           :article="a"
-          @click="openArticle(a.id,a.title,a.author,a.date)"
+          @click="openArticle(a.id,a.title,a.author,a.date,a.content)"
         />
       </div>
 
@@ -54,9 +54,7 @@
 <script setup lang="ts">
 import KnowledgeCard from '~/components/knowledgeCard.vue'
 import { ARTICLES } from '~/utils/knowledgeDataStore'
-import type { KnowledgeArticle } from '~/types/knowledgeArticle'
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 definePageMeta({ layout: 'home-page-layout' })
 const router = useRouter()
 const q = ref('')
@@ -81,8 +79,8 @@ const filtered = computed(() => {
   })
 })
 
-function openArticle(id: string,title: string,author:string,date:string) {
-  navigateTo({
+function openArticle(id: string,title: string,author:string,date:string, content: string) {
+ router.push({
     path: `/knowledge/${id}`,
     state: {
       articleData: {
@@ -90,6 +88,7 @@ function openArticle(id: string,title: string,author:string,date:string) {
         title,
         author,
         date,
+        content,
       }
     }
   })
