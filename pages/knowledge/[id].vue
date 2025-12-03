@@ -34,7 +34,6 @@ onMounted(() => {
     const stateData = history.state
     if (stateData && stateData.articleData) {
       articelContent.value = stateData.articleData
-      console.log('接收到的数据:', articelContent.value)
     }
   }
 })
