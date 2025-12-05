@@ -19,6 +19,7 @@ type Product struct {
 	SalerId     string         `gorm:"column:saler_id;index;type:varchar(36);not null;comment:卖家ID"`
 	Status      string         `gorm:"column:status;type:int;default:1;not null;comment:商品状态0-下架1-上架"`
 	CreatAt     time.Time      `gorm:"column:create_at;type:timestamp;not null;comment:创建时间"`
+	Email       string         `gorm:"column:email;type:varchar(100);not null;comment:联系邮箱"`
 	UpdateAt    time.Time      `gorm:"column:update_at;type:timestamp;not null;comment:更新时间"`
 	DeleteAt    gorm.DeletedAt `gorm:"column:delete_at;type:timestamp;comment:删除时间"`
 }
