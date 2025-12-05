@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -32,14 +33,19 @@ func GetProductList(c *gin.Context) {
 }
 
 func PostProduct(c *gin.Context) {
-	var req request.PostProductRequest
-	if err := c.ShouldBind(&req); err != nil {
+	// 先绑定到包装结构体
+	var wrapper request.PostProductRequestWrapper
+	if err := c.ShouldBind(&wrapper); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
 			"message": "参数解析错误: " + err.Error(),
 		})
 		return
 	}
+
+	log.Printf("wrapper: %+v", wrapper)
+	// 提取实际的数据
+	req := wrapper.FormData
 	// if c.GetString("user_id") != req.SalerId {
 	// 	c.JSON(http.StatusBadRequest, gin.H{
 	// 		"code":    400,
