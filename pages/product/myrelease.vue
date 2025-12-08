@@ -23,7 +23,7 @@
           :key="item.id || index"
           class="product-item"
         >
-          <ProductCard :product="item" @open-dialog="dialogControler.openDialog(item)" />
+          <ProductCard :product="item" @open-buy-dialog="dialogControler.openDialog(item)" @delete-product="DeleteMyProduct(item.id)" @open-edit-dialog="dialogControler.openEditDialog(item)" />
         </li>
       </ul>
 
@@ -39,13 +39,18 @@
         animated
         class="mt-6"
       />
-
+      
       <div
         v-else-if="finished && products.length"
         class="text-center text-gray-400 mt-4 text-sm"
       >
         已加载全部 {{ total }} 件商品
       </div>
+      <ProductEditDialog 
+      :model-value="editproduct.showEditProductDialog" 
+      :product="editproduct.product" 
+      @save="handleSaveEdit"
+      @update:modelValue="val => editproduct.showEditProductDialog = val" @cancel="dialogControler.closeEditDialog" />
     </div>
   </div>
 </template>
@@ -56,12 +61,13 @@ import { ElMessage } from 'element-plus'
 import { runWithBackoff } from '~/composables/useBackoff'
 import ProductCard from '~/components/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
-import { useComfirmBuyStore } from '~/utils/comfirmBuyStore'
+import { EditMyProduct } from '~/composables/useProduct'
+import { useComfirmBuyStore , useEditProductStore} from '~/utils/useProductStore'
 import type { productResponse } from '~/types/product'
 definePageMeta({ layout: 'home-page-layout' })
 const showDialog = ref(false)
 const comfirmproduct = useComfirmBuyStore()
-
+const editproduct = useEditProductStore()
 const products = ref<productResponse[]>([])
 const loading = ref(false)
 const initialLoading = ref(true)
@@ -78,6 +84,15 @@ class dialogControl {
   closeDialog() {
     showDialog.value = false
     comfirmproduct.resetProduct()
+  }
+  openEditDialog(product: productResponse) {
+    console.log('Opening edit dialog for product:', product)
+    editproduct.setProduct(product)
+    editproduct.openEditProductDialog()
+  }
+  closeEditDialog() {
+    editproduct.resetProduct()
+    editproduct.closeEditProductDialog()
   }
 }
 const dialogControler = new dialogControl()
@@ -110,7 +125,19 @@ const loadMore = async () => {
     initialLoading.value = false
   }
 }
-
+async function handleSaveEdit(editedData: any){
+  try{
+    await EditMyProduct(editedData)
+    ElMessage.success('商品信息已更新')
+    // 刷新商品列表或更新本地状态
+    products.value = []
+    page.value = 1
+    finished.value = false
+    await loadMore()
+  }catch(err){
+    ElMessage.error('更新商品信息失败')
+  }
+}
 onMounted(async () => {
   await loadMore()
 })
