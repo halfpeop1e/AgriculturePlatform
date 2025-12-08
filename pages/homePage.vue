@@ -5,8 +5,8 @@
         <ImageShow size='500px' :images="Imageitem"/>
       </div>
     <el-divider />
-    <div class="flex items-center justify-center">
-        <div style="width: 1000px;height:350px; margin-top: 20px;">
+    <div class="flex items-center justify-center w-full">
+        <div style="width: 70%;height:350px; margin-top: 20px;">
         <ImageShow size="350px" :images="Imageitem"/>  
         </div> 
         <el-divider direction="vertical" class="h-full"/>
