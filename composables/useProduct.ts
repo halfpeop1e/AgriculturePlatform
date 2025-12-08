@@ -11,14 +11,14 @@ import type{ postProductRequest } from "~/types/product";
 import type { comfirmOrderRequest } from "~/types/comfirmOrder";
 
 const useAxiosInstance=useAxios()
-export async function PostProduct(formData:any){
+export async function PostProduct(formData:postProductRequest){
     try{
         const response=await useAxiosInstance.post<postProductRequest>('/product/sell',{
             formData,
         },
         {
             headers:{
-                'Content-Type':'multipart/json'
+                'Content-Type': 'application/json'
             }
         })
         if(response.status===200){
@@ -51,4 +51,40 @@ export async function BuyProduct(order:comfirmOrderRequest){
     catch(err){
         console.error('购买产品失败',err)
     }
-}   
+}
+
+export async function DeleteMyProduct(productId:string) {
+    try {
+        const response = await useAxiosInstance.delete(`/product/delete/${productId}`);
+        if (response.status === 200) {
+            console.log('删除产品成功', response.data);
+            ElMessage.success('删除产品成功');
+            return response;
+        } else {
+            throw new Error('删除产品失败');
+        }
+    } catch (err) {
+        console.error('删除产品失败', err);
+    }
+}
+export async function EditMyProduct(formData:any) {
+    try {
+        const response = await useAxiosInstance.put(`/product/edit/${formData.id}`,{
+            formData,
+        },
+        {
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.status === 200) {
+            console.log('编辑产品成功', response.data);
+            ElMessage.success('编辑产品成功');
+            return response;
+        } else {
+            throw new Error('编辑产品失败');
+        }
+    } catch (err) {
+        console.error('编辑产品失败', err);
+    }
+}
