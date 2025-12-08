@@ -21,6 +21,7 @@ export const useComfirmBuyStore = defineStore('comfirmBuyStore', {
     actions:{
         openComfirmBuyDialog(){
             this.showComfirmBuyDialog=true
+            console.log('打开购买确认弹窗')
         },
         closeComfirmBuyDialog(){
             this.showComfirmBuyDialog=false
@@ -33,3 +34,23 @@ export const useComfirmBuyStore = defineStore('comfirmBuyStore', {
         }
     }
 })  
+export const useEditProductStore = defineStore('editProductStore', {
+    state:()=>({
+        showEditProductDialog:false,
+        product:{} as productResponse
+    }),
+    actions:{
+        openEditProductDialog(){
+            this.showEditProductDialog=true
+        },
+        closeEditProductDialog(){
+            this.showEditProductDialog=false
+        },
+        setProduct(product:productResponse){
+            this.product=product
+        },
+        resetProduct(){
+            this.product={} as productResponse
+        }
+    }
+})
