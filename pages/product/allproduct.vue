@@ -23,7 +23,7 @@
           :key="item.id || index"
           class="product-item"
         >
-          <ProductCard :product="item" @open-dialog="dialogControler.openDialog(item)" />
+          <ProductCard :product="item" @open-buy-dialog="dialogControler.openDialog(item)" />
         </li>
       </ul>
 
@@ -50,7 +50,7 @@
 
     <Comfirmbuy
       :product="comfirmproduct.product"
-      :show-dialog="showDialog"
+      :show-dialog="comfirmproduct.showComfirmBuyDialog"
       @close-dialog="dialogControler.closeDialog"
     />
   </div>
@@ -63,7 +63,7 @@ import { runWithBackoff } from '~/composables/useBackoff'
 import Comfirmbuy from '~/components/comfirmbuy.vue'
 import ProductCard from '~/components/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
-import { useComfirmBuyStore } from '~/utils/comfirmBuyStore'
+import { useComfirmBuyStore } from '~/utils/useProductStore'
 import type { productResponse } from '~/types/product'
 definePageMeta({ layout: 'home-page-layout' })
 const showDialog = ref(false)
@@ -83,11 +83,11 @@ const maxRetries = 3
 class dialogControl {
   openDialog(product: productResponse) {
     comfirmproduct.setProduct(product)
-    showDialog.value = true
+    comfirmproduct.openComfirmBuyDialog()
     console.log('打开对话框，产品ID=', product.id)
   }
   closeDialog() {
-    showDialog.value = false
+    comfirmproduct.closeComfirmBuyDialog()
     comfirmproduct.resetProduct()
   }
 }
