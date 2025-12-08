@@ -46,11 +46,11 @@
          商户：{{ product.saler }}
           </div>
           <div v-if="!routedivided(route.path)">
-            <el-button type="success" size="default" @click="openBuyDialog">购买</el-button>
+            <el-button type="success" size="default" @click="Buttonevent.openBuyDialog()">购买</el-button>
           </div>
           <div class="flex" v-if="routedivided(route.path)">
-          <el-button type="primary" size="default" @click="openBuyDialog">编辑</el-button>
-          <el-button type="danger" size="default" @click="openBuyDialog">删除</el-button>
+          <el-button type="primary" size="default" @click="Buttonevent.openEditDialog()">编辑</el-button>
+          <el-button type="danger" size="default" @click="Buttonevent.deleteProduct()">删除</el-button>
           </div>
         </div>
       </div>
@@ -77,12 +77,22 @@ const props = defineProps<{
   product: Product
 }>()
 
+const Buttonevent=(new class{
+  openBuyDialog() {
+    emit('openBuyDialog')
+  }
+  openEditDialog() {
+    emit('openEditDialog')
+  }
+  deleteProduct() {
+    emit('deleteProduct')
+  }
+})
 
-function openBuyDialog() {
-  emit('openDialog')
-}
 const emit = defineEmits<{
-    (e: 'openDialog'): void
+    (e: 'openBuyDialog'): void
+    (e: 'openEditDialog'): void
+    (e: 'deleteProduct'): void
   }>()
 function routedivided(route:string){
     const r=(route || '').toLowerCase()
