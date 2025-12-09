@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import type { Order } from '~/types/myOrder'
-import { defineEmits, defineProps, computed } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{ order: Order }>()
 const emits = defineEmits<{
