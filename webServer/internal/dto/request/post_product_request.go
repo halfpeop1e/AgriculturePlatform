@@ -12,5 +12,5 @@ type PostProductRequest struct {
 	Stock        int64    `form:"stock" json:"stock"`
 	Saler        string   `form:"saler" json:"saler"`
 	SalerId      string   `form:"salerId" json:"salerId"`
-	ContactEmail string   `form:"contactEmail" json:"contactEmail"` // 新添加的字段
+	ContactEmail string   `form:"contactEmail" json:"contactEmail"`
 }
