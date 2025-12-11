@@ -181,3 +181,52 @@ func (p *productServer) GetOrderList() (string, int, *respond.OrderListRespond) 
 	}
 	return "获取成功", 0, orderList
 }
+
+func (p *productServer) EditerProduct(req request.EditerProductRequest, product_id string) (string, int) {
+	var product model.Product
+	if res := dao.GormDB.Where("id = ?", product_id).First(&product); res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "查询失败", -1
+	}
+	if req.Name != "" {
+		product.Name = req.Name
+	}
+	if req.Category != "" {
+		product.Category = req.Category
+	}
+	if req.Description != "" {
+		product.Description = req.Description
+	}
+	if req.Price != 0 {
+		product.Price = req.Price
+	}
+	if req.Stock != 0 {
+		product.Stock = req.Stock
+	}
+	if req.Saler != "" {
+		product.Saler = req.Saler
+	}
+	if req.SalerId != "" {
+		product.SalerId = req.SalerId
+	}
+	if req.ContactEmail != "" {
+		product.Email = req.ContactEmail
+	}
+	if len(req.Images) > 0 {
+		allImages, _ := util.FileReceiverBase64Util(req.Images, util.IsFileType)
+		imagesJSON, _ := json.Marshal(allImages)
+		product.Images = string(imagesJSON)
+	}
+	dao.GormDB.Save(&product)
+	return "编辑成功", 0
+}
+
+func (p *productServer) DeleteProduct(productId string) (string, int) {
+	product := model.Product{}
+	if res := dao.GormDB.Where("id = ?", productId).First(&product); res.Error != nil {
+		log.Printf("Database error: %v", res.Error)
+		return "查询失败", -1
+	}
+	dao.GormDB.Delete(&product)
+	return "删除成功", 0
+}
