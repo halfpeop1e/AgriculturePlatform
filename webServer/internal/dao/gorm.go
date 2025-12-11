@@ -27,5 +27,5 @@ func init() {
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
-	GormDB.AutoMigrate(&model.User{}, &model.Knowledge{}, &model.Order{}, &model.Product{}, &model.LoanProduct{}) // 自动迁移，如果没有建表，会自动创建对应的表
+	GormDB.AutoMigrate(&model.User{}, &model.Knowledge{}, &model.Order{}, &model.Product{}, &model.LoanProduct{}, &model.Loan{}) // 自动迁移，如果没有建表，会自动创建对应的表
 }
