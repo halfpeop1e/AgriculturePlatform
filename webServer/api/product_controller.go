@@ -14,6 +14,7 @@ import (
 func GetProductList(c *gin.Context) {
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
+	salerId := c.DefaultQuery("salerId", "all")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -27,7 +28,7 @@ func GetProductList(c *gin.Context) {
 		pageSize = 50
 	}
 
-	msg, data, code := gorm.ProductServer.GetProductList(page, pageSize)
+	msg, data, code := gorm.ProductServer.GetProductList(page, pageSize, salerId)
 
 	JsonBack(c, msg, code, data)
 }
