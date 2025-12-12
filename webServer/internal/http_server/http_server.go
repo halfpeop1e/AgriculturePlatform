@@ -55,4 +55,20 @@ func init() {
 		loan.POST("/add", v1.AddLoanProduct)
 		loan.POST("/apply", v1.ApplyLoan)
 	}
+	question := GE.Group("/question")
+	question.Use(JWTAuthMiddleware())
+	{
+		question.GET("/list", v1.GetQuestionList)
+		question.POST("/create", v1.CreateQuestion)
+		question.GET("/detail/:questionId", v1.GetQuestionDetail)
+		question.POST("/answer/:questionId", v1.AnswerQuestion)
+	}
+	
+	expert := GE.Group("/expert")
+	expert.Use(JWTAuthMiddleware())
+	{
+		expert.GET("/list", v1.GetExpertList)
+		expert.GET("/detail/:expertId", v1.GetExpertDetail)
+		expert.POST("/contact/:expertId", v1.ContactExpert)
+	}
 }

@@ -12,9 +12,9 @@ export const nav = [
   {
     label: '专家问答',
     items: [
-      { label: '问题汇总',routername:'/homePage',icon: 'pi pi-fw pi-comments' },
-      { label: '联系专家' ,routername:'/homePage',icon: 'pi pi-fw pi-user-plus'},
-      { label: '提问',routername:'/homePage' ,icon: 'pi pi-fw pi-question-circle' },
+      { label: '问题汇总', routername: '/question', icon: 'pi pi-fw pi-comments' },
+      { label: '联系专家', routername: '/expert', icon: 'pi pi-fw pi-user-plus' },
+      { label: '提问', routername: '/question/create', icon: 'pi pi-fw pi-question-circle' },
     ],
   },
   {
