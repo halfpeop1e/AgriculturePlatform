@@ -5,4 +5,5 @@ type RegisterRequest struct {
 	Password    string `json:"password"`
 	ComPassword string `json:"compassword"`
 	Email       string `json:"email"`
+	Role        string `json:"role"`
 }

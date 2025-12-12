@@ -56,7 +56,7 @@ func (p *productServer) PostProduct(req request.PostProductRequest) (string, int
 	return "提交成功", 0
 }
 
-func (p *productServer) GetProductList(page, pageSize int) (string, *respond.ProductListRespond, int) {
+func (p *productServer) GetProductList(page, pageSize int, salerId string) (string, *respond.ProductListRespond, int) {
 	var total int64
 	if res := dao.GormDB.Model(&model.Product{}).Where("status = ?", "1").Count(&total); res.Error != nil {
 		log.Printf("Database error: %v", res.Error)
@@ -79,11 +79,18 @@ func (p *productServer) GetProductList(page, pageSize int) (string, *respond.Pro
 	if offset < 0 {
 		offset = 0
 	}
-
+	log.Print("收到的salerId:" + salerId)
 	var products []model.Product
-	if res := dao.GormDB.Where("status = ?", "1").Order("create_at DESC").Limit(pageSize).Offset(offset).Find(&products); res.Error != nil {
-		log.Printf("Database error: %v", res.Error)
-		return "查询失败", nil, -1
+	if salerId != "all" {
+		if res := dao.GormDB.Where("status = ? AND saler_id = ?", "1", salerId).Order("create_at DESC").Limit(pageSize).Offset(offset).Find(&products); res.Error != nil {
+			log.Printf("Database error: %v", res.Error)
+			return "查询失败", nil, -1
+		}
+	} else {
+		if res := dao.GormDB.Where("status = ?", "1").Order("create_at DESC").Limit(pageSize).Offset(offset).Find(&products); res.Error != nil {
+			log.Printf("Database error: %v", res.Error)
+			return "查询失败", nil, -1
+		}
 	}
 
 	for _, product := range products {

@@ -49,6 +49,7 @@ func (u *userInfoService) Login(loginReq request.LoginRequest) (string, *respond
 	}
 	loginResp := &respond.LoginRespond{
 		UserId: user.Uuid,
+		Role:   user.Role,
 		Tokens: token,
 	}
 	return "登陆成功", loginResp, 0
@@ -90,6 +91,7 @@ func (u *userInfoService) Register(registerReq request.RegisterRequest) (string,
 	user.Uuid = util.GenerateUUID()
 	user.CreatAt = time.Now()
 	user.Avatar = "default.png"
+	user.Role = registerReq.Role
 	if res := dao.GormDB.Create(&user); res.Error != nil {
 		return "注册失败", nil, -1
 	}
