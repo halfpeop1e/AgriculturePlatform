@@ -11,7 +11,7 @@
 -->
 <template>
     <!-- 购买弹窗 -->
-  <el-dialog :model-value="showDialog" width="420px" title="确认购买">
+  <el-dialog v-model="localVisible" width="420px" title="确认购买">
     <div class="space-y-4">
       <div class="text-lg font-medium">{{ product.name }}</div>
       <div class="flex items-center justify-between text-sm text-gray-600">
@@ -61,6 +61,7 @@ const props=defineProps<{
   },
   showDialog: boolean
 }>()
+const localVisible = ref(props.showDialog)
 function closeDialog() {
   emit('closeDialog')
 }

@@ -32,6 +32,8 @@ func init() {
 		product.GET("/list", v1.GetProductList)
 		product.POST("/sell", v1.PostProduct)
 		product.POST("/buy", v1.BuyProduct)
+		product.PUT("/edit/:productId", v1.EditerProduct)
+		product.DELETE("/delete/:productId", v1.DeleteProduct)
 	}
 	order := GE.Group("/order")
 	order.Use(JWTAuthMiddleware())
@@ -53,4 +55,20 @@ func init() {
 		loan.POST("/add", v1.AddLoanProduct)
 		loan.POST("/apply", v1.ApplyLoan)
 	}
+	// question := GE.Group("/question")
+	// question.Use(JWTAuthMiddleware())
+	// {
+	// 	question.GET("/list", v1.GetQuestionList)
+	// 	question.POST("/create", v1.CreateQuestion)
+	// 	question.GET("/detail/:questionId", v1.GetQuestionDetail)
+	// 	question.POST("/answer/:questionId", v1.AnswerQuestion)
+	// }
+
+	// expert := GE.Group("/expert")
+	// expert.Use(JWTAuthMiddleware())
+	// {
+	// 	expert.GET("/list", v1.GetExpertList)
+	// 	expert.GET("/detail/:expertId", v1.GetExpertDetail)
+	// 	expert.POST("/contact/:expertId", v1.ContactExpert)
+	// }
 }

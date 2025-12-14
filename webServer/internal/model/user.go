@@ -19,6 +19,7 @@ type User struct {
 	Adress     string         `gorm:"column:adress;type:varchar(50);comment:用户地址"`
 	Bio        string         `gorm:"column:bio;type:varchar(255);default:'褪色者成为混沌之王，燃烧了一切，交界地陷入一片火海之中。梅琳娜表示自己将找到褪色者，给予他命定之死。';comment:用户简介"`
 	ActiveTime time.Time      `gorm:"column:active_time;type:timestamp;comment:用户活跃时间"`
+	Role       string         `gorm:"column:role;type:varchar(20);default:'user';comment:用户角色"`
 	CreatAt    time.Time      `gorm:"column:create_at;type:timestamp;not null;comment:创建时间"`
 	DeleteAt   gorm.DeletedAt `gorm:"column:delete_at;type:timestamp;comment:删除时间"`
 }

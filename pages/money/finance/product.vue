@@ -150,7 +150,11 @@
                     "
                     >查看详情</el-button
                   >
-                  <el-button type="primary">申请</el-button>
+                  <el-button type="primary"
+                  @click="{
+                    selectedProduct = product;
+                    applyDialogVisible = true;
+                  }">申请</el-button>
                 </div>
               </template>
             </el-card>
@@ -324,6 +328,53 @@
 <div class="flex justify-center mt-4">
     <el-pagination background :current-page="current" @current-change="handlePageChange"  layout="prev, pager, next" :total="productStore.total" />
   </div>
+
+   <el-dialog
+    v-model="applyDialogVisible"
+    title="产品详情"
+    width="600"
+    align-center
+  >
+    <div v-if="selectedProduct" class="space-y-4">
+      <!-- 产品基本信息 -->
+      <div class="flex items-center gap-4 pb-4 border-b">
+        <img
+          :src="
+            selectedProduct.productAvatar ||
+            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png'
+          "
+          alt="产品图片"
+          class="w-20 h-20 object-cover rounded"
+        />
+        <div>
+          <h3 class="text-xl font-semibold">
+            {{ selectedProduct.productName }}
+          </h3>
+          <p class="text-gray-500">产品编号: {{ selectedProduct.productId }}</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex gap-2">
+          <el-text class="mx-1" type="info">贷款金额(元):</el-text>
+<el-input v-model="applyAmount" style="width: 240px" placeholder="请输入贷款金额(元)" />
+        </div>
+        <div class="flex gap-2">
+          <el-text class="mx-1" type="info">贷款期限(月):</el-text>
+          <el-input v-model="applyTerm" style="width: 240px" placeholder="请输入贷款期限(月)" />
+        </div>
+        
+      </div>
+    </div>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="applyDialogVisible = false">关闭</el-button>
+        <el-button type="primary" @click="handleApplyLoan">确认</el-button>
+      </div>
+    </template>
+  </el-dialog>
+
   </div>
 </template>
 
@@ -333,7 +384,22 @@ import { ref, computed } from "vue";
 import { Setting,Menu } from "@element-plus/icons-vue";
 definePageMeta({ layout: "home-page-layout" });
 const current = ref(1)
+const applyAmount = ref(0)
+const applyTerm = ref(0)
 
+// 处理贷款申请
+const handleApplyLoan = async () => {
+  try {
+    // 调用贷款申请函数
+    await applyLoan(selectedProduct.value!, applyAmount.value, applyTerm.value)
+    // 申请成功后才关闭对话框
+    applyDialogVisible.value = false
+    
+
+  } catch (error) {
+    console.error('贷款申请失败:', error)
+  } 
+}
 // 加载数据的函数
 const loadLoanProducts = async (page = 1, pageSize = 9) => {
   const data = await getLoanProductList(page, pageSize);
@@ -359,6 +425,23 @@ const handlePageChange = async (newPage: number) => {
   current.value = newPage;
   await loadLoanProducts(newPage, 9);
 };
+
+//申请贷款
+const applyLoan = async (product: AgriculturalLoanProduct,amount:number,term:number) => {
+  term = Math.floor(term)
+  if(product.loanAmountRange.min > amount || product.loanAmountRange.max < amount){
+    ElMessage.error('金额错误')
+    return
+  }
+  if(product.loanTerm.minMonths > term || product.loanTerm.maxMonths < term){
+    ElMessage.error('期限错误')
+    return
+  }
+  const data = await useApplyLoan(product.productId,useUserStore().userId,amount,term)
+  if(data){
+    ElMessage.success('申请成功')
+  }
+}
 
 const openAdd = ref(false);
 const createDefaultProduct = (): AgriculturalLoanProduct => {
@@ -412,6 +495,7 @@ const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
 };
 const centerDialogVisible = ref(false);
+const applyDialogVisible = ref(false);
 const selectedProduct = ref<AgriculturalLoanProduct | null>(null);
 const value = ref<string[]>([]);
 const input = ref("");

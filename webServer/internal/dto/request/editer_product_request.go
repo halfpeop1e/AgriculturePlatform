@@ -1,9 +1,9 @@
 package request
 
-type PostProductRequestWrapper struct {
-	FormData PostProductRequest `json:"formData"`
+type EditerProductRequestWrapper struct {
+	FormData EditerProductRequest `json:"formData"`
 }
-type PostProductRequest struct {
+type EditerProductRequest struct {
 	Name         string   `form:"name" json:"name"`
 	Images       []string `form:"images" json:"images"`
 	Category     string   `form:"category" json:"category"`
