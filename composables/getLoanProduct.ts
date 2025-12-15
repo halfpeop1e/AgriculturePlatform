@@ -42,3 +42,24 @@ export async function getLoanApplyList(userId: string) {
     console.error("获取产品列表失败", err);
   }
 }
+
+export async function useApplyLoan(productId: string, userId: string, amount: number,deadline: number) {
+  try {
+    const response = await useAxiosInstance.post<{
+      data: ApplyListRespond;
+    }>("/loan/apply", {
+        user_id : userId,
+        product_id:productId,
+        amount:parseFloat(amount.toString()),
+        deadline:parseInt(deadline.toString()),
+    });
+    if (response.status === 200) {
+      console.log("获取产品列表成功", response.data);
+      return response.data.data;
+    } else {
+      throw new Error("获取产品列表失败");
+    }
+  } catch (err) {
+    console.error("获取产品列表失败", err);
+  }
+}

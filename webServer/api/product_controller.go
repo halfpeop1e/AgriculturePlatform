@@ -14,6 +14,7 @@ import (
 func GetProductList(c *gin.Context) {
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
+	salerId := c.DefaultQuery("salerId", "all")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -27,7 +28,7 @@ func GetProductList(c *gin.Context) {
 		pageSize = 50
 	}
 
-	msg, data, code := gorm.ProductServer.GetProductList(page, pageSize)
+	msg, data, code := gorm.ProductServer.GetProductList(page, pageSize, salerId)
 
 	JsonBack(c, msg, code, data)
 }
@@ -73,4 +74,39 @@ func BuyProduct(c *gin.Context) {
 func GetOrderList(c *gin.Context) {
 	msg, code, data := gorm.ProductServer.GetOrderList()
 	JsonBack(c, msg, code, data)
+}
+
+func EditerProduct(c *gin.Context) {
+	productId := c.Param("productId")
+	if productId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "缺少产品ID",
+		})
+		return
+	}
+	var wrapper request.EditerProductRequestWrapper
+	if err := c.ShouldBind(&wrapper); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "参数解析错误: " + err.Error(),
+		})
+		return
+	}
+	req := wrapper.FormData
+	msg, code := gorm.ProductServer.EditerProduct(req, productId)
+	JsonBack(c, msg, code, nil)
+}
+
+func DeleteProduct(c *gin.Context) {
+	productId := c.Param("productId")
+	if productId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "缺少产品ID",
+		})
+		return
+	}
+	msg, code := gorm.ProductServer.DeleteProduct(productId)
+	JsonBack(c, msg, code, nil)
 }

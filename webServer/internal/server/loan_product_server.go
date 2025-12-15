@@ -197,7 +197,7 @@ func StringToCollateralRequirementType(req string) (model.CollateralRequirementT
 func ApllyLoanProduct(req request.ApplyLoanRequest) (string, int) {
 	var apply model.Loan
 	var total int64
-	if err := dao.GormDB.Where("product_id = ? AND user_id = ?", req.ProductID, req.UserID).Count(&total).Error; err != nil {
+	if err := dao.GormDB.Model(&model.Loan{}).Where("product_id = ? AND user_id = ?", req.ProductID, req.UserID).Count(&total).Error; err != nil {
 		return "查询失败", -1
 	}
 	if total > 0 {

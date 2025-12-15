@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import type { ApplyListRespond } from '~/types/loanApply';
 
-import { Setting } from '@element-plus/icons-vue';
+import { Setting,Menu } from '@element-plus/icons-vue';
 definePageMeta({ layout: "home-page-layout" });
 const router = useRouter();
 const handleOpen = (key: string, keyPath: string[]) => {
