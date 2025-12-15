@@ -1,6 +1,6 @@
 <template>
-    <section class="w-full py-10 px-6 flex items-center justify-center">
-        <Card class=" w-4/5 rounded-3xl bg-white/90 shadow-2xl backdrop-blur-md border border-white/40">
+    <div class="w-full py-10 flex items-center justify-center">
+        <Card class="w-4/5 rounded-3xl bg-white/90 shadow-2xl backdrop-blur-md border border-white/40">
             <template #content>
                 <div class="space-y-10">
                     <div class="rounded-2xl bg-slate-900/5 p-6">
@@ -9,7 +9,7 @@
 
                     <Divider />
 
-                    <div class="flex flex-col items-center justify-between gap-8 lg:flex-row">
+                    <div class="flex flex-col items-center justify-center lg:flex-row">
                         <div class="w-full max-w-2xl">
                             <ImageShow size="350px" :images="Imageitem" />
                         </div>
@@ -46,7 +46,7 @@
 
                     <Divider />
 
-                    <div class="flex w-full justify-center">
+                    <div class="flex w-9/10 justify-center">
                         <DataInHome />
                     </div>
 
@@ -58,7 +58,7 @@
                 </div>
             </template>
         </Card>
-    </section>
+    </div>
 </template>
 
 <script setup lang="ts">
