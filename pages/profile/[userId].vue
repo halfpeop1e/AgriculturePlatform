@@ -103,17 +103,18 @@ import Divider from 'primevue/divider'
 import Button from 'primevue/button'
 import { useToast } from 'primevue/usetoast'
 import { onMounted } from 'vue'
-
-definePageMeta({ layout: 'profile-page-layout' })
-const toast = useToast()
 const userStore = useUserStore()
 const profile = userStore.userinfo
+definePageMeta({ layout: 'profile-page-layout' })
+
+const toast = useToast()
+
+
 
 function onContact() {
     window.open(`mailto:${profile.email}`, '_blank')
     toast.add({ severity: 'success', summary: '邮件已打开', detail: '请在邮件客户端继续交流', life: 2500 })
 }
-
 onMounted(() => {
     getUserProfile()
 })
