@@ -27,13 +27,14 @@ export const useUserStore = defineStore('userStore', {
     joinedAt:'' ,
     phone: '',
     address:'' ,
-    
+
     },
     lastActive: '',
     userId: '',
     avatar: '',
     islogin:false,
     tokens:'',
+    role:''
     }),
     actions:{
         setUserProfile(profile:profileResponse){
