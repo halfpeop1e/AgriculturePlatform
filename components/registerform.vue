@@ -27,6 +27,7 @@
               <el-radio-group v-model="form.role">
                 <el-radio value="normal" size="small" border>普通人员</el-radio>
                 <el-radio value="finance" size="small" border>财务人员</el-radio>
+                <el-radio value="expert" size="small" border>专家</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="验证邮箱" prop="comemail">
