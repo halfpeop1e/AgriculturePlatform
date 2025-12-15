@@ -19,6 +19,7 @@ export async function loginUser(loginData:LoginRequest){
             UserStore.userId=response.data.data.userId
             //console.log("userId:",UserStore.userId)
             UserStore.tokens=response.data.data.tokens
+            UserStore.role=response.data.data.role
             UserStore.LoginSet()
             console.log('用户已登录，更新本地状态',UserStore)
             navigateTo('/')
