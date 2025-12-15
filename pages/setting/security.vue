@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import { error } from 'console';
 import { ref } from 'vue'
 const security = ref({ email:'',code:'',current: '', new: '', confirm: '' })
 const notice = ref<{ type: string; text: string } | null>(null)
