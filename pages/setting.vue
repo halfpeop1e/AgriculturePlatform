@@ -1,7 +1,7 @@
 <template>
-  <section class="p-6">
+  <div class="p-6">
     <div class="relative mx-auto flex max-w-6xl gap-6">
-      <div class="fixed left-6 top-20 z-20">
+      <div class=" left-6 top-20 z-20">
         <Button icon="pi pi-bars" outlined rounded @click="toggleSidebar" />
       </div>
 
@@ -15,7 +15,7 @@
         </template>
       </Card>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +24,6 @@ import Card from 'primevue/card'
 import SizeBar from '~/components/sizeBar.vue'
 import { settingNav } from '~/config/settingRoute'
 
-definePageMeta({ layout: 'home-page-layout' })
 
 const buttonstore = buttonStore()
 const router = useRouter()
