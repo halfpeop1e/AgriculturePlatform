@@ -1,52 +1,75 @@
 <template>
-    <div>
-       <el-card style="border-radius: 20px;background-color: rgba(255, 255, 255, 0.244);">
-      <div>
-        <ImageShow size='500px' :images="Imageitem"/>
-      </div>
-    <el-divider />
-    <div class="flex items-center justify-center">
-        <div style="width: 1000px;height:350px; margin-top: 20px;">
-        <ImageShow size="350px" :images="Imageitem"/>  
-        </div> 
-        <el-divider direction="vertical" class="h-full"/>
-        <el-card style="width: 310px;margin-top: 20px;height: 350px;">
-        <div>
-        <p class="text-3xl mb-1">平台宗旨</p>
-        <div class="text-lg">以数据驱动为核心，融合金融服务与农产品营销，实现产业链上下游的高效对接与智能化管理，助力农业数字化转型。</div>
-        </div>
-        <el-divider/>
-        <div>
-                        <div
-                            class="text-3xl mb-1 fancy-underline text-cyan-700"
-                            role="button"
-                            tabindex="0"
-                            @click="onClickExperience"    
-                        >
-                            立刻体验
+    <section class="w-full py-10 px-6 flex items-center justify-center">
+        <Card class=" w-4/5 rounded-3xl bg-white/90 shadow-2xl backdrop-blur-md border border-white/40">
+            <template #content>
+                <div class="space-y-10">
+                    <div class="rounded-2xl bg-slate-900/5 p-6">
+                        <ImageShow size="500px" :images="Imageitem" />
+                    </div>
+
+                    <Divider />
+
+                    <div class="flex flex-col items-center justify-between gap-8 lg:flex-row">
+                        <div class="w-full max-w-2xl">
+                            <ImageShow size="350px" :images="Imageitem" />
                         </div>
-            <div class="text-lg">注册或登录账号，开启您的农业数字化之旅！</div>
-        </div>
-        </el-card>
-        </div>
-    
-    <el-divider />
-    <div style="width: 100%;" class="flex justify-center">
-    <DataInHome />      
-    </div>
-    <el-divider />
-    <div style="width: 100%; margin-top: 20px;" class="flex justify-center">
-        <Contactus/>
-    </div>
-    </el-card>
-  </div>
+
+                        <Divider layout="vertical" class="hidden h-72 lg:flex" />
+
+                        <Card class="w-full max-w-sm rounded-2xl border border-slate-200 shadow-lg">
+                            <template #content>
+                                <div class="space-y-6">
+                                    <header class="space-y-2">
+                                        <h2 class="text-3xl font-semibold text-slate-900">平台宗旨</h2>
+                                        <p class="text-base leading-relaxed text-slate-600">
+                                            以数据驱动为核心，融合金融服务与农产品营销，实现产业链上下游的高效对接与智能化管理，助力农业数字化转型。
+                                        </p>
+                                    </header>
+
+                                    <Divider />
+
+                                    <div class="space-y-3">
+                                         <div
+                                            class="text-3xl mb-1 fancy-underline text-cyan-700"
+                                            role="button"
+                                            tabindex="0"
+                                            @click="onClickExperience"    
+                                          >
+                                            立刻体验
+                                          </div>
+                                        <p class="text-sm text-slate-500">注册或登录账号，开启您的农业数字化之旅！</p>
+                                    </div>
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
+
+                    <Divider />
+
+                    <div class="flex w-full justify-center">
+                        <DataInHome />
+                    </div>
+
+                    <Divider />
+
+                    <div class="flex w-full justify-center">
+                        <Contactus />
+                    </div>
+                </div>
+            </template>
+        </Card>
+    </section>
 </template>
 
 <script setup lang="ts">
+import Card from 'primevue/card'
+import Divider from 'primevue/divider'
+import Button from 'primevue/button'
 import DataInHome from '~/components/dataInHome.vue'
 import ImageShow from '~/components/imageShow.vue'
 import Contactus from '~/components/Contactus.vue'
 import { Imageitem } from '~/types/imageshow'
+
 definePageMeta({ layout: 'home-page-layout' })
 
 function onClickExperience() {
@@ -55,7 +78,7 @@ function onClickExperience() {
 </script>
 
 <style scoped>
-.fancy-underline {
+  .fancy-underline {
     position: relative;
     display: inline-block;
     cursor: pointer;

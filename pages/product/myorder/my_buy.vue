@@ -12,12 +12,13 @@
       <el-alert title="买入订单" type="info" show-icon />
       <ul class="mt-3 space-y-3">
         <li v-for="o in buyOrders" :key="o.orderId">
-          <OrderCard :order="o" @view="openDialog" />
+          <OrderCard :order="o" @view="openDialog" @pay="handlePay"/>
         </li>
         <li v-if="buyOrders.length === 0" class="text-gray-500">暂无买入订单</li>
       </ul>
       <!-- 订单详情对话框 -->
       <order-info-dialog v-model="dialogVisible" :order="selectedOrder" @pay="handlePay" />
+      <PayDialog v-model="PayShow" :order="selectedOrder" @pay="handlePay" />
     </div>
 </template>
 
@@ -28,10 +29,11 @@ import { ref, computed } from 'vue'
 import type { Order } from '@/types/myOrder'
 import OrderCard from '~/components/OrderCard.vue'
 import OrderInfoDialog from '~/components/orderInfoDialog.vue'
+import PayDialog from '~/components/paydialog.vue'
 
 const selectedOrder = ref<Order | null>(null)
 const dialogVisible = ref(false)
-
+const PayShow = ref(false)
 function openDialog(orderId: string) {
   const found = orders.value.find((x) => x.orderId === orderId) || null
   selectedOrder.value = found
@@ -40,7 +42,7 @@ function openDialog(orderId: string) {
 
 function handlePay(orderId: string) {
   console.log('触发支付，orderId=', orderId)
-  // 这里可以调用支付流程或重定向到支付页
+  PayShow.value = true
   dialogVisible.value = false
 }
 

@@ -8,7 +8,7 @@
   注意点：图片使用 object-cover 保持封面显示，购买按钮触发 openDialog 事件。
 -->
 <template>
-  <el-card class="w-full hover:shadow-lg transition-shadow duration-300 ease-in-out">
+  <el-card class="w-full hover:shadow-lg transition-shadow duration-300 ease-in-out rounded-lg">
     <div class="flex gap-6">
       <!-- 左侧产品图片 -->
       <div class="w-48 aspect-[4/3] overflow-hidden rounded-lg">

@@ -25,8 +25,8 @@
             </el-form-item>
             <el-form-item label="选择角色" prop="role">
               <el-radio-group v-model="form.role">
-                <el-radio value="normal" size="large" border>普通人员</el-radio>
-                <el-radio value="finance" size="large" border>财务人员</el-radio>
+                <el-radio value="normal" size="small" border>普通人员</el-radio>
+                <el-radio value="finance" size="small" border>财务人员</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="验证邮箱" prop="comemail">
@@ -130,7 +130,7 @@ function Countdown(seconds: number) {
 <style scoped>
 .login-card {
     width: 400px;
-    height: 600px;
+    height: 650px;
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.244);
 }

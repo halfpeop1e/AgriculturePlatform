@@ -1,31 +1,38 @@
 <template>
-  <div class="p-6">
-    <div class="max-w-6xl mx-auto flex gap-6">
+  <section class="p-6">
+    <div class="relative mx-auto flex max-w-6xl gap-6">
+      <div class="fixed left-6 top-20 z-20">
+        <Button icon="pi pi-bars" outlined rounded @click="toggleSidebar" />
+      </div>
+
       <SizeBar :nav="settingNav" />
-        <div class="absolute top-16 left-1">
-        <el-button :icon="Expand" @click="toggleSidebar" />
-      </div>
-      <div class="flex-1 bg-white rounded-lg shadow-sm p-6">
-        <!-- 子路由渲染点 -->
-        <router-view />
-      </div>
+
+      <Card class="flex-1 rounded-2xl border border-slate-200 bg-white shadow-lg">
+        <template #content>
+          <div class="min-h-[540px] rounded-2xl bg-slate-50/60 p-6">
+            <router-view />
+          </div>
+        </template>
+      </Card>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
+import Button from 'primevue/button'
+import Card from 'primevue/card'
 import SizeBar from '~/components/sizeBar.vue'
 import { settingNav } from '~/config/settingRoute'
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { Expand } from '@element-plus/icons-vue'
+
 definePageMeta({ layout: 'home-page-layout' })
-const buttonstore = buttonStore();
+
+const buttonstore = buttonStore()
 const router = useRouter()
+
 function toggleSidebar() {
-    buttonstore.isvisible = !buttonstore.isvisible;
+  buttonstore.isvisible = !buttonstore.isvisible
 }
-// 当访问 /setting 时，自动导航到 /setting/profile
+
 onMounted(() => {
   if (router.currentRoute.value.path === '/setting') {
     router.replace('/setting/profile')
@@ -34,5 +41,4 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.max-w-6xl { max-width: 72rem }
 </style>

@@ -16,7 +16,8 @@ export interface profileResponse{
     JoinedAt:string ;
     Phone: string;
     Address:string ;
-    LastActive: string; 
+    LastActive: string;
+    role:string 
     }
     message:string;
 }

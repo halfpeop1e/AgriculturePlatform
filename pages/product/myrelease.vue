@@ -23,7 +23,7 @@
           :key="item.id || index"
           class="product-item"
         >
-          <ProductCard :product="item" @open-buy-dialog="dialogControler.openDialog(item)" @delete-product="DeleteMyProduct(item.id)" @open-edit-dialog="dialogControler.openEditDialog(item)" />
+          <ProductCard :product="item" @open-buy-dialog="dialogControler.openDialog(item)" @delete-product="handleDelete(item.id)" @open-edit-dialog="dialogControler.openEditDialog(item)" />
         </li>
       </ul>
 
@@ -137,6 +137,22 @@ async function handleSaveEdit(editedData: any){
   }catch(err){
     ElMessage.error('更新商品信息失败')
   }
+}
+async function handleDelete(id:string){
+  try{
+      const response= await DeleteMyProduct(id)
+      if(response?.status==200){
+        loadMore()
+        return
+      }
+      else{
+        throw new Error('删除商品失败')
+      }
+  }
+  catch(err){
+      ElMessage.error('删除商品失败，请稍后重试')
+  }
+      loadMore()
 }
 onMounted(async () => {
   await loadMore()
