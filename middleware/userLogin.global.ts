@@ -9,17 +9,40 @@
 */
 export default defineNuxtRouteMiddleware((to) => {
     // 允许访问的公开路径
-    const publicPaths = ['/','/homePage', '/login', '/register','/css','/setting/profile','/product/sellproduct','/product/allproduct']
+    const publicPaths = ['/','/homePage', '/login', '/register']
     const userStore = useUserStore()
-    // 如果是公开路径，直接放行
-    if (publicPaths.includes(to.path)) {
-      return
-    }
+    const isPublicPath = publicPaths.includes(to.path)
+
     // 检查是否已登录（通过 cookie 中的 AuthToken）
     const authToken = useCookie('AuthToken')?.value
+    const isAuthenticated = Boolean(authToken || userStore.tokens)
 
-    // 如果没有登录凭证，重定向到登录页
-    // if (!authToken&&!userStore.tokens) {
-    //   return navigateTo('/login')
-    // }
+    if (!isAuthenticated) {
+      if (isPublicPath) {
+        return
+      }
+      return navigateTo('/login')
+    }
+
+    if (userStore.role==='expert' && to.path !== '/expert/dashboard'){
+      return navigateTo('/expert/dashboard')
+    }
+    if (userStore.role === 'finance') {
+      const financeDashboardPath = '/finaceJustice'
+      const profilePathPrefix = '/profile'
+      const isProfileRoute = to.path.startsWith(profilePathPrefix)
+      const isSettingRoute = to.path.startsWith('/setting')
+      const isFinanceDashboard = to.path === financeDashboardPath
+
+      if (!isFinanceDashboard && !isProfileRoute&&!isSettingRoute) {
+        console.log('跳转到财务界面')
+        return navigateTo(financeDashboardPath)
+      }
+      return
+    }
+
+    if (isPublicPath) {
+      console.log('访问公开路径，无需跳转')
+      return
+    }
 })
