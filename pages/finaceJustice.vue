@@ -10,29 +10,29 @@
 			</el-select>
 		</section>
 
-		<el-card shadow="hover" class="rounded-2xl border border-gray-200">
+		<el-card shadow="hover" class="rounded-2xl border border-gray-200 ">
 			<el-table :data="filteredRequests" stripe border :max-height="520">
-				<el-table-column prop="referenceNo" label="申请编号" width="140" />
-				<el-table-column prop="applicant" label="申请人" width="140" />
-				<el-table-column prop="type" label="类型" width="120">
+				<el-table-column prop="referenceNo" label="申请编号" width="200" />
+				<el-table-column prop="applicant" label="申请人" width="200" />
+				<el-table-column prop="type" label="类型" width="200">
 					<template #default="{ row }">
 						<el-tag :type="typeTagMap[row.type as FinanceRequest['type']] || 'info'" effect="dark">{{ typeLabel(row.type) }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="amount" label="金额 (¥)" width="140">
+				<el-table-column prop="amount" label="金额 (¥)" width="200">
 					<template #default="{ row }">{{ formatCurrency(row.amount) }}</template>
 				</el-table-column>
-				<el-table-column prop="submittedAt" label="提交时间" width="180" />
-				<el-table-column prop="status" label="状态" width="120">
+				<el-table-column prop="submittedAt" label="提交时间" width="200" />
+				<el-table-column prop="status" label="状态" width="200">
 					<template #default="{ row }">
 						<el-tag :type="statusTagType(row.status)">{{ statusLabel(row.status) }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="220" fixed="right">
+				<el-table-column label="操作" width="340" fixed="right">
 					<template #default="{ row }">
-						<el-button type="primary" plain size="small" @click="openDetail(row)">查看详情</el-button>
-						<el-button v-if="row.status === 'pending'" type="success" size="small" @click="approve(row)">通过</el-button>
-						<el-button v-if="row.status === 'pending'" type="danger" size="small" @click="openReject(row)">驳回</el-button>
+						<el-button type="primary" plain size="default" @click="openDetail(row)">查看详情</el-button>
+						<el-button v-if="row.status === 'pending'" type="success" size="default" @click="approve(row)">通过</el-button>
+						<el-button v-if="row.status === 'pending'" type="danger" size="default" @click="openReject(row)">驳回</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -110,7 +110,7 @@
 import { computed, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-definePageMeta({ layout: 'home-page-layout' })
+definePageMeta({ layout: 'finance-page-layout' })
 
 interface FinanceRequest {
 	id: string
