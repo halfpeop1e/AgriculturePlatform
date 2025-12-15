@@ -9,13 +9,14 @@
 <template>
   <div>
 <div class="flex h-screen">
-        <SizeBar :nav="nav"/>
+        <SizeBar v-if="buttonstore.isvisible" :nav="nav"/>
         <div class="flex-1 overflow-auto h-full">
             <slot />
         </div>
     </div>
     <div class="absolute top-0 left-4">
-        <el-button :icon="Expand" @click="toggleSidebar" />
+        <el-button v-if="RoleJustice()" :icon="Expand" @click="toggleSidebar" />
+        <Button v-else icon="pi pi-home"  @click="navigateTo('/middlepage')" severity="secondary" raised variant="outlined"/>
     </div>
   </div>
         
@@ -27,8 +28,21 @@ import buttonStore from "~/utils/buttonStore"
 import { Expand } from '@element-plus/icons-vue'
 import {nav} from '~/config/topbarRoute'
 const buttonstore = buttonStore();
+const userStore = useUserStore();
 function toggleSidebar() {
     buttonstore.isvisible = !buttonstore.isvisible;
+}
+const userRole = computed(() => userStore.role);
+function RoleJustice(){
+    if(userRole.value=='normal'){
+        return true;
+    }
+    else if(userRole.value=='finance'){
+        return false;
+    }
+    else if(userRole.value=='expert'){
+        return false;
+    }
 }
 </script>
 
