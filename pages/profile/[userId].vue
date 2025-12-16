@@ -105,7 +105,6 @@ import { useToast } from 'primevue/usetoast'
 import { onMounted } from 'vue'
 const userStore = useUserStore()
 const profile = userStore.userinfo
-definePageMeta({ layout: 'profile-page-layout' })
 
 const toast = useToast()
 
