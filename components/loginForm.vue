@@ -82,13 +82,20 @@ async function onSubmit() {
             })
             getUserProfile()
             emit('setactivetime')
-            if(form.value.remember){
-                setCookie("AuthToken" ,response?.data.tokens,1)
+            if(response?.status==200){
+              if(form.value.remember){
+                setCookie("AuthToken" ,response?.data.data.tokens,1)
+              }
+               ElMessage.success('登录成功')
             }
-            ElMessage.success('登录成功（模拟）')
+            else{
+              throw new Error('用户登录失败')
+            }
+            
         } catch (err) {
             ElMessage.error('登录失败')
         } finally {
+           
             loading.value = false
         }
     })
