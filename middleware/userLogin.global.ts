@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware((to) => {
     // 检查是否已登录（通过 cookie 中的 AuthToken）
     const authToken = useCookie('AuthToken')?.value
     const isAuthenticated = Boolean(authToken || userStore.tokens)
-
+    const isSettingRoute = to.path.startsWith('/setting')
     if (!isAuthenticated) {
       if (isPublicPath) {
         return
@@ -24,17 +24,25 @@ export default defineNuxtRouteMiddleware((to) => {
       return navigateTo('/login')
     }
 
-    if (userStore.role==='expert' && to.path !== '/expert/dashboard'){
-      return navigateTo('/expert/dashboard')
+    if (userStore.role === 'expert') {
+      const expertDashboardPath = '/expert/dashboard'
+      const profilePathPrefix = '/profile'
+      const isProfileRoute = to.path.startsWith(profilePathPrefix)
+      const isExpertDashboard = to.path === expertDashboardPath
+      if (!isExpertDashboard && !isProfileRoute && !isSettingRoute) {
+        console.log('跳转到专家界面')
+        return navigateTo(expertDashboardPath)
+      }
+      return
     }
+
     if (userStore.role === 'finance') {
       const financeDashboardPath = '/finaceJustice'
       const profilePathPrefix = '/profile'
       const isProfileRoute = to.path.startsWith(profilePathPrefix)
-      const isSettingRoute = to.path.startsWith('/setting')
       const isFinanceDashboard = to.path === financeDashboardPath
 
-      if (!isFinanceDashboard && !isProfileRoute&&!isSettingRoute) {
+      if (!isFinanceDashboard && !isProfileRoute && !isSettingRoute) {
         console.log('跳转到财务界面')
         return navigateTo(financeDashboardPath)
       }
