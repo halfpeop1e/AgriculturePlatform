@@ -23,7 +23,7 @@ export async function loginUser(loginData:LoginRequest){
             UserStore.LoginSet()
             console.log('用户已登录，更新本地状态',UserStore)
             navigateTo('/')
-            return response.data
+            return response
         }
         else{
             throw new Error('用户登录失败')
