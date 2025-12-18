@@ -63,7 +63,7 @@ const emit = defineEmits<{
 }>()
 const LodingStore=useLoadingStore()
 const formRef = ref<any>(null)
-const form = ref({ username: '',email:'', password: '',compassword:'',isverified:false,role:'normal' })
+const form = ref({ username: '',email:'', password: '',compassword:'',role:'normal' })
 const comemail=ref<string>('')
 const loading = ref(false)
 const rules:  FormRules = {
