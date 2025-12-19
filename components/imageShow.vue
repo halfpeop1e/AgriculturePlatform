@@ -18,6 +18,7 @@
         :src="item.url"
         alt=""
         class="w-full h-full object-cover rounded-lg"
+        @click="imgNavigate(item.link as string)"
       />
 
       <!-- 居中文字 -->
@@ -36,6 +37,7 @@ interface ImageItem {
   url: string
   // 文本是可选的：某些轮播项可能只展示图片不需要覆盖文字
   text?: string
+  link?: string
 }
 import type { PropType } from 'vue'
 
@@ -54,6 +56,14 @@ const props = defineProps({
     // ]
   },
 })
+const imgNavigate = (link: string) => {
+  if (link) {
+    navigateTo(link)
+  }
+  else {
+    return
+  }
+}
 </script>
 
 <style scoped>

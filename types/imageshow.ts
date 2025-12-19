@@ -10,3 +10,10 @@ export const Imageitem = [
 { url: '/showImage/img3.jpeg', text: '产销互联 · 助农共赢' },
 { url: '/showImage/img4.jpg', text: '乡村振兴 · 万众助力' },
 ]
+
+export const ImageNavigate= [
+  { url: '/showImage/nav1.png', text: '农产品', link: '/productList' },
+  { url: '/showImage/nav2.png', text: '助农资讯', link: '/newsList' },
+  { url: '/showImage/nav3.png', text: '政策法规', link: '/policyList' },
+  { url: '/showImage/nav4.png', text: '技术服务', link: '/techList' },
+] 
