@@ -23,7 +23,13 @@ export default defineNuxtRouteMiddleware((to) => {
       }
       return navigateTo('/login')
     }
-
+    if(isAuthenticated&&userStore.islogin){
+      if(to.path=='/login'||to.path=='/register'){
+        ElMessage.success("您已经登录")
+        return navigateTo('/homePage')
+       
+      }
+    }
     if (userStore.role === 'expert') {
       const expertDashboardPath = '/expert/dashboard'
       const profilePathPrefix = '/profile'
