@@ -165,7 +165,8 @@ const callCozeAPIStream = async (
   
   // 获取 API 基础 URL（支持远程后端服务器或独立 BFF）
   const config = useRuntimeConfig()
-  const apiBaseUrl = config.public.apiBaseUrl || ''
+  // 强制转换为字符串，避免 config.public.apiBaseUrl 被推断为 `{}` 导致调用 `replace` 报错
+  const apiBaseUrl = String(config.public?.apiBaseUrl ?? '')
   
   // 构建 API 端点
   // 如果配置了远程服务器（如独立 BFF），使用完整 URL；否则使用相对路径（Nuxt Server API）
