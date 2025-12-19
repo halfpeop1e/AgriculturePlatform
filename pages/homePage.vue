@@ -11,7 +11,7 @@
 
                     <div class="flex flex-col items-center justify-center lg:flex-row">
                         <div class="w-full max-w-2xl">
-                            <ImageShow size="350px" :images="Imageitem" />
+                            <ImageShow size="350px" :images="ImageNavigate" />
                         </div>
 
                         <Divider layout="vertical" class="hidden h-72 lg:flex" />
@@ -68,7 +68,7 @@ import Button from 'primevue/button'
 import DataInHome from '~/components/dataInHome.vue'
 import ImageShow from '~/components/imageShow.vue'
 import Contactus from '~/components/Contactus.vue'
-import { Imageitem } from '~/types/imageshow'
+import { Imageitem,ImageNavigate } from '~/types/imageshow'
 
 definePageMeta({ layout: 'home-page-layout' })
 
