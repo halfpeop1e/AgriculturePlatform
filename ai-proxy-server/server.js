@@ -11,7 +11,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 15000
 
 // 配置 CORS - 允许前端访问
 const corsOptions = {
