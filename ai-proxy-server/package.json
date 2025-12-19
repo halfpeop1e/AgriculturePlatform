@@ -1,0 +1,26 @@
+{
+  "name": "ai-proxy-server",
+  "version": "1.0.0",
+  "description": "简易后端代理服务器 - 处理 Coze AI 聊天流式转发",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "coze",
+    "ai",
+    "proxy",
+    "stream"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1"
+  }
+}
+
