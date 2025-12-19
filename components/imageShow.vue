@@ -18,13 +18,14 @@
         :src="item.url"
         alt=""
         class="w-full h-full object-cover rounded-lg"
-        @click="imgNavigate(item.link as string)"
+        
       />
 
       <!-- 居中文字 -->
       <div
         v-if="item.text"
         class="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-5xl font-semibold"
+        @click="imgNavigate(item.link as string)"
       >
         {{ item.text }}
       </div>
@@ -58,6 +59,7 @@ const props = defineProps({
 })
 const imgNavigate = (link: string) => {
   if (link) {
+    console.log("ping")
     navigateTo(link)
   }
   else {

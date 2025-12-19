@@ -12,8 +12,7 @@ export const Imageitem = [
 ]
 
 export const ImageNavigate= [
-  { url: '/showImage/nav1.png', text: '农产品', link: '/productList' },
-  { url: '/showImage/nav2.png', text: '助农资讯', link: '/newsList' },
-  { url: '/showImage/nav3.png', text: '政策法规', link: '/policyList' },
-  { url: '/showImage/nav4.png', text: '技术服务', link: '/techList' },
+  { url: '/navimg/ask.png', text: '咨询专家团队', link: '/expert' },
+  { url: '/navimg/finance.jpeg', text: '浏览金融产品', link: '/money/loan' },
+  { url: '/navimg/sell.png', text: '进入产品页面', link: '/product/allproduct' },
 ] 
