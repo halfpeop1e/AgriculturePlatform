@@ -6,6 +6,9 @@
   <NuxtLayout class="app-content">
     <NuxtPage />
   </NuxtLayout>
+
+  <!-- 智能助手悬浮球（使用 ClientOnly 包装，确保流式处理在客户端运行） -->
+  <AssistantFloatingBallWrapper />
 </template>
 
 <script setup lang="ts">
