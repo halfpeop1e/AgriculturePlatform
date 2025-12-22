@@ -160,6 +160,8 @@ import InputNumber from 'primevue/inputnumber'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
 import { useUserStore } from '~/utils/userStore'
+import { submitExpertProfile } from '~/composables/useChange'
+import type { ExpertProfile } from '~/types/profile'
 
 type SelectOption = { label: string; value: string }
 
@@ -234,6 +236,20 @@ const serviceOptions: SelectOption[] = [
 	{ label: '团队培训', value: '团队培训' }
 ]
 
+const buildProfilePayload = (): ExpertProfile => ({
+	name: form.name,
+	avatar: form.avatar,
+	field: form.field,
+	introduction: form.introduction,
+	skills: [...form.skills],
+	education: form.education || undefined,
+	experience: form.experience || undefined,
+	certification: form.certification?.length ? [...form.certification] : undefined,
+	availableTime: form.availableTime?.length ? [...form.availableTime] : undefined,
+	serviceScope: form.serviceScope?.length ? [...form.serviceScope] : undefined,
+	price: form.price ?? undefined
+})
+
 const resetErrors = () => {
 	errors.name = ''
 	errors.avatar = ''
@@ -296,19 +312,8 @@ const handleCertificationCreate = (event: { value: string }) => {
 
 const persistDraft = () => {
 	if (confirm('暂存草稿后可稍后继续填写，是否确认？')) {
-		userStore.setExpertProfile({
-			name: form.name,
-			avatar: form.avatar,
-			field: form.field,
-			introduction: form.introduction,
-			skills: [...form.skills],
-			education: form.education || undefined,
-			experience: form.experience || undefined,
-			certification: form.certification?.length ? [...form.certification] : undefined,
-			availableTime: form.availableTime?.length ? [...form.availableTime] : undefined,
-			serviceScope: form.serviceScope?.length ? [...form.serviceScope] : undefined,
-			price: form.price ?? undefined
-		})
+		const payload = buildProfilePayload()
+		userStore.setExpertProfile(payload, false)
 		ElMessage.success('草稿已保存')
 	}
 }
@@ -322,20 +327,13 @@ const handleSubmit = async () => {
 
 	submitting.value = true
 	try {
-		await new Promise((resolve) => setTimeout(resolve, 600))
-		userStore.setExpertProfile({
-			name: form.name,
-			avatar: form.avatar,
-			field: form.field,
-			introduction: form.introduction,
-			skills: [...form.skills],
-			education: form.education || undefined,
-			experience: form.experience || undefined,
-			certification: form.certification?.length ? [...form.certification] : undefined,
-			availableTime: form.availableTime?.length ? [...form.availableTime] : undefined,
-			serviceScope: form.serviceScope?.length ? [...form.serviceScope] : undefined,
-			price: form.price ?? undefined
-		})
+		const payload = buildProfilePayload()
+		const success = await submitExpertProfile(payload)
+		if (!success) {
+			ElMessage.error('资料提交失败，请稍后再试')
+			return
+		}
+		userStore.setExpertProfile(payload)
 		ElMessage.success('资料已提交，正在跳转专家工作台')
 		await router.push('/expert/dashboard')
 	} finally {

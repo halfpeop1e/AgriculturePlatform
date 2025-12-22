@@ -118,7 +118,6 @@
 						</div>
 						<div class="flex gap-3">
 							<Button label="编辑资料" icon="pi pi-pencil" severity="secondary" @click="handleEdit" />
-							<Button label="预约咨询" icon="pi pi-calendar" severity="primary" />
 						</div>
 					</div>
 				</template>
