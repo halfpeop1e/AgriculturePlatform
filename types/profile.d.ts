@@ -22,3 +22,17 @@ export interface profileResponse{
     message:string;
 }
 
+export interface ExpertProfile {
+  name: string
+  avatar: string
+  field: string
+  introduction: string
+  skills: string[]
+  education?: string
+  experience?: string
+  certification?: string[]
+  availableTime?: string[]
+  serviceScope?: string[]
+  price?: number
+}
+
