@@ -45,10 +45,10 @@
           <div class=" text-xl flex-1 leading-relaxed">
          商户：{{ product.saler }}
           </div>
-          <div v-if="!routedivided(route.path)">
+          <div v-if="!routedivided(route.path)&&product.saler!==user">
             <el-button type="success" size="default" @click="Buttonevent.openBuyDialog()">购买</el-button>
           </div>
-          <div class="flex" v-if="routedivided(route.path)">
+          <div class="flex" v-if="routedivided(route.path)||product.saler===user">
           <el-button type="primary" size="default" @click="Buttonevent.openEditDialog()">编辑</el-button>
           <el-button type="danger" size="default" @click="Buttonevent.deleteProduct()">删除</el-button>
           </div>
@@ -63,6 +63,8 @@
 
 <script setup lang="ts">
 const route = useRoute()
+const userStore=useUserStore()
+const user=userStore.userinfo?.nickname||''
 interface Product {
   id: string
   name: string
@@ -81,8 +83,10 @@ const Buttonevent=(new class{
   openBuyDialog() {
     emit('openBuyDialog')
   }
-  openEditDialog() {
+  async openEditDialog() {
+    await navigateTo('/product/myrelease')
     emit('openEditDialog')
+    console.log('购买按钮被点击')
   }
   deleteProduct() {
     emit('deleteProduct')
