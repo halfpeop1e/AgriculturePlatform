@@ -76,9 +76,9 @@ export const useUserStore = defineStore('userStore', {
         this.expertProfileCompleted=false
         this.expertProfile=null
       },
-      setExpertProfile(profile: ExpertProfile){
+      setExpertProfile(profile: ExpertProfile, completed = true){
         this.expertProfile = profile
-        this.expertProfileCompleted = true
+        this.expertProfileCompleted = completed
         }
       }
 })

@@ -12,6 +12,7 @@
 import {useAxios} from '~/composables/useAxios'
 const useAxiosInstance=useAxios()
 import { useUserStore } from '~/utils/userStore'
+import type { ExpertProfile } from '~/types/profile'
 
 export async function changeUserProfile(profileData:{
     nickname:string,
@@ -56,6 +57,22 @@ export async function securityChangeInfo(securityData:{
     }
     catch(err){
         console.error('修改用户安全失败',err)
+        return false
+    }
+}
+
+export async function submitExpertProfile(profileData: ExpertProfile){
+    const userStore=useUserStore()
+    try{
+        const response=await useAxiosInstance.post(`/expert/profile/${userStore.userId}/submit`,profileData)
+        if(response.status===200){
+            console.log('提交专家资料成功')
+            return true
+        }
+        throw new Error('提交专家资料失败')
+    }
+    catch(err){
+        console.error('提交专家资料失败',err)
         return false
     }
 }
