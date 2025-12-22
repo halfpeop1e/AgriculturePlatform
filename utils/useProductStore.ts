@@ -21,7 +21,7 @@ export const useComfirmBuyStore = defineStore('comfirmBuyStore', {
     actions:{
         openComfirmBuyDialog(){
             this.showComfirmBuyDialog=true
-            console.log('打开购买确认弹窗')
+            console.log('打开购买确认弹窗', this.showComfirmBuyDialog)
         },
         closeComfirmBuyDialog(){
             this.showComfirmBuyDialog=false

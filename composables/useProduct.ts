@@ -50,6 +50,7 @@ export async function BuyProduct(order:comfirmOrderRequest){
     }
     catch(err){
         console.error('购买产品失败',err)
+        ElMessage.error('购买产品失败')
     }
 }
 
