@@ -34,5 +34,12 @@ export interface ExpertProfile {
   availableTime?: string[]
   serviceScope?: string[]
   price?: number
+  completed?: boolean
+}
+
+export interface ExpertProfileResponse {
+  code: number
+  data: ExpertProfile
+  message: string
 }
 
