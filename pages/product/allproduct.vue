@@ -24,7 +24,13 @@
           class="product-item"
         >
           <ProductCard :product="item" @open-buy-dialog="dialogControler.openDialog(item)" />
+          
         </li>
+        <Comfirmbuy
+            :product="comfirmproduct.product"
+            :show-dialog="comfirmproduct.showComfirmBuyDialog"
+            @close-dialog="dialogControler.closeDialog"
+          />
       </ul>
 
       <el-empty
@@ -48,11 +54,7 @@
       </div>
     </div>
 
-    <Comfirmbuy
-      :product="comfirmproduct.product"
-      :show-dialog="comfirmproduct.showComfirmBuyDialog"
-      @close-dialog="dialogControler.closeDialog"
-    />
+    
   </div>
 </template>
 
