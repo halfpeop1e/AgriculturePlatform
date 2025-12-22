@@ -112,7 +112,7 @@
       <div v-else class="bg-white rounded-md shadow p-6 text-center text-gray-500">
         未找到专家信息，请返回列表重试。
       </div>
-      <ExpertQestionDialog v-model:model-value="showdialog" @close="showdialog = false" />
+      <ExpertQestionDialog v-model:model-value="showdialog" :expert-id="expertId" @close="showdialog = false" />
     </div>
   </div>
 </template>
@@ -138,7 +138,7 @@ const route = useRoute()
 const router = useRouter()
 const showdialog = ref(false)
 const defaultAvatar = '/ioanImage/default-avatar.png'
-
+const expertId = computed(() => String(route.params.expertId || ''))
 const expertDetail = computed<ExpertDetail | null>(() => {
   if (props.expert) {
     return props.expert

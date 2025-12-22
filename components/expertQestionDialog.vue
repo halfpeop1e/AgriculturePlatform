@@ -65,7 +65,7 @@ import MultiSelect from 'primevue/multiselect'
 import { submitQuestion } from '~/composables/useQuestionAnswer'
 import { useUserStore } from '~/utils/userStore'
 
-const props = defineProps<{ modelValue: boolean }>()
+const props = defineProps<{ modelValue: boolean;expertId:string }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
   (e: 'submitted'): void
@@ -156,7 +156,8 @@ const onSubmit = async () => {
       title: form.value.title,
       content: form.value.content,
       tags: form.value.tags,
-      authorId: form.value.authorId
+      authorId: form.value.authorId,
+      expertId:props.expertId
     })
 
     if (result) {

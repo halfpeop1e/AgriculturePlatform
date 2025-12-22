@@ -1,5 +1,6 @@
 export interface Question {
   id: string;
+  expertId:string;
   title: string;
   content: string;
   author: string;
