@@ -31,6 +31,13 @@ export default defineNuxtRouteMiddleware((to) => {
       }
     }
     if (userStore.role === 'expert') {
+      const completionPath = '/infomationcomplete'
+      if (!userStore.expertProfileCompleted && to.path !== completionPath) {
+        return navigateTo(completionPath)
+      }
+      if (userStore.expertProfileCompleted && to.path === completionPath) {
+        return navigateTo('/expert/dashboard')
+      }
       const expertDashboardPath = '/expert/dashboard'
       const profilePathPrefix = '/profile'
       const isProfileRoute = to.path.startsWith(profilePathPrefix)
