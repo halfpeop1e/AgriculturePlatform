@@ -1,7 +1,7 @@
 // @ts-ignore - Nuxt runtime types may not be available in editor linting environment
 import { defineNuxtPlugin } from '#app'
 import { useUserStore } from '~/utils/userStore'
-import { getUserProfile } from '~/composables/getProfile'
+import { getUserProfile, getExpertProfile } from '~/composables/getProfile'
 
 // 客户端启动时尝试从 cookie 中恢复用户会话：
 // - 读取 useCookie('AuthToken')，若存在则解析 token payload 提取 userId
@@ -61,6 +61,9 @@ export default defineNuxtPlugin((nuxtApp: any) => {
 
         // 请求用户资料（受保护接口），若成功则 setUserProfile
         await getUserProfile()
+        if (userStore.role === 'expert') {
+          await getExpertProfile()
+        }
         userStore.LoginSet()
         console.log('已从 cookie 恢复用户会话',userStore)
       } catch (err) {
