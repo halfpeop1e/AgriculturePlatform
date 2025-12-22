@@ -142,7 +142,8 @@ async function handleDelete(id:string){
   try{
       const response= await DeleteMyProduct(id)
       if(response?.status==200){
-        loadMore()
+        await loadMore()
+        console.log('删除商品成功')
         return
       }
       else{
@@ -152,7 +153,7 @@ async function handleDelete(id:string){
   catch(err){
       ElMessage.error('删除商品失败，请稍后重试')
   }
-      loadMore()
+     await loadMore()
 }
 onMounted(async () => {
   await loadMore()
