@@ -14,7 +14,7 @@ export const nav = [
     items: [
       { label: '问题汇总', routername: '/question', icon: 'pi pi-fw pi-comments' },
       { label: '联系专家', routername: '/expert', icon: 'pi pi-fw pi-user-plus' },
-      { label: '提问', routername: '/question/create', icon: 'pi pi-fw pi-question-circle' },
+      { label: '问答论坛',routername:'/allpost',icon: 'pi pi-fw pi-comments' },
     ],
   },
   {
@@ -34,7 +34,6 @@ export const nav = [
         { label: '农业知识',routername:'/knowledge',icon: 'pi pi-fw pi-book' },
     ],
   },
- 
 ]
 // 导出为纯数据（不包含函数），在运行时由调用方构建带 command 的模型
 export const menuData = [
