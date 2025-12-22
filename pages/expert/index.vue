@@ -34,11 +34,11 @@
       </div>
 
       <!-- 专家列表 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ExpertCard 
+      <div class="flex flex-col gap-4">
+        <ExpertCard
           v-for="expert in filteredExperts" 
           :key="expert.id" 
-          :expert="expert" 
+          :expert="expert"
           @click="navigateToDetail(expert.id)"
         />
       </div>
@@ -55,10 +55,8 @@
 import ExpertCard from '~/components/ExpertCard.vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-// 修复路径导入
-import { EXPERTS } from '@/utils/expertDataStore'
-// 确保类型正确导入
 import type { Expert } from '@/types/expert'
+import { mockExperts } from '@/types/experttest'
 
 definePageMeta({ layout: 'home-page-layout' })
 
@@ -67,12 +65,16 @@ const router = useRouter()
 const searchKey = ref('')
 const selectedField = ref('')
 
-const expertFields = [
-  '种植业', '养殖业', '农产品加工', '农业技术', '土壤改良', '病虫害防治'
-]
+const experts = ref<Expert[]>(mockExperts)
+
+const expertFields = computed(() => {
+  const fields = new Set<string>()
+  experts.value.forEach((expert) => fields.add(expert.field))
+  return Array.from(fields)
+})
 
 const filteredExperts = computed<Expert[]>(() => {
-  return EXPERTS.filter(expert => {
+  return experts.value.filter(expert => {
     const matchSearch = searchKey.value.trim() === '' 
       || expert.name.includes(searchKey.value)
       || expert.field.includes(searchKey.value)
@@ -86,10 +88,13 @@ const filteredExperts = computed<Expert[]>(() => {
 
 const handleSearch = () => {
   // 可选：添加防抖逻辑
+  console.log(experts.value)
 }
 
 const navigateToDetail = (expertId: string) => {
-  router.push(`/experts/${expertId}`)
+  router.push(
+    `/expert/${expertId}`
+  )
 }
 </script>
 
