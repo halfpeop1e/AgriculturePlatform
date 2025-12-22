@@ -8,7 +8,7 @@
   注意：调用方可以在请求完成后直接从 userStore 中读取最新的用户信息
 */
 import {useAxios} from '~/composables/useAxios'
-import type { profileResponse } from '~/types/profile'
+import type { profileResponse, ExpertProfile, ExpertProfileResponse } from '~/types/profile'
 import { useUserStore } from '~/utils/userStore'
 const useAxiosInstance=useAxios()
 export async function getUserProfile(){
@@ -31,5 +31,32 @@ export async function getUserProfile(){
     }
     catch(err){
         console.error('获取用户资料失败',err)
+    }
+}
+
+export async function getExpertProfile(){
+    const userStore = useUserStore()
+    if (!userStore.userId) {
+        console.warn('无法获取专家资料：缺少用户 ID')
+        return null
+    }
+    try{
+        const response = await useAxiosInstance.get<ExpertProfileResponse | ExpertProfile>(`/expert/profile/${userStore.userId}`)
+        if(response.status===200 && response.data){
+            const payload = response.data as ExpertProfileResponse | ExpertProfile
+            const profile = (typeof payload === 'object' && 'data' in payload ? (payload as ExpertProfileResponse).data : payload) as ExpertProfile
+            if(profile){
+                const completed = typeof profile.completed === 'boolean' ? profile.completed : Boolean(profile.name && profile.introduction)
+                userStore.setExpertProfile(profile, completed)
+                return profile
+            }
+        }
+        throw new Error('获取专家资料失败')
+    }
+    catch(err){
+        console.error('获取专家资料失败',err)
+        userStore.expertProfile = null
+        userStore.expertProfileCompleted = false
+        return null
     }
 }
