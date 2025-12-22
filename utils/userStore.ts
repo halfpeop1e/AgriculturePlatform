@@ -15,7 +15,7 @@
   使用场景：登录成功后调用 LoginSet 与 setUserProfile；退出时调用 LogoutSet；其他组件从 store 读取用户信息
 */
 import { defineStore } from 'pinia'
-import type { profileResponse } from '~/types/profile'
+import type { profileResponse, ExpertProfile } from '~/types/profile'
 export const useUserStore = defineStore('userStore', {
     state:()=>({
     userinfo:{
@@ -34,7 +34,9 @@ export const useUserStore = defineStore('userStore', {
     avatar: '',
     islogin:false,
     tokens:'',
-    role:''
+    role:'',
+    expertProfileCompleted:false,
+    expertProfile: null as ExpertProfile | null
     }),
     actions:{
         setUserProfile(profile:profileResponse){
@@ -49,6 +51,7 @@ export const useUserStore = defineStore('userStore', {
             this.userinfo.phone=profile.data.Phone
             this.userinfo.address=profile.data.Address
             this.lastActive=profile.data.LastActive
+        this.role = profile.data.role
         },
         LoginSet(){
             this.islogin=true
@@ -69,6 +72,13 @@ export const useUserStore = defineStore('userStore', {
                 phone: '',
                 address:'' ,  
             }
+        this.role=''
+        this.expertProfileCompleted=false
+        this.expertProfile=null
+      },
+      setExpertProfile(profile: ExpertProfile){
+        this.expertProfile = profile
+        this.expertProfileCompleted = true
         }
       }
 })
