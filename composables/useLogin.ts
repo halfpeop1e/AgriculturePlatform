@@ -7,6 +7,7 @@
   注意：该函数会直接修改全局 UserStore（因此调用方无需再次写入 store），若需替换为纯函数请修改实现。
 */
 import {useAxios} from '~/composables/useAxios'
+import { getExpertProfile } from '~/composables/getProfile'
 import Cookies from 'js-cookie'
 import type { LoginRequest,LoginResponse } from '~/types/login'
 const useAxiosInstance=useAxios()
@@ -21,6 +22,9 @@ export async function loginUser(loginData:LoginRequest){
             UserStore.tokens=response.data.data.tokens
             UserStore.role=response.data.data.role
             UserStore.LoginSet()
+            if (UserStore.role === 'expert') {
+                await getExpertProfile()
+            }
             console.log('用户已登录，更新本地状态',UserStore)
             navigateTo('/')
             return response
