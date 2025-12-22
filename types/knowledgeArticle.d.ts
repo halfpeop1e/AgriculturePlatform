@@ -21,3 +21,11 @@ export interface KnowledgeArticleContent{
     author:string
     date:string
 }
+export interface PostArticleRequest{
+    title:string
+    excerpt:string
+    content:string
+    tags?:string[]
+    author: string
+    date: string
+}
