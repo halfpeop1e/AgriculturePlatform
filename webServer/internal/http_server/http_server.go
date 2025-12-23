@@ -54,13 +54,14 @@ func init() {
 		loan.GET("/list", v1.GetLoanProductList)
 		loan.POST("/add", v1.AddLoanProduct)
 		loan.POST("/apply", v1.ApplyLoan)
+		loan.POST("/allow", v1.AllowLoan)
 	}
 	question := GE.Group("/question")
 	question.Use(JWTAuthMiddleware())
 	{
 		question.GET("/list", v1.GetQuestionList)
 		question.POST("/create", v1.CreateQuestion)
-		question.GET("/detail/:questionId", v1.GetQuestionDetail)
+		// question.GET("/detail/:questionId", v1.GetQuestionDetail)
 		question.POST("/answer/:questionId", v1.AnswerQuestion)
 	}
 
@@ -68,7 +69,23 @@ func init() {
 	expert.Use(JWTAuthMiddleware())
 	{
 		expert.GET("/list", v1.GetExpertList)
-		expert.GET("/detail/:expertId", v1.GetExpertDetail)
+		expert.GET("/:expertId", v1.GetExpertDetail)
 		expert.POST("/contact/:expertId/book", v1.BookExpert)
+		expert.POST("/profile/:userId/submit", v1.SubmitExpertProfile)
+		expert.GET("/profile/:userId", v1.GetExpertProfile)
+	}
+
+	// 在文件中添加帖子路由组（匹配前端接口）
+	posts := GE.Group("/posts")
+	{
+		posts.GET("", v1.GetPostList)     // 获取帖子列表
+		posts.GET("/:id", v1.GetPostById) // 获取帖子详情
+
+		// 需要登录的接口
+		postsAuth := posts.Use(JWTAuthMiddleware())
+		postsAuth.POST("", v1.CreatePost)                                    // 创建帖子
+		postsAuth.POST("/:postId/replies", v1.AddReply)                      // 添加回复
+		postsAuth.POST("/:postId/like", v1.TogglePostLike)                   // 切换帖子点赞
+		postsAuth.POST("/:postId/replies/:replyId/like", v1.ToggleReplyLike) // 切换回复点赞
 	}
 }

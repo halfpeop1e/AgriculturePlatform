@@ -256,3 +256,17 @@ func GetApplyList(userId string) (string, int, *[]respond.ApplyListRespond) {
 	}
 	return "获取成功", 0, &responds
 }
+
+func AllowLoan(req request.AllowLoanRequest) (string, int) {
+	var apply model.Loan
+	if res := dao.GormDB.Model(&model.Loan{}).Where("uuid = ?", req.ApplyID).First(&apply); res.Error != nil {
+		return "申请记录不存在", -1
+	}
+	if req.Allow {
+		apply.Status = 1
+	} else {
+		apply.Status = 2
+	}
+	dao.GormDB.Save(&apply)
+	return "更新成功", 0
+}

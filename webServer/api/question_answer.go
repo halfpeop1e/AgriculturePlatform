@@ -33,12 +33,12 @@ func AnswerQuestion(c *gin.Context) {
 	JsonBack(c, msg, code, nil)
 }
 
-func GetQuestionDetail(c *gin.Context) {
+// func GetQuestionDetail(c *gin.Context) {
 
-	questionId := c.Param("id")
+// 	questionId := c.Param("id")
 
-	msg, data, code := gorm.QuestionServer.GetQuestionDetail(questionId)
+// 	msg, data, code := gorm.QuestionServer.GetQuestionDetail(questionId)
 
-	JsonBack(c, msg, code, data)
+// 	JsonBack(c, msg, code, data)
 
-}
+// }

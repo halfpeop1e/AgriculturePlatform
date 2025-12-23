@@ -20,7 +20,11 @@
               :outlined="route.path !== '/money/finance/process'"
               @click="router.push('/money/finance/process')"
             />
+            <div class="pt-6">
+              <Button label="审批产品" icon="pi pi-plus" class="w-full" severity="help" @click="check = true" />
+            </div>
           </div>
+          
         </div>
       </aside>
 
@@ -72,14 +76,6 @@
                       <span>产品编号：{{ application.product_id }}</span>
                     </div>
                   </div>
-                  <Button
-                    label="查看详情"
-                    icon="pi pi-eye"
-                    severity="secondary"
-                    outlined
-                    class="w-full md:w-auto"
-                    @click="router.push('/money/finance/product')"
-                  />
                 </div>
               </template>
             </Card>
@@ -91,8 +87,90 @@
         </div>
       </main>
     </div>
+
+    <Dialog v-model:visible="check" header="贷款产品审批" :style="{ width: '35rem' }" modal class="p-fluid">
+      <div class="flex flex-col gap-6">
+        
+        <!-- 1. 选择待审批的单据 -->
+        <div class="flex flex-col gap-2">
+          <label for="audit-select" class="font-medium text-slate-700">选择待审批单据</label>
+          <Dropdown 
+            id="audit-select"
+            v-model="selectedAuditId" 
+            :options="pendingApplications" 
+            optionLabel="displayLabel" 
+            optionValue="id" 
+            placeholder="请选择一条申请记录"
+            class="w-full"
+            emptyMessage="当前没有待审批的申请"
+          />
+        </div>
+
+        <!-- 2. 单据详情 (选中后显示) -->
+        <div v-if="selectedApplication" class="rounded-lg bg-slate-50 p-4 border border-slate-200 space-y-3">
+          <div class="flex items-center gap-3 border-b border-slate-200 pb-3">
+            <Avatar :image="selectedApplication.avatar || defaultAvatar" shape="circle" />
+            <div>
+              <p class="font-bold text-slate-800">{{ selectedApplication.product_name }}</p>
+              <p class="text-xs text-slate-500">申请编号: {{ selectedApplication.uuid }}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-y-2 text-sm">
+            <span class="text-slate-500">当前状态:</span>
+            <span class="font-medium text-amber-600">{{ selectedApplication.status }}</span>
+          </div>
+        </div>
+
+        <!-- 3. 审批操作表单 -->
+        <div v-if="selectedApplication" class="flex flex-col gap-4 border-t border-slate-100 pt-4">
+          <div class="flex flex-col gap-2">
+            <label class="font-medium text-slate-700">审批结果</label>
+            <div class="flex gap-4">
+              <div class="flex items-center">
+                <RadioButton v-model="auditForm.result" inputId="pass" name="audit" value="通过" />
+                <label for="pass" class="ml-2 cursor-pointer text-green-600 font-medium">通过</label>
+              </div>
+              <div class="flex items-center">
+                <RadioButton v-model="auditForm.result" inputId="reject" name="audit" value="拒绝" />
+                <label for="reject" class="ml-2 cursor-pointer text-red-600 font-medium">驳回</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="remark" class="font-medium text-slate-700">审批意见</label>
+            <Textarea 
+              id="remark" 
+              v-model="auditForm.remark" 
+              rows="3" 
+              placeholder="请输入审批备注..." 
+              class="w-full" 
+            />
+          </div>
+        </div>
+
+        <!-- 空状态提示 -->
+        <div v-else-if="!pendingApplications.length" class="text-center py-6 text-slate-400 text-sm">
+          <i class="pi pi-check-circle text-4xl mb-2 text-slate-300"></i>
+          <p>当前无需审批的单据</p>
+        </div>
+
+      </div>
+
+      <template #footer>
+        <Button label="取消" icon="pi pi-times" severity="secondary" @click="check = false" />
+        <Button 
+          label="提交审批" 
+          icon="pi pi-check" 
+          severity="primary" 
+          :disabled="!selectedApplication || submitting" 
+          :loading="submitting"
+          @click="submitAudit" 
+        />
+      </template>
+    </Dialog>
   </div>
-</template>
+  </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
@@ -107,6 +185,9 @@ import { useToast } from 'primevue/usetoast'
 import type { ApplyListRespond } from '~/types/loanApply'
 import { getLoanApplyList } from '~/composables/getLoanProduct'
 import { useUserStore } from '~/utils/userStore'
+import Dropdown from 'primevue/dropdown'
+import RadioButton from 'primevue/radiobutton'
+import Textarea from 'primevue/textarea'
 
 definePageMeta({ layout: 'home-page-layout' })
 
@@ -117,6 +198,7 @@ const userStore = useUserStore()
 
 const loading = ref(false)
 const applications = ref<ApplyListRespond[]>([])
+const check = ref(false)
 
 const defaultAvatar = 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png'
 
@@ -144,6 +226,62 @@ const fetchApplications = async () => {
 }
 
 onMounted(fetchApplications)
+
+
+
+// --- 审批相关逻辑 ---
+const selectedAuditId = ref(null)
+const submitting = ref(false)
+const auditForm = ref({
+  result: '通过',
+  remark: ''
+})
+
+// 过滤出待审批的申请（为了演示，这里假设包含'待'字样的状态都可以审批，或者你可以列出所有单据方便测试）
+const pendingApplications = computed(() => {
+  if (!applications.value) return []
+  return applications.value.map(app => ({
+    ...app,
+    displayLabel: `${app.product_name} - ${app.status} (${app.uuid.substring(0, 8)}...)`
+  }))
+})
+
+// 获取当前选中的单据详情
+const selectedApplication = computed(() => {
+  return applications.value.find(app => app.id === selectedAuditId.value)
+})
+
+// 提交审批函数
+const submitAudit = async () => {
+  if (!selectedApplication.value) return
+
+  submitting.value = true
+  
+  // 模拟API请求延迟
+  await useApplyLoanResult(selectedApplication.value.uuid, auditForm.value.result === '通过')
+
+  // 更新本地数据状态（模拟后端更新）
+  const appIndex = applications.value.findIndex(app => app.id === selectedAuditId.value)
+  if (appIndex !== -1) {
+    // 根据选择更新状态
+    const newStatus = auditForm.value.result === '通过' ? '审批通过' : '已拒绝'
+    applications.value[appIndex]!.status = newStatus
+    
+    toast.add({ 
+      severity: auditForm.value.result === '通过' ? 'success' : 'error', 
+      summary: '审批完成', 
+      detail: `单据 ${applications.value[appIndex]!.product_id} 已${auditForm.value.result}`, 
+      life: 3000 
+    })
+  }
+
+  // 重置表单并关闭
+  submitting.value = false
+  selectedAuditId.value = null
+  auditForm.value.remark = ''
+  auditForm.value.result = '通过'
+  check.value = false
+}
 </script>
 
 <style scoped></style>
