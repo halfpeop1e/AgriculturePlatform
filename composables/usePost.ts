@@ -55,9 +55,14 @@ export const usePost = () => {
 		loadingState.value = true
 		setError(null)
 		try {
-			const response = await axiosInstance.get<Post[]>('/posts')
-			const data = response.data || []
-			postsState.value = data.map(normalizePost)
+			const response = await axiosInstance.get<any>('/posts')
+			// 兼容不同的后端返回结构：直接是数组，或者是在 data 字段中，或者是在 data.list 中
+			let data = response.data
+			if (data && !Array.isArray(data)) {
+				data = data.data || data.list || []
+			}
+			const finalData = Array.isArray(data) ? data : []
+			postsState.value = finalData.map(normalizePost)
 			return postsState.value
 		} catch (err: any) {
 			console.error('获取帖子列表失败，回退到 mock 数据', err)

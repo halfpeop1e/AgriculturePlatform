@@ -43,7 +43,18 @@
       </IconField>
     </section>
 
-    <div class="grid grid-cols-1 gap-6">
+    <div v-if="loading" class="grid grid-cols-1 gap-6">
+      <div v-for="i in 3" :key="i" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <Skeleton width="50%" height="1.5rem" class="mb-4" />
+        <Skeleton width="100%" height="4rem" class="mb-4" />
+        <div class="flex justify-between">
+          <Skeleton width="20%" height="1rem" />
+          <Skeleton width="20%" height="1rem" />
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="grid grid-cols-1 gap-6">
       <QuestionCard
         v-for="qItem in filtered"
         :key="qItem.id"
@@ -52,7 +63,7 @@
       />
     </div>
 
-    <Message v-if="!filtered.length" severity="warn" class="justify-center text-sm">
+    <Message v-if="!loading && !filtered.length" severity="warn" class="justify-center text-sm">
       没有匹配的问题，试试其他筛选条件
     </Message>
   </div>
@@ -66,6 +77,7 @@ import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
+import Skeleton from 'primevue/skeleton'
 import QuestionCard from '~/components/Card/QuestionCard.vue'
 import { useQuestionDataStore } from '~/utils/questionDataStore'
 
@@ -74,10 +86,16 @@ definePageMeta({ layout: 'expert-backend-layout' })
 const router = useRouter()
 const questionStore = useQuestionDataStore()
 const q = ref('')
+const loading = ref(false)
 const selectedTags = ref<Set<string>>(new Set())
 
-onMounted(() => {
-  questionStore.fetchQuestions()
+onMounted(async () => {
+  loading.value = true
+  try {
+    await questionStore.fetchQuestions()
+  } finally {
+    loading.value = false
+  }
 })
 
 const allTags = computed(() => {
@@ -118,7 +136,7 @@ const filtered = computed(() => {
 })
 
 const openQuestion = (id: string) => {
-  router.push(`/question/${id}`)
+  router.push(`/specialBoard/question/${id}`)
 }
 
 

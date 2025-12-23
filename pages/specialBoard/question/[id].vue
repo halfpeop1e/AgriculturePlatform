@@ -1,5 +1,14 @@
 <template>
   <div class="space-y-8">
+    <div class="flex items-center gap-4">
+      <Button
+        icon="pi pi-arrow-left"
+        label="返回列表"
+        text
+        severity="secondary"
+        @click="router.back()"
+      />
+    </div>
     <Card v-if="questionDetail" class="border border-slate-200 shadow-sm">
       <template #content>
         <section class="mb-8 space-y-4">
@@ -54,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Card from 'primevue/card'
 import Divider from 'primevue/divider'
 import Tag from 'primevue/tag'
@@ -69,6 +78,7 @@ import { submitAnswer as submitAnswerApi } from '~/composables/useQuestionAnswer
 definePageMeta({ layout: 'expert-backend-layout' })
 
 const route = useRoute()
+const router = useRouter()
 const toast = useToast()
 const questionStore = useQuestionDataStore()
 const answerContent = ref('')

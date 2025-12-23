@@ -92,11 +92,14 @@ async function handleSubmitAnswer() {
     return
   }
   
-  // 调用API提交回答（不判断返回值是否为true，因为原函数返回void）
-  await submitAnswerApi(id, answerContent.value)
-  answerContent.value = ''
-  // 重新获取问题详情以更新回答列表
-  questionStore.fetchQuestionDetail(id)
+  try {
+    await submitAnswerApi(id, answerContent.value)
+    ElMessage.success('回答提交成功')
+    answerContent.value = ''
+    questionStore.fetchQuestionDetail(id)
+  } catch (error) {
+    ElMessage.error('回答提交失败，请稍后重试')
+  }
 }
 
 // 页面离开时清除当前问题数据
