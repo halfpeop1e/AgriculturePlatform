@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import ExpertCard from '~/components/ExpertCard.vue'
+import ExpertCard from '~/components/Card/ExpertCard.vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Expert } from '@/types/expert'

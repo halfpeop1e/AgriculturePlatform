@@ -8,7 +8,7 @@
   依赖：useAxios 返回的 Axios 实例（包含 token 拦截逻辑）
 */
 import { useAxios } from "./useAxios"
-import type { KnowledgeArticle } from "~/types/knowledgeArticle";
+import type { KnowledgeArticle,PostArticleRequest } from "~/types/knowledgeArticle";
 const useAxiosInstance=useAxios()
 export async function getKnowledgeArticleList(){
     try{
@@ -41,4 +41,21 @@ export async function getKnowledgeArticleContentById(id:string){
         console.error('获取文章具体内容失败',err)
         ElMessage.error('获取文章具体内容失败')
     }
+}
+export async function postKnowledgeArticle(data:PostArticleRequest){
+  try{
+      const response=await useAxiosInstance.post('/knowledge/article/create',data)
+      if(response.status===200){
+          console.log('发布知识文章成功',response.data)
+          ElMessage.success('发布知识文章成功')
+          return response.data
+      }
+      else{
+          throw new Error('发布知识文章失败')
+      }
+  }
+  catch(err){
+      console.error('发布知识文章失败',err)
+      ElMessage.error('发布知识文章失败')
+  }
 }

@@ -62,7 +62,7 @@
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { runWithBackoff } from '~/composables/useBackoff'
-import Comfirmbuy from '~/components/comfirmbuy.vue'
+import Comfirmbuy from '~/components/comfirmbuyDialog.vue'
 import ProductCard from '~/components/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
 import { useComfirmBuyStore } from '~/utils/useProductStore'

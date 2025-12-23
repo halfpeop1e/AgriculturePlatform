@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import type { Answer } from '~/types/questionAnswer'
 import { Check } from '@element-plus/icons-vue'
 
