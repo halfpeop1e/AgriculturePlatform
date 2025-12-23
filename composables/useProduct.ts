@@ -40,17 +40,17 @@ export async function BuyProduct(order:comfirmOrderRequest){
            order
         })
         if(response.status===200){
-            console.log('购买产品成功',response.data)
-            ElMessage.success('购买产品成功')
+            console.log('下单产品成功',response.data)
+            ElMessage.success('下单产品成功')
             return response
         }
         else{
-            throw new Error('购买产品失败')
+            throw new Error('下单产品失败')
         }
     }
     catch(err){
-        console.error('购买产品失败',err)
-        ElMessage.error('购买产品失败')
+        console.error('下单产品失败',err)
+        ElMessage.error('下单产品失败')
     }
 }
 

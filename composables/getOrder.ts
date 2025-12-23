@@ -10,10 +10,10 @@ import type{ Order } from "~/types/myOrder";
 export async function getOrderList(){
     try{
         const useAxiosInstance=useAxios()
-        const response=await useAxiosInstance.get<Order[]>(`/order/list`)
+        const response=await useAxiosInstance.get(`/order/list`)
         if(response.status===200){
             console.log('获取订单列表成功',response.data)
-            return response.data
+            return response.data.data.orders as Order[]
         }
         else{
             throw new Error('获取订单列表失败')
