@@ -34,7 +34,13 @@
       </div>
 
       <!-- 专家列表 -->
-      <div class="flex flex-col gap-4">
+      <div v-if="loading" class="text-center py-10">
+        <p>加载中...</p>
+      </div>
+      <div v-else-if="error" class="text-center py-10 text-red-500">
+        <p>{{ error }}</p>
+      </div>
+      <div v-else class="flex flex-col gap-4">
         <ExpertCard
           v-for="expert in filteredExperts" 
           :key="expert.id" 
@@ -44,7 +50,7 @@
       </div>
 
       <!-- 空状态 -->
-      <div v-if="filteredExperts.length === 0" class="text-center text-gray-500 py-10">
+      <div v-if="!loading && !error && filteredExperts.length === 0" class="text-center text-gray-500 py-10">
         <p>未找到匹配的专家，请尝试其他筛选条件</p>
       </div>
     </div>
@@ -53,19 +59,48 @@
 
 <script setup lang="ts">
 import ExpertCard from '~/components/Card/ExpertCard.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Expert } from '@/types/expert'
-import { mockExperts } from '@/types/experttest'
+import { useAxios } from '~/composables/useAxios'
 
 definePageMeta({ layout: 'home-page-layout' })
 
 const router = useRouter()
+const { axios } = useAxios()
 
 const searchKey = ref('')
 const selectedField = ref('')
+const experts = ref<Expert[]>([])
+const loading = ref(true)
+const error = ref<string | null>(null)
 
-const experts = ref<Expert[]>(mockExperts)
+const fetchExperts = async () => {
+  loading.value = true
+  error.value = null
+  try {
+    const response = await axios.get('/api/expert/list', {
+      params: {
+        field: selectedField.value,
+        searchKey: searchKey.value,
+      },
+    })
+    if (response.data.code === 0) {
+      experts.value = response.data.data.list || []
+    } else {
+      error.value = response.data.msg || '获取专家列表失败'
+    }
+  } catch (err) {
+    error.value = '请求专家列表失败'
+    console.error('Error fetching experts:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchExperts()
+})
 
 const expertFields = computed(() => {
   const fields = new Set<string>()
@@ -87,8 +122,7 @@ const filteredExperts = computed<Expert[]>(() => {
 })
 
 const handleSearch = () => {
-  // 可选：添加防抖逻辑
-  console.log(experts.value)
+  fetchExperts()
 }
 
 const navigateToDetail = (expertId: string) => {
