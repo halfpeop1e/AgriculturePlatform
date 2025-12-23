@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import KnowledgeCard from '~/components/knowledgeCard.vue'
+import KnowledgeCard from '~/components/Card/knowledgeCard.vue'
 import { ARTICLES } from '~/utils/knowledgeDataStore'
 import { ref, computed } from 'vue'
 definePageMeta({ layout: 'home-page-layout' })

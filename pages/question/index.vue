@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import QuestionCard from '~/components/QuestionCard.vue'
+import QuestionCard from '~/components/Card/QuestionCard.vue'
 import { useQuestionDataStore } from '~/utils/questionDataStore'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'

@@ -1,4 +1,5 @@
 import  {testprofile} from "~/types/test"
+const userStore = useUserStore()
 export const nav = [
   {
     label: '产品交易',
@@ -40,7 +41,27 @@ export const menuData = [
   {
     label: '个人中心',
     icon: 'pi pi-user',
-    to: `/profile/${testprofile.userId}`
+    to: `/profile/${userStore.userId}`
+  },
+  {
+    label: '设置',
+    icon: 'pi pi-cog',
+    to: '/setting'
+  },
+  {
+    separator: true
+  },
+  {
+    label: '退出登录',
+    icon: 'pi pi-sign-out',
+    action: 'logout'
+  }
+]
+export const menuExpertData = [
+  {
+    label: '个人中心',
+    icon: 'pi pi-user',
+    to: `/expertprofile/${userStore.userId}`
   },
   {
     label: '设置',

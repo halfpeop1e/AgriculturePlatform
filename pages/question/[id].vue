@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useQuestionDataStore } from '~/utils/questionDataStore'
 import { ref, onMounted, watch, computed } from 'vue'
 import AnswerItem from '~/components/AnswerItem.vue'
@@ -67,7 +67,6 @@ import { ElMessage } from 'element-plus'  // 补充导入ElMessage
 
 definePageMeta({ layout: 'home-page-layout' })
 const route = useRoute()
-const router = useRouter()
 const questionStore = useQuestionDataStore()
 const answerContent = ref('')
 const id = route.params.id as string  // 确保id类型正确（如果后端需要number可改为Number(route.params.id)）

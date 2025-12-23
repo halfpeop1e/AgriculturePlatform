@@ -11,22 +11,21 @@
     <div class="prose max-w-none mb-3" v-html="answer.content" />
     
     <div class="flex justify-end">
-      <el-button 
-        v-if="answer.isAccepted" 
-        type="success" 
-        size="small" 
+      <Button
+        v-if="answer.isAccepted"
+        label="已采纳"
+        icon="pi pi-check"
+        severity="success"
+        size="small"
         disabled
-      >
-        <el-icon><Check /></el-icon>
-        已采纳
-      </el-button>
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Answer } from '~/types/questionAnswer'
-import { Check } from '@element-plus/icons-vue'
+import Button from 'primevue/button'
 
 const props = defineProps<{
   answer: Answer

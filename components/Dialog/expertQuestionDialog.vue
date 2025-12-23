@@ -64,6 +64,7 @@ import Textarea from 'primevue/textarea'
 import MultiSelect from 'primevue/multiselect'
 import { submitQuestion } from '~/composables/useQuestionAnswer'
 import { useUserStore } from '~/utils/userStore'
+import { v4 as uuidv4 } from 'uuid'
 
 const props = defineProps<{ modelValue: boolean;expertId:string }>()
 const emit = defineEmits<{
