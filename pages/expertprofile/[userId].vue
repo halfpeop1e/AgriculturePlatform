@@ -148,7 +148,7 @@ import { getMockExpertById } from '~/types/experttest'
 import { useUserStore } from '~/utils/userStore'
 
 definePageMeta({
-	layout: 'profile-page-layout'
+	layout: 'expert-backend-layout'
 })
 
 const route = useRoute()

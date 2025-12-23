@@ -47,6 +47,7 @@ import ProgressSpinner from 'primevue/progressspinner'
 import type { CreatePostInput } from '~/composables/usePost'
 import { usePost } from '~/composables/usePost'
 import postDialog from '~/components/Dialog/postDialog.vue'
+import PostCard from '~/components/Card/PostCard.vue'
 definePageMeta({
   layout:'home-page-layout'
 })

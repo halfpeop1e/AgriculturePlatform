@@ -67,6 +67,8 @@ import Textarea from 'primevue/textarea'
 import ProgressSpinner from 'primevue/progressspinner'
 import type { Author } from '~/types/post'
 import { usePost } from '~/composables/usePost'
+import PostCard from '~/components/Card/PostCard.vue'
+import AnswerCard from '~/components/Card/answerCard.vue'
 definePageMeta({
   layout:'home-page-layout'
 })

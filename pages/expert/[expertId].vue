@@ -112,13 +112,14 @@
       <div v-else class="bg-white rounded-md shadow p-6 text-center text-gray-500">
         未找到专家信息，请返回列表重试。
       </div>
-      <ExpertQestionDialog v-model:model-value="showdialog" :expert-id="expertId" @close="showdialog = false" />
+      <ExpertQuestionDialog v-model:model-value="showdialog" :expert-id="expertId" @close="showdialog = false" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import ExpertQuestionDialog from '~/components/Dialog/expertQuestionDialog.vue'
 import { useRoute, useRouter } from 'vue-router'
 import Card from 'primevue/card'
 import Avatar from 'primevue/avatar'
