@@ -7,6 +7,8 @@ type Order struct {
 	Totalprice int    `json:"totalprice"`
 	Status     string `json:"status"`
 	Type       string `json:"type"`
+	Buyer      string `json:"buyer"`
+	Saler      string `json:"saler"`
 }
 
 type OrderListRespond struct {

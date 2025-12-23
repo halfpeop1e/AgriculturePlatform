@@ -41,9 +41,9 @@ func init() {
 		order.GET("/list", v1.GetOrderList)
 	}
 	user := GE.Group("/user")
+	user.GET("/profile/:userId", v1.GetUserInfo)
 	user.Use(JWTAuthMiddleware())
 	{
-		user.GET("/profile/:userId", v1.GetUserInfo)
 		user.POST("/profile/:userId/update", v1.UpdateUserInfo)
 		user.POST("/security/:userId/update", v1.SafeUpdateInfo)
 	}
@@ -55,20 +55,20 @@ func init() {
 		loan.POST("/add", v1.AddLoanProduct)
 		loan.POST("/apply", v1.ApplyLoan)
 	}
-	// question := GE.Group("/question")
-	// question.Use(JWTAuthMiddleware())
-	// {
-	// 	question.GET("/list", v1.GetQuestionList)
-	// 	question.POST("/create", v1.CreateQuestion)
-	// 	question.GET("/detail/:questionId", v1.GetQuestionDetail)
-	// 	question.POST("/answer/:questionId", v1.AnswerQuestion)
-	// }
+	question := GE.Group("/question")
+	question.Use(JWTAuthMiddleware())
+	{
+		question.GET("/list", v1.GetQuestionList)
+		question.POST("/create", v1.CreateQuestion)
+		question.GET("/detail/:questionId", v1.GetQuestionDetail)
+		question.POST("/answer/:questionId", v1.AnswerQuestion)
+	}
 
-	// expert := GE.Group("/expert")
-	// expert.Use(JWTAuthMiddleware())
-	// {
-	// 	expert.GET("/list", v1.GetExpertList)
-	// 	expert.GET("/detail/:expertId", v1.GetExpertDetail)
-	// 	expert.POST("/contact/:expertId", v1.ContactExpert)
-	// }
+	expert := GE.Group("/expert")
+	expert.Use(JWTAuthMiddleware())
+	{
+		expert.GET("/list", v1.GetExpertList)
+		expert.GET("/detail/:expertId", v1.GetExpertDetail)
+		expert.POST("/contact/:expertId/book", v1.BookExpert)
+	}
 }
