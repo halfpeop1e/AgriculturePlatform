@@ -91,6 +91,9 @@ export const useAxios = () => {
   AxiosInstance.interceptors.request.use(
     (config) => {
       const token = getToken();
+      if (token == null){
+        console.log("no token found");
+      }
       if (token) {
         if (isJwtExpired(token)) {
           // token 已过期：清理并重定向到登录页

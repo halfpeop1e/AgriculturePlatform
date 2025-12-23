@@ -10,6 +10,7 @@ import (
 	"go-agriculture/internal/model"
 	"go-agriculture/internal/util"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -127,7 +128,8 @@ func (p *productServer) GetProductList(page, pageSize int, salerId string) (stri
 
 func (p *productServer) BuyProduct(req request.BuyProductRequest, user_id string) (string, int) {
 	var product model.Product
-	if res := dao.GormDB.Where("id = ?", req.ProductId).First(&product); res.Error != nil {
+	productId, _ := strconv.Atoi(req.ProductId)
+	if res := dao.GormDB.Where("id = ?", productId).First(&product); res.Error != nil {
 		log.Printf("Database error: %v", res.Error)
 		return "查询失败", -1
 	}
@@ -135,19 +137,28 @@ func (p *productServer) BuyProduct(req request.BuyProductRequest, user_id string
 		return "库存不足", -1
 	}
 	var buyUser model.User
-	if res := dao.GormDB.Where("uuid = ?", user_id).First(&buyUser); res.Error != nil {
-		log.Printf("Database error: %v", res.Error)
-		return "用户查询失败", -1
+	if user_id == "" {
+		if res := dao.GormDB.Where("name = ?", req.Buyer).First(&buyUser); res.Error != nil {
+			log.Printf("Database error: %v", res.Error)
+			return "用户查询失败", -1
+		}
+	} else {
+		if res := dao.GormDB.Where("uuid = ?", user_id).First(&buyUser); res.Error != nil {
+			log.Printf("Database error: %v", res.Error)
+			return "用户查询失败", -1
+		}
 	}
 	order := model.Order{
 		Uuid:       util.GenerateUUID(),
 		Name:       product.Name,
 		Quantity:   int64(req.Quantity),
 		Totalprice: float64(req.Totalprice),
-		Status:     "已完成",
+		Status:     "待支付",
 		Ordertype:  "buy",
 		ProductId:  product.Id,
 		UserId:     user_id,
+		Buyer:      buyUser.Name,
+		Saler:      product.Saler,
 		CreatAt:    time.Now(),
 	}
 	dao.GormDB.Create(&order)
@@ -156,10 +167,12 @@ func (p *productServer) BuyProduct(req request.BuyProductRequest, user_id string
 		Name:       product.Name,
 		Quantity:   int64(req.Quantity),
 		Totalprice: float64(req.Totalprice),
-		Status:     "已完成",
+		Status:     "待支付",
 		Ordertype:  "sell",
 		ProductId:  product.Id,
 		UserId:     product.SalerId,
+		Buyer:      buyUser.Name,
+		Saler:      product.Saler,
 		CreatAt:    time.Now(),
 	}
 	dao.GormDB.Create(&order)
@@ -183,6 +196,8 @@ func (p *productServer) GetOrderList() (string, int, *respond.OrderListRespond) 
 			Totalprice: int(order.Totalprice),
 			Status:     order.Status,
 			Type:       order.Ordertype,
+			Buyer:      order.Buyer,
+			Saler:      order.Saler,
 		}
 		orderList.Orders = append(orderList.Orders, newOrder)
 	}

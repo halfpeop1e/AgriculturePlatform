@@ -47,19 +47,19 @@ func PostProduct(c *gin.Context) {
 	log.Printf("wrapper: %+v", wrapper)
 	// 提取实际的数据
 	req := wrapper.FormData
-	// if c.GetString("user_id") != req.SalerId {
-	// 	c.JSON(http.StatusBadRequest, gin.H{
-	// 		"code":    400,
-	// 		"message": "这id是你吗",
-	// 	})
-	// 	return
-	// }
+	if c.GetString("user_id") != req.SalerId {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "这id是你吗",
+		})
+		return
+	}
 	msg, code := gorm.ProductServer.PostProduct(req)
 	JsonBack(c, msg, code, nil)
 }
 
 func BuyProduct(c *gin.Context) {
-	var req request.BuyProductRequest
+	var req request.BuyProductRequestWrapper
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
@@ -67,7 +67,7 @@ func BuyProduct(c *gin.Context) {
 		})
 		return
 	}
-	msg, code := gorm.ProductServer.BuyProduct(req, c.GetString("user_id"))
+	msg, code := gorm.ProductServer.BuyProduct(req.Order, c.GetString("user_id"))
 	JsonBack(c, msg, code, nil)
 }
 
