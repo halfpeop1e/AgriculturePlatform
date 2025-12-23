@@ -27,13 +27,18 @@ definePageMeta({ layout: 'home-page-layout' })
 import { useRoute } from 'nuxt/app'
 import { ref, computed } from 'vue'
 import type { Order } from '@/types/myOrder'
-import OrderCard from '~/components/OrderCard.vue'
-import OrderInfoDialog from '~/components/orderInfoDialog.vue'
-import PayDialog from '~/components/paydialog.vue'
+import OrderCard from '~/components/Card/OrderCard.vue'
+import OrderInfoDialog from '~/components/Dialog/orderInfoDialog.vue'
+import PayDialog from '~/components/Dialog/paydialog.vue'
 
 const selectedOrder = ref<Order | null>(null)
 const dialogVisible = ref(false)
 const PayShow = ref(false)
+const orderStore = useOrderStore()
+
+const orders = computed(() => (Array.isArray(orderStore.orderList) ? orderStore.orderList : []))
+const buyOrders = computed(() => orders.value.filter((o) => o?.type === 'buy'))
+
 function openDialog(orderId: string) {
   const found = orders.value.find((x) => x.orderId === orderId) || null
   selectedOrder.value = found
@@ -45,14 +50,6 @@ function handlePay(orderId: string) {
   PayShow.value = true
   dialogVisible.value = false
 }
-
-const orders = ref<Order[]>([
-  { orderId: 'b1', name: '绿色有机苹果', quantity: 2, totalprice: 1000, status: '未支付', type: 'buy', buyer:'张三',saler:'水果商户' },
-  { orderId: 'b2', name: '香甜玉米', quantity: 5, totalprice: 1000, status: '待收货', type: 'buy' ,buyer:'李四',saler:'玉米商户'},
-  { orderId: 's1', name: '土鸡蛋', quantity: 10, totalprice: 1000, status: '待发货', type: 'sell', buyer:'王五',saler:'蛋商户' }
-])
-
-const buyOrders = computed(() => orders.value.filter((o) => o.type === 'buy'))
 
 function testRoute(){
     const route = useRoute()
