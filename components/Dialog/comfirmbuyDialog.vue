@@ -151,7 +151,9 @@ async function confirmOrder() {
     order.value.buyer = userStore.userinfo.nickname
     order.value.saler = props.product.saler
 
-    await BuyProduct(order.value)
+    await BuyProduct(order.value).then(()=>{
+      navigateTo('/product/myorder/my_buy')
+    })
     toast.add({ severity: 'success', summary: '下单成功', detail: `${props.product.name} × ${qty}`, life: 3000 })
     visible.value = false
   } catch (error) {

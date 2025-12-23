@@ -58,7 +58,7 @@ const author = computed<Author>(() => {
   return {
     id: userStore.userId || String(info.id || `user_${Date.now()}`),
     nickname: info.nickname || info.name || '匿名',
-    avatar: info.avatar || ''
+    avatar: userStore.avatar || ''
   }
 })
 
