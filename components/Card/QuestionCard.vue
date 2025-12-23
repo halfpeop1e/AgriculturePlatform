@@ -1,47 +1,42 @@
 <template>
   <div
-    class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer p-4"
+    class="cursor-pointer overflow-hidden rounded-lg border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
   >
-    <div class="flex items-start justify-between">
+    <div class="flex items-start justify-between gap-4">
       <div class="flex-1">
-        <!-- 标签区域 -->
-        <div class="flex items-center gap-2 mb-2 flex-wrap">
-          <span
+        <div class="mb-2 flex flex-wrap items-center gap-2">
+          <Tag
             v-for="tag in question.tags || []"
             :key="tag"
-            class="inline-flex items-center text-xs px-2 py-0.5 rounded border border-blue-600 text-black bg-white"
-          >
-            {{ tag }}
-          </span>
+            :value="tag"
+            severity="info"
+            rounded
+          />
         </div>
 
-        <!-- 标题 -->
-        <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{{ question.title }}</h3>
+        <h3 class="mb-2 line-clamp-2 text-lg font-semibold text-gray-800">{{ question.title }}</h3>
 
-        <!-- 内容摘要 -->
-        <p class="text-sm text-gray-500 mb-3 line-clamp-2">{{ question.content }}</p>
+        <p class="mb-3 line-clamp-2 text-sm text-gray-500">{{ question.content }}</p>
 
-        <!-- 底部信息 -->
-        <div class="flex items-center justify-between text-sm text-gray-500">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-sm text-gray-500">
           <span>提问者: {{ question.author }}</span>
           <span>{{ question.date }}</span>
-          <span>
-            <el-badge :value="question.answerCount" class="ml-2" />
-            回答
-          </span>
+          <div class="flex items-center gap-2">
+            <i class="pi pi-comments text-gray-400"></i>
+            <Badge :value="question.answerCount" severity="info" />
+            <span>回答</span>
+          </div>
         </div>
       </div>
-      
-      <!-- 状态标识 -->
-      <div v-if="question.isAnswered" class="ml-4">
-        <el-tag type="success">已解决</el-tag>
-      </div>
+
+      <Tag v-if="question.isAnswered" value="已解决" severity="success" rounded class="shrink-0" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import Tag from 'primevue/tag'
+import Badge from 'primevue/badge'
 import type { Question } from '~/types/questionAnswer'
 
 const props = defineProps<{
