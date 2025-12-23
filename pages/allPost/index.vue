@@ -29,7 +29,7 @@
 			</div>
 		</div>
 
-		<post-dialog v-model="dialogVisible" @submit="submitPost" />
+		<postDialog v-model="dialogVisible" @submit="submitPost" />
 
 		<Button
 			icon="pi pi-pencil"
@@ -46,6 +46,7 @@ import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 import type { CreatePostInput } from '~/composables/usePost'
 import { usePost } from '~/composables/usePost'
+import postDialog from '~/components/Dialog/postDialog.vue'
 definePageMeta({
   layout:'home-page-layout'
 })
