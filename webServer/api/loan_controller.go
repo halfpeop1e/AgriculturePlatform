@@ -99,3 +99,16 @@ func GiveMoney(c *gin.Context) {
 	JsonBack(c, msg, code, nil)
 
 }
+
+func AskQwen(c *gin.Context) {
+	var req request.AiRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "参数解析错误: " + err.Error(),
+		})
+		return
+	}
+	msg, code, data := gorm.AskQwen(req)
+	JsonBack(c, msg, code, data)
+}

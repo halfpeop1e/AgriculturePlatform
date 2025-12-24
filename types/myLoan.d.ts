@@ -16,3 +16,23 @@ interface CheckMyLoanRespond {
 interface GiveMoney {
   loanId : number
 }
+interface LoanPlan {
+  name: string;
+  tag: string;
+  rate: string;
+  monthlyPayment: string;
+  totalInterest: string;
+  description: string;
+  id:string;
+}
+
+interface AiRespond{
+  aiSuggestion: string;
+  loanPlans: LoanPlan[];
+}
+
+interface AiRequest{
+  purpose: string;
+  amount: number;
+  term: number;
+}
