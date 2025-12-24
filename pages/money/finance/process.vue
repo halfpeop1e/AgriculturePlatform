@@ -163,7 +163,7 @@
           label="提交审批" 
           icon="pi pi-check" 
           severity="primary" 
-          :disabled="!selectedApplication || submitting" 
+          :disabled="!selectedApplication || submitting ||selectedApplication.status !== '申请中'"
           :loading="submitting"
           @click="submitAudit" 
         />

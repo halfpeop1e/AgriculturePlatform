@@ -70,3 +70,32 @@ func AllowLoan(c *gin.Context) {
 	msg, code := gorm.AllowLoan(req)
 	JsonBack(c, msg, code, nil)
 }
+
+func GetMyLoan(c *gin.Context) {
+	userId := c.GetString("user_id")
+	msg, code, data := gorm.GetMyLoan(userId)
+	JsonBack(c, msg, code, data)
+}
+
+func GiveMoney(c *gin.Context) {
+
+	var req request.GiveMoneyRequest
+
+	if err := c.ShouldBind(&req); err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{
+
+			"code": 400,
+
+			"message": "参数解析错误: " + err.Error(),
+		})
+
+		return
+
+	}
+
+	msg, code := gorm.GiveMoney(req)
+
+	JsonBack(c, msg, code, nil)
+
+}

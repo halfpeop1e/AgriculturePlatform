@@ -7,6 +7,7 @@ type CheckMyLoanRespond struct {
 }
 
 type LoanOrder struct {
+	ID         int64   `json:"id"`
 	Year       int     `json:"year"`
 	Month      int     `json:"month"`
 	Amount     float64 `json:"amount"`

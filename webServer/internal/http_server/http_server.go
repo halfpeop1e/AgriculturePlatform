@@ -55,6 +55,8 @@ func init() {
 		loan.POST("/add", v1.AddLoanProduct)
 		loan.POST("/apply", v1.ApplyLoan)
 		loan.POST("/allow", v1.AllowLoan)
+		loan.GET("/detail", v1.GetMyLoan)
+		loan.POST("/give", v1.GiveMoney)
 	}
 	question := GE.Group("/question")
 	question.Use(JWTAuthMiddleware())

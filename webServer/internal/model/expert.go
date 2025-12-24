@@ -35,7 +35,7 @@ type ExpertCase struct {
 	AuthorId  string         `gorm:"column:author_id;index;type:varchar(36);default:'';not null;comment:作者ID"`
 	ExpertId  string         `gorm:"column:expert_id;index;type:varchar(36);not null;default:'';comment:专家ID"`
 	Question  string         `gorm:"column:question;type:text;not null;comment:咨询问题"`
-	Answer    string         `gorm:"column:answer;type:text;comment:专家回答"`
+	Answer    string         `gorm:"column:answer;type:json;default:'[]' ;comment:专家回答"`
 	CaseDate  time.Time      `gorm:"column:case_date;type:timestamp;not null;comment:案例日期"`
 	CreatedAt time.Time      `gorm:"column:created_at;type:timestamp;not null;comment:创建时间"`
 	DeleteAt  gorm.DeletedAt `gorm:"column:delete_at;type:timestamp;comment:删除时间"`

@@ -491,7 +491,8 @@ const handleApplyLoan = async () => {
     return
   }
 
-  if (validateApplyInput(selectedProduct.value, amount, roundedTerm)) {
+  if (!validateApplyInput(selectedProduct.value, amount, roundedTerm)) {
+    toast.add({ severity: 'error', summary: '申请失败', detail: '请填写正确的贷款金额和期限', life: 3000 })
     console.log('贷款申请输入验证未通过')
     return
   }

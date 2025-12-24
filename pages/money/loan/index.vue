@@ -240,6 +240,7 @@ import { ArrowDownBold, PictureRounded } from "@element-plus/icons-vue";
 import farmer1 from "~/public/ioanImage/1762280990064.png";
 import farmer2 from "~/public/ioanImage/1762281252724.png";
 import muzimi from "~/public/ioanImage/1762350715242.png";
+import { on } from "events";
 
 const userStore = useUserStore();
 const section2 = ref<HTMLElement | null>(null);
@@ -254,27 +255,23 @@ const nextPage = () => {
 const now = new Date();
 const nextMonth = now.getMonth() + 2;
 
-// --- 类型定义 (对应后端 Go Struct) ---
-interface LoanOrder {
-  year: number;
-  month: number;
-  amount: number;
-  loanName: string;
-  loanStatus: string; // 例如: "Unpaid", "Paid"
+const GetLoanData = async () => {
+
+  const data = await addLoanProduct();
+  console.log(data, 'data')
+  loanData.value = data ?? loanData.value;
 }
 
-interface CheckMyLoanRespond {
-  loanedSum: number; // 所有贷款金额
-  loanSum: number; // 所有待还金额
-  loanList: LoanOrder[];
-}
-
+onMounted(() => {
+  GetLoanData();
+})
 // --- 模拟数据 (实际开发中请替换为 API 请求) ---
 const loanData = ref<CheckMyLoanRespond>({
   loanedSum: 500000.0,
   loanSum: 200000.0,
   loanList: [
     {
+      id: 1,
       year: 2023,
       month: 10,
       amount: 5000,
@@ -283,6 +280,7 @@ const loanData = ref<CheckMyLoanRespond>({
     },
     // 假设下个月是 11月，这笔是待还的
     {
+      id: 2,
       year: 2023,
       month: 11,
       amount: 8500.5,
@@ -290,6 +288,7 @@ const loanData = ref<CheckMyLoanRespond>({
       loanStatus: "Unpaid",
     },
     {
+      id: 3,
       year: 2023,
       month: 11,
       amount: 2000.0,
@@ -298,6 +297,7 @@ const loanData = ref<CheckMyLoanRespond>({
     },
     // 未来的
     {
+      id: 4,
       year: 2023,
       month: 12,
       amount: 8500.5,
@@ -371,9 +371,12 @@ const handleSelectionChange = (val: LoanOrder[]) => {
 };
 
 // 执行还款
-const handleRepayAction = () => {
+const handleRepayAction = async () => {
   // 这里调用后端还款接口
   console.log("正在还款订单:", selectedLoans.value);
+  selectedLoans.value.map(async item => {
+    await giveMoney(item.id)
+  })
 
   ElMessage.success(`成功还款 ${formatCurrency(selectedRepayAmount.value)} 元`);
   repayDialogVisible.value = false;

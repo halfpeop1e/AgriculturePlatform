@@ -7,6 +7,7 @@ import (
 	"go-agriculture/internal/dto/respond"
 	"go-agriculture/internal/model"
 	"go-agriculture/internal/util"
+	"strconv"
 	"time"
 )
 
@@ -264,9 +265,112 @@ func AllowLoan(req request.AllowLoanRequest) (string, int) {
 	}
 	if req.Allow {
 		apply.Status = 1
+		var product model.LoanProduct
+
+		if res := dao.GormDB.Model(&model.LoanProduct{}).Where("product_id = ?", apply.ProductID).First(&product); res.Error != nil {
+			return "查询失败", -1
+		}
+		for i := 0; i < int(apply.Deadline); i++ {
+			var AllOrder model.AllOrder
+			newOrder := respond.LoanOrder{
+				Year:     apply.CreatAt.Year(),
+				Month:    (int(apply.CreatAt.Month()) + i) % 12,
+				Amount:   apply.Amount / float64(apply.Deadline),
+				LoanName: product.ProductName + "第" + strconv.Itoa(i+1) + "期",
+			}
+			if newOrder.Month == 0 {
+				newOrder.Month = 12
+			}
+			if int(apply.CreatAt.Month())+i > 12 {
+				newOrder.Year++
+			}
+			newOrder.LoanStatus = "Unpaid"
+			AllOrder.Amount = newOrder.Amount
+			AllOrder.LoanName = newOrder.LoanName
+			AllOrder.LoanStatus = newOrder.LoanStatus
+			AllOrder.Month = newOrder.Month
+			AllOrder.Year = newOrder.Year
+			AllOrder.LoanId = apply.Uuid
+			AllOrder.CreatAt = time.Now()
+			dao.GormDB.Create(&AllOrder)
+		}
 	} else {
 		apply.Status = 2
 	}
+
 	dao.GormDB.Save(&apply)
 	return "更新成功", 0
+}
+
+func GetMyLoan(userId string) (string, int, *respond.CheckMyLoanRespond) {
+	var responds respond.CheckMyLoanRespond
+	var loanedSum float64 = 0
+	var loanSum float64 = 0
+	var loans []model.Loan
+	if res := dao.GormDB.Model(&model.Loan{}).
+		Where("user_id = ?", userId).
+		Where("phone = ? OR phone = ?", 1, 4).Find(&loans); res.Error != nil {
+		return "查询失败", -1, nil
+	}
+	for _, loan := range loans {
+		var AllOrder []model.AllOrder
+		if res := dao.GormDB.Model(&model.AllOrder{}).Where("loan_id = ?", loan.Uuid).Find(&AllOrder); res.Error != nil {
+			return "查询失败", -1, nil
+		}
+		for _, order := range AllOrder {
+			loanedSum += order.Amount
+			if order.LoanStatus == "Unpaid" {
+				loanSum += order.Amount
+			}
+			responds.LoanList = append(responds.LoanList, respond.LoanOrder{
+				ID:         order.Id,
+				Year:       order.Year,
+				Month:      order.Month,
+				Amount:     order.Amount,
+				LoanName:   order.LoanName,
+				LoanStatus: order.LoanStatus,
+			})
+		}
+		responds.LoanedSum = loanedSum
+		responds.LoanSum = loanSum
+	}
+	return "获取成功", 0, &responds
+}
+
+func GiveMoney(req request.GiveMoneyRequest) (string, int) {
+	var order model.AllOrder
+
+	if res := dao.GormDB.Model(&model.AllOrder{}).Where("id = ?", req.LoanId).First(&order); res.Error != nil {
+
+		return "查询失败", -1
+
+	}
+
+	if order.LoanStatus == "Unpaid" {
+
+		order.LoanStatus = "Paid"
+
+		dao.GormDB.Save(&order)
+		var orders []model.AllOrder
+		if res := dao.GormDB.Model(&model.AllOrder{}).Where("loan_id = ?", order.LoanId).Find(&orders); res.Error != nil {
+			return "查询失败", -1
+		}
+		for _, order := range orders {
+			if order.LoanStatus == "Unpaid" {
+				return "支付成功", 0
+			}
+		}
+		var loan model.Loan
+		if res := dao.GormDB.Model(&model.Loan{}).Where("uuid = ?", order.LoanId).First(&loan); res.Error != nil {
+			return "查询失败", -1
+		}
+		loan.Status = 4
+		dao.GormDB.Save(&loan)
+		return "支付成功", 0
+
+	} else {
+
+		return "订单已支付", -1
+
+	}
 }

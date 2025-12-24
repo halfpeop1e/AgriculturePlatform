@@ -10,7 +10,7 @@ type QuestionRespond struct {
 	AuthorId   string   `json:"authorId"`
 	Tags       []string `json:"tags"`
 	Question   string   `json:"question"`
-	Answer     string   `json:"answer"`
+	Answer     []string `json:"answer"`
 	CaseDate   string   `json:"caseDate"`
 }
 

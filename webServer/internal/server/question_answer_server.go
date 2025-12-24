@@ -31,6 +31,10 @@ func (q *questionServerType) GetQuestionList() (string, *[]respond.QuestionRespo
 		if question.Tags != "" {
 			json.Unmarshal([]byte(question.Tags), &tags)
 		}
+		var answers []string
+		if question.Answer != "" {
+			json.Unmarshal([]byte(question.Answer), &answers)
+		}
 		var expert model.Expert
 		log.Print("expId:" + question.ExpertId)
 		if res := dao.GormDB.Where("id = ?", question.ExpertId).First(&expert); res.Error != nil {
@@ -47,7 +51,6 @@ func (q *questionServerType) GetQuestionList() (string, *[]respond.QuestionRespo
 			log.Printf("Database error: %v", res.Error)
 			return "查询失败4", nil, -1
 		}
-
 		newQuestion := respond.QuestionRespond{
 			Id:         fmt.Sprintf("%d", question.Id),
 			ExpertId:   question.ExpertId,
@@ -58,7 +61,7 @@ func (q *questionServerType) GetQuestionList() (string, *[]respond.QuestionRespo
 			AuthorId:   question.AuthorId,
 			Tags:       tags,
 			Question:   question.Question,
-			Answer:     question.Answer,
+			Answer:     answers,
 			CaseDate:   question.CaseDate.Format("2006-01-02 15:04:05"),
 		}
 		questionList = append(questionList, newQuestion)
@@ -95,6 +98,10 @@ func (q *questionServerType) GetQuestionListByUser(userId string, role string) (
 		if question.Tags != "" {
 			json.Unmarshal([]byte(question.Tags), &tags)
 		}
+		var answers []string
+		if question.Answer != "" {
+			json.Unmarshal([]byte(question.Answer), &answers)
+		}
 		var expert model.Expert
 		log.Print("expId:" + question.ExpertId)
 		if res := dao.GormDB.Where("id = ?", question.ExpertId).First(&expert); res.Error != nil {
@@ -122,7 +129,7 @@ func (q *questionServerType) GetQuestionListByUser(userId string, role string) (
 			AuthorId:   question.AuthorId,
 			Tags:       tags,
 			Question:   question.Question,
-			Answer:     question.Answer,
+			Answer:     answers,
 			CaseDate:   question.CaseDate.Format("2006-01-02 15:04:05"),
 		}
 		questionList = append(questionList, newQuestion)
@@ -164,8 +171,13 @@ func (q *questionServerType) AnswerQuestion(req request.SubmitAnswerRequest, use
 		log.Printf("Database error: %v", res.Error)
 		return "问题不存在", -1
 	}
-
-	question.Answer = req.Content
+	var answers []string
+	if question.Answer != "" {
+		json.Unmarshal([]byte(question.Answer), &answers)
+	}
+	answers = append(answers, req.Content)
+	qanswer, _ := json.Marshal(answers)
+	question.Answer = string(qanswer)
 
 	dao.GormDB.Save(&question)
 
@@ -198,6 +210,10 @@ func (q *questionServerType) GetQuestionDetail(questionId string) (string, *resp
 	if question.Tags != "" {
 		json.Unmarshal([]byte(question.Tags), &tags)
 	}
+	var answers []string
+	if question.Answer != "" {
+		json.Unmarshal([]byte(question.Answer), &answers)
+	}
 	questionDetail := &respond.QuestionRespond{
 		Id:         questionId,
 		ExpertId:   question.ExpertId,
@@ -207,7 +223,7 @@ func (q *questionServerType) GetQuestionDetail(questionId string) (string, *resp
 		Author:     user.Name,
 		AuthorId:   question.AuthorId,
 		Question:   question.Question,
-		Answer:     question.Answer,
+		Answer:     answers,
 		Tags:       tags,
 		CaseDate:   question.CaseDate.Format("2006-01-02"),
 	}
