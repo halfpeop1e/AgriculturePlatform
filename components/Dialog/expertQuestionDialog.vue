@@ -62,6 +62,7 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import MultiSelect from 'primevue/multiselect'
+import { useToast } from 'primevue/usetoast'
 import { submitQuestion } from '~/composables/useQuestionAnswer'
 import { useUserStore } from '~/utils/userStore'
 import { v4 as uuidv4 } from 'uuid'
@@ -78,6 +79,7 @@ const visible = computed({
 })
 
 const userStore = useUserStore()
+const toast = useToast()
 
 const form = ref({
   title: '',
@@ -164,10 +166,13 @@ const onSubmit = async () => {
     })
 
     if (result) {
+      toast.add({ severity: 'success', summary: '提交成功', detail: '您的问题已提交', life: 3000 })
       emit('submitted')
       visible.value = false
       resetForm()
     }
+  } catch (error) {
+    toast.add({ severity: 'error', summary: '提交失败', detail: '请稍后重试', life: 4000 })
   } finally {
     submitting.value = false
   }

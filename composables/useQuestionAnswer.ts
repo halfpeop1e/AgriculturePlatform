@@ -21,7 +21,7 @@ export async function getQuestionList() {
     throw new Error('获取问答列表失败')
   } catch (err) {
     console.error('获取问答列表失败', err)
-    ElMessage.error('获取问答列表失败')
+    throw err
   }
 }
 
@@ -38,22 +38,25 @@ export async function getQuestionDetail(id: string) {
     throw new Error('获取问答详情失败')
   } catch (err) {
     console.error('获取问答详情失败', err)
-    ElMessage.error('获取问答详情失败')
+    throw err
   }
 }
 
 // 提交问题
 export async function submitQuestion(data: Omit<Question, 'id' | 'date'  | 'answerCount' | 'isAnswered'>) {
   try {
-    const response = await useAxiosInstance.post('/question/create', data)
+    const response = await useAxiosInstance.post<any>('/question/create', data)
     if (response.status === 200) {
-      ElMessage.success('问题提交成功')
-      return response.data
+      let resData = response.data
+      if (resData && resData.data && resData.code !== undefined) {
+        resData = resData.data
+      }
+      return resData
     }
     throw new Error('问题提交失败')
   } catch (err) {
     console.error('问题提交失败', err)
-    ElMessage.error('问题提交失败')
+    throw err
   }
 }
 
@@ -72,6 +75,6 @@ export async function submitAnswer(questionId: string, content: string) {
     throw new Error('回答提交失败')
   } catch (err) {
     console.error('回答提交失败', err)
-    ElMessage.error('回答提交失败')
+    throw err
   }
 }

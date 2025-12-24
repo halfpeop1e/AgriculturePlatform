@@ -80,3 +80,60 @@ func BookExpert(c *gin.Context) {
 	msg, code := gorm.ExpertServer.BookExpert(expertId, req, userId)
 	JsonBack(c, msg, code, nil)
 }
+
+func SubmitExpertProfile(c *gin.Context) {
+	userId := c.Param("userId")
+	if userId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "缺少用户ID",
+		})
+		return
+	}
+
+	var req request.SubmitExpertProfileRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "参数解析错误: " + err.Error(),
+		})
+		return
+	}
+
+	// 验证用户ID是否匹配（从JWT中获取的ID）
+	currentUserId := c.GetString("user_id")
+	if currentUserId != userId {
+		c.JSON(http.StatusForbidden, gin.H{
+			"code":    403,
+			"message": "无权操作",
+		})
+		return
+	}
+
+	msg, code := gorm.ExpertServer.SubmitExpertProfile(userId, req)
+	JsonBack(c, msg, code, nil)
+}
+
+func GetExpertProfile(c *gin.Context) {
+	userId := c.Param("userId")
+	if userId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "缺少用户ID",
+		})
+		return
+	}
+
+	// 验证用户ID是否匹配（从JWT中获取的ID）
+	currentUserId := c.GetString("user_id")
+	if currentUserId != userId {
+		c.JSON(http.StatusForbidden, gin.H{
+			"code":    403,
+			"message": "无权查看",
+		})
+		return
+	}
+
+	msg, data, code := gorm.ExpertServer.GetExpertProfile(userId)
+	JsonBack(c, msg, code, data)
+}

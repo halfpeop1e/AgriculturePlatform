@@ -57,3 +57,16 @@ func GetApplyList(c *gin.Context) {
 	msg, code, data := gorm.GetApplyList(userId)
 	JsonBack(c, msg, code, data)
 }
+
+func AllowLoan(c *gin.Context) {
+	var req request.AllowLoanRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "参数解析错误: " + err.Error(),
+		})
+		return
+	}
+	msg, code := gorm.AllowLoan(req)
+	JsonBack(c, msg, code, nil)
+}

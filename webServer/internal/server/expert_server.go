@@ -117,7 +117,7 @@ func (e *expertServerType) GetExpertList(page, pageSize int, field, searchKey st
 func (e *expertServerType) GetExpertDetail(expertId string) (string, *respond.ExpertDetailRespond, int) {
 	var expert model.Expert
 
-	if res := dao.GormDB.Where("uuid = ? AND status = ?", expertId, "active").First(&expert); res.Error != nil {
+	if res := dao.GormDB.Where("id = ? AND status = ?", expertId, "active").First(&expert); res.Error != nil {
 		log.Printf("Database error: %v", res.Error)
 		return "查询失败", nil, -1
 	}
@@ -210,7 +210,7 @@ func (e *expertServerType) getRecentCases(expertId string, limit int) []respond.
 func (e *expertServerType) BookExpert(expertId string, req request.BookExpertRequest, userId string) (string, int) {
 	// 检查专家是否存在且状态为 active
 	var expert model.Expert
-	if res := dao.GormDB.Where("uuid = ? AND status = ?", expertId, "active").First(&expert); res.Error != nil {
+	if res := dao.GormDB.Where("id = ? AND status = ?", expertId, "active").First(&expert); res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return "专家不存在或已停用", -1
 		}
@@ -261,4 +261,115 @@ func (e *expertServerType) BookExpert(expertId string, req request.BookExpertReq
 	}
 
 	return "预约成功", 0
+}
+
+func (e *expertServerType) SubmitExpertProfile(userId string, req request.SubmitExpertProfileRequest) (string, int) {
+	// 检查用户是否存在
+	var user model.User
+	if res := dao.GormDB.Where("uuid = ?", userId).First(&user); res.Error != nil {
+		log.Printf("查询用户失败: %v", res.Error)
+		return "用户不存在", -1
+	}
+
+	// 序列化数组为JSON字符串
+	skillsJSON, _ := json.Marshal(req.Skills)
+	certificationJSON, _ := json.Marshal(req.Certification)
+	availableTimeJSON, _ := json.Marshal(req.AvailableTime)
+	serviceScopeJSON, _ := json.Marshal(req.ServiceScope)
+
+	expert := model.Expert{
+		Name:          req.Name,
+		Uuid:          userId,
+		Avatar:        req.Avatar,
+		Field:         req.Field,
+		Introduction:  req.Introduction,
+		Skills:        string(skillsJSON),
+		Education:     req.Education,
+		Experience:    req.Experience,
+		Certification: string(certificationJSON),
+		ConsultCount:  0,
+		Rating:        5.00,
+		ResponseTime:  "",
+		AvailableTime: string(availableTimeJSON),
+		ServiceScope:  string(serviceScopeJSON),
+		Price:         *req.Price,
+		Status:        "active",
+		CreatedAt:     time.Now(),
+	}
+	if res := dao.GormDB.Create(&expert); res.Error != nil {
+		log.Printf("创建专家记录失败: %v", res.Error)
+		// 检查是否是 UUID 唯一约束冲突
+		if res.Error.Error() == `pq: duplicate key value violates unique constraint "experts_pkey"` ||
+			res.Error.Error() == `ERROR: duplicate key value violates unique constraint "experts_pkey" (SQLSTATE 23505)` {
+			return "该用户已有专家记录", -1
+		}
+		return "提交专家资料失败", -1
+	}
+
+	return "提交专家资料成功", 0
+}
+
+// GetExpertProfile 获取专家资料（根据用户ID）
+func (e *expertServerType) GetExpertProfile(userId string) (string, *respond.ExpertProfileRespond, int) {
+	var expert model.Expert
+
+	// 根据用户ID查询专家记录
+	if res := dao.GormDB.Where("uuid = ?", userId).First(&expert); res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			// 没有找到专家记录，返回空数据
+			return "获取成功", nil, 0
+		}
+		log.Printf("查询专家资料失败: %v", res.Error)
+		return "查询失败", nil, -1
+	}
+
+	avatar := expert.Avatar
+	// 解析 JSON 字段
+	skills := make([]string, 0)
+	if expert.Skills == "" {
+		skills = []string{}
+	} else if err := json.Unmarshal([]byte(expert.Skills), &skills); err != nil {
+		skills = []string{}
+	}
+
+	certification := make([]string, 0)
+	if expert.Certification == "" {
+		certification = []string{}
+	} else if err := json.Unmarshal([]byte(expert.Certification), &certification); err != nil {
+		certification = []string{}
+	}
+
+	availableTime := make([]string, 0)
+	if expert.AvailableTime == "" {
+		availableTime = []string{}
+	} else if err := json.Unmarshal([]byte(expert.AvailableTime), &availableTime); err != nil {
+		availableTime = []string{}
+	}
+
+	serviceScope := make([]string, 0)
+	if expert.ServiceScope == "" {
+		serviceScope = []string{}
+	} else if err := json.Unmarshal([]byte(expert.ServiceScope), &serviceScope); err != nil {
+		serviceScope = []string{}
+	}
+
+	// 判断是否完成（根据业务逻辑，这里使用status作为判断）
+	completed := expert.Status == "active"
+
+	expertProfile := &respond.ExpertProfileRespond{
+		Name:          expert.Name,
+		Avatar:        avatar,
+		Field:         expert.Field,
+		Introduction:  expert.Introduction,
+		Skills:        skills,
+		Education:     expert.Education,
+		Experience:    expert.Experience,
+		Certification: certification,
+		AvailableTime: availableTime,
+		ServiceScope:  serviceScope,
+		Price:         expert.Price,
+		Completed:     completed,
+	}
+
+	return "获取成功", expertProfile, 0
 }

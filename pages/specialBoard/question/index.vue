@@ -60,10 +60,16 @@ definePageMeta({ layout: 'expert-backend-layout' })
 const router = useRouter()
 const questionStore = useQuestionDataStore()
 const q = ref('')
+const loading = ref(false)
 const selectedTags = ref<Set<string>>(new Set())
 
-onMounted(() => {
-  questionStore.fetchQuestions()
+onMounted(async () => {
+  loading.value = true
+  try {
+    await questionStore.fetchQuestions()
+  } finally {
+    loading.value = false
+  }
 })
 
 const allTags = computed(() => {

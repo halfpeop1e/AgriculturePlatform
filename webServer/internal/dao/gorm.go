@@ -29,5 +29,5 @@ func init() {
 	}
 	GormDB.AutoMigrate(&model.User{}, &model.Knowledge{}, &model.Order{}, &model.Product{},
 		&model.LoanProduct{}, &model.Loan{}, &model.Expert{}, &model.ExpertBooking{}, model.ExpertCase{},
-		&model.Question{}, &model.Answer{}) // 自动迁移，如果没有建表，会自动创建对应的表
+		&model.Question{}, &model.Answer{}, &model.Post{}, &model.PostLike{}, &model.PostReply{}, &model.PostReplyLike{}) // 自动迁移，如果没有建表，会自动创建对应的表
 }
