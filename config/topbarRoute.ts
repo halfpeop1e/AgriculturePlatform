@@ -1,5 +1,5 @@
 import  {testprofile} from "~/types/test"
-const userStore = useUserStore()
+
 export const nav = [
   {
     label: '产品交易',
@@ -41,7 +41,7 @@ export const menuData = [
   {
     label: '个人中心',
     icon: 'pi pi-user',
-    to: `/profile/${userStore.userId}`
+    to: `/profile`
   },
   {
     label: '设置',
@@ -61,12 +61,12 @@ export const menuExpertData = [
   {
     label: '个人中心',
     icon: 'pi pi-user',
-    to: `/expertprofile/${userStore.userId}`
+    to: `/expertprofile`
   },
   {
     label: '设置',
     icon: 'pi pi-cog',
-    to: '/setting'
+    to: '/infomationcomplete'
   },
   {
     separator: true

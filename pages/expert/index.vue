@@ -43,6 +43,18 @@
         />
       </div>
 
+      <!-- 分页 -->
+      <div class="mt-6 flex justify-center">
+        <Paginator
+          :first="(currentPage - 1) * pageSize"
+          :rows="pageSize"
+          :totalRecords="ExpertDataStore.total"
+          :rowsPerPageOptions="[5,10,20]"
+          @page="handlePageChange"
+          class="rounded-lg border border-slate-200 bg-white p-2 shadow-sm"
+        />
+      </div>
+
       <!-- 空状态 -->
       <div v-if="filteredExperts.length === 0" class="text-center text-gray-500 py-10">
         <p>未找到匹配的专家，请尝试其他筛选条件</p>
@@ -53,23 +65,28 @@
 
 <script setup lang="ts">
 import ExpertCard from '~/components/Card/ExpertCard.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Expert } from '@/types/expert'
-import { mockExperts } from '@/types/experttest'
+import { useExpertDataStore } from '~/utils/expertDataStore'
+import Paginator from 'primevue/paginator'
 
 definePageMeta({ layout: 'home-page-layout' })
-
+const ExpertDataStore = useExpertDataStore()
 const router = useRouter()
 
 const searchKey = ref('')
 const selectedField = ref('')
 
-const experts = ref<Expert[]>(mockExperts)
+const experts = ref<Expert[]>([])
+const currentPage = ref(1)
+const pageSize = ref(10)
 
 const expertFields = computed(() => {
   const fields = new Set<string>()
-  experts.value.forEach((expert) => fields.add(expert.field))
+  // prefer store data if available
+  const list = ExpertDataStore.experts.length ? ExpertDataStore.experts : experts.value
+  list.forEach((expert) => fields.add(expert.field))
   return Array.from(fields)
 })
 
@@ -88,13 +105,30 @@ const filteredExperts = computed<Expert[]>(() => {
 
 const handleSearch = () => {
   // 可选：添加防抖逻辑
-  console.log(experts.value)
+  currentPage.value = 1
+  ExpertDataStore.fetchExperts(currentPage.value, pageSize.value, selectedField.value || undefined, searchKey.value || undefined).then(() => {
+    experts.value = ExpertDataStore.experts ?? []
+  })
 }
 
 const navigateToDetail = (expertId: string) => {
   router.push(
     `/expert/${expertId}`
   )
+}
+onMounted(async () => {
+  // 模拟获取专家数据
+  await ExpertDataStore.fetchExperts(currentPage.value, pageSize.value)
+  experts.value = ExpertDataStore.experts ?? []
+})
+
+const handlePageChange = (e: { first: number; rows: number }) => {
+  const newPage = Math.floor(e.first / e.rows) + 1
+  currentPage.value = newPage
+  pageSize.value = e.rows
+  ExpertDataStore.fetchExperts(currentPage.value, pageSize.value, selectedField.value || undefined, searchKey.value || undefined).then(() => {
+    experts.value = ExpertDataStore.experts ?? []
+  })
 }
 </script>
 

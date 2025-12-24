@@ -32,20 +32,28 @@ export default defineNuxtRouteMiddleware((to) => {
     }
     if (userStore.role === 'expert') {
       const completionPath = '/infomationcomplete'
-      if (!userStore.expertProfileCompleted && to.path !== completionPath) {
-        return navigateTo(completionPath)
+
+      // 未完善资料：强制跳转到完善页，仅允许访问完善页本身
+      if (!userStore.expertProfile?.name) {
+        console.log(userStore.expertProfile?.name)
+        if (to.path !== completionPath){
+          console.log('跳转到专家资料完善页')
+          return navigateTo(completionPath)
+        } 
+        return
       }
-      if (userStore.expertProfileCompleted && to.path === completionPath) {
-        return navigateTo('/expert/dashboard')
-      }
-      const expertDashboardPath = '/expert/dashboard'
-      const profilePathPrefix = '/profile'
-      const isProfileRoute = to.path.startsWith(profilePathPrefix)
-      const isExpertDashboard = to.path === expertDashboardPath
-      if (!isExpertDashboard && !isProfileRoute && !isSettingRoute) {
-        console.log('跳转到专家界面')
+      // 允许的专家路由：以 /specialBoard 开头 或以 /expertprofile 开头
+      const expertDashboardPath = '/specialBoard'
+      const profilePathPrefix = '/expertprofile'
+      const isExpertDashboard = to.path === expertDashboardPath || to.path.startsWith(expertDashboardPath)
+      const isProfileRoute = to.path === profilePathPrefix || to.path.startsWith(profilePathPrefix)
+
+      // 非以上允许路由时重定向到专家后台主页
+      if (!isExpertDashboard && !isProfileRoute) {
+        console.log('跳转到专家界面,topath', to.path)
         return navigateTo(expertDashboardPath)
       }
+    
       return
     }
 

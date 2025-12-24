@@ -13,7 +13,7 @@
         </div>
         <div class="flex items-center gap-3">
           <Avatar
-            :image="userStore.avatar || defaultAvatar"
+            :image="userStore.avatar"
             shape="circle"
             size="large"
             class="cursor-pointer border border-gray-300 hover:ring-2 hover:ring-gray-300 transition-all"

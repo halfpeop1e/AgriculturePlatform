@@ -46,7 +46,8 @@ export const useExpertDataStore = defineStore('expertDataStore', {
   }),
   actions: {
     async fetchExperts(page: number = 1, pageSize: number = 10, field?: string, searchKey?: string) {
-      const data = await getExpertList(page, pageSize, field, searchKey)
+      const res = await getExpertList(page, pageSize, field, searchKey)
+      const data = res?.data
       if (data) {
         this.experts = data.list
         this.total = data.total

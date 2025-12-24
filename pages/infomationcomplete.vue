@@ -1,8 +1,7 @@
 <template>
 	<div class="min-h-screen bg-slate-50 py-10">
-		<div class="mx-auto w-full max-w-4xl px-4">
-			<Card class="shadow-lg">
-				<template #title>
+		<div class="mx-auto w-full max-w-4xl px-4 space-y-4">
+      <el-card>
 					<div class="flex items-center justify-between">
 						<div>
 							<h1 class="text-2xl font-semibold text-slate-900">完善专家资料</h1>
@@ -12,10 +11,11 @@
 						</div>
 						<Tag value="专家专享" severity="info" />
 					</div>
-				</template>
-
-				<div class="space-y-6">
-					<section class="grid gap-6 md:grid-cols-2">
+				</el-card>
+			<el-card class="shadow-lg">
+		
+				<div class="space-y-6 h-full">
+					<section class="grid gap-6 md:grid-cols-1">
 						<div class="space-y-2">
 							<label class="text-sm font-medium text-slate-700">姓名</label>
 							<InputText v-model.trim="form.name" placeholder="请输入真实姓名" class="w-full" />
@@ -47,7 +47,7 @@
 
 						<div class="space-y-2">
 							<label class="text-sm font-medium text-slate-700">咨询单价（元）</label>
-							<InputNumber v-model="form.price" inputClass="w-full" mode="decimal" :min="0" />
+							<InputNumber v-model="form.price" inputClass="w-full mt-2" mode="decimal" :min="0" />
 						</div>
 					</section>
 
@@ -145,7 +145,7 @@
 						<Button label="提交审批" icon="pi pi-check" :loading="submitting" @click="handleSubmit" />
 					</div>
 				</div>
-			</Card>
+			</el-card>
 		</div>
 	</div>
 </template>
@@ -346,7 +346,7 @@ if (!selectedField.value.length && form.field) {
 }
 
 definePageMeta({
-	layout: 'profile-page-layout'
+	layout: 'expert-backend-layout'
 })
 </script>
 

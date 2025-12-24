@@ -41,11 +41,14 @@ export default defineNuxtPlugin((nuxtApp: any) => {
             .join('')
         )
         const payload = JSON.parse(jsonStr || '{}')
-
         // 支持多种可能的字段名
         const userId =
           payload.userId || payload.user_id || payload.uid || payload.id || payload.sub || (payload.data && (payload.data.userId || payload.data.id))
-
+        const userRole=
+          payload.role || payload.user_role || (payload.data && (payload.data.role || payload.data.user_role))
+        if (userRole) {
+          userStore.role = String(userRole)
+        }
         if (userId) {
           userStore.userId = String(userId)
         }
@@ -62,6 +65,7 @@ export default defineNuxtPlugin((nuxtApp: any) => {
         // 请求用户资料（受保护接口），若成功则 setUserProfile
         await getUserProfile()
         if (userStore.role === 'expert') {
+          console.log('恢复会话：用户为专家，获取专家资料')
           await getExpertProfile()
         }
         userStore.LoginSet()

@@ -1,9 +1,9 @@
 <template>
   <div class="bg-white rounded-md p-3 shadow-sm flex flex-col gap-2">
     <div class="flex items-center gap-3">
-      <Avatar :image="reply.author.avatar || defaultAvatar" shape="circle" class="w-9 h-9" />
+      <Avatar :image="displayAuthor.avatar" shape="circle" class="w-9 h-9" />
       <div class="flex flex-col">
-        <div class="font-medium text-sm">{{ reply.author.nickname }}</div>
+        <div class="font-medium text-sm">{{ displayAuthor.nickname }}</div>
         <div class="text-xs text-gray-500">{{ formattedTime }}</div>
       </div>
     </div>
@@ -32,6 +32,11 @@ const emits = defineEmits<{
 }>()
 
 const defaultAvatar = '/ioanImage/default-avatar.png'
+
+const displayAuthor = computed(() => ({
+  nickname: props.reply?.author?.nickname || '匿名用户',
+  avatar: props.reply?.author?.avatar || defaultAvatar
+}))
 
 const localLikes = ref(props.reply.likes ?? 0)
 const localLiked = ref(!!props.reply.liked)

@@ -144,6 +144,7 @@ import Divider from 'primevue/divider'
 import ProgressSpinner from 'primevue/progressspinner'
 import type { ExpertDetail } from '~/types/expert'
 import { getExpertDetail } from '~/composables/getExpert'
+import { getExpertProfile } from '~/composables/getProfile'
 import { getMockExpertById } from '~/types/experttest'
 import { useUserStore } from '~/utils/userStore'
 
@@ -167,7 +168,7 @@ const buildDetailFromProfile = () => {
 	return {
 		id: userStore.userId || 'current-expert',
 		name: profile.name,
-		avatar: profile.avatar,
+		avatar: userStore.avatar,
 		field: profile.field,
 		introduction: profile.introduction,
 		skills: [...profile.skills],
@@ -190,16 +191,21 @@ const loadExpertDetail = async (userId: string) => {
 	expertDetail.value = null
 
 	try {
-		const apiResult = await getExpertDetail(userId)
-		if (apiResult) {
-			expertDetail.value = apiResult
-			return
-		}
-
+		// 如果查看的是当前登录用户，优先调用 getExpertProfile 同步并基于 profile 构建详情
 		if (userStore.userId && userId === userStore.userId) {
-			const localProfile = buildDetailFromProfile()
-			if (localProfile) {
-				expertDetail.value = localProfile
+			const profile = await getExpertProfile()
+			if (profile) {
+				const localProfile = buildDetailFromProfile()
+				if (localProfile) {
+					expertDetail.value = localProfile
+					return
+				}
+			}
+		} else {
+			// 查看他人，调用按 id 查询的接口
+			const other = await getExpertDetail(userId)
+			if (other) {
+				expertDetail.value = other
 				return
 			}
 		}
@@ -234,7 +240,7 @@ watch(
 )
 
 const handleBack = () => {
-	router.back()
+	navigateTo('/specialBoard')
 }
 
 const handleEdit = () => {

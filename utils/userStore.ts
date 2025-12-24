@@ -51,7 +51,6 @@ export const useUserStore = defineStore('userStore', {
             this.userinfo.phone=profile.data.Phone
             this.userinfo.address=profile.data.Address
             this.lastActive=profile.data.LastActive
-        this.role = profile.data.role
         },
         LoginSet(){
             this.islogin=true

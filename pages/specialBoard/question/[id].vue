@@ -37,7 +37,7 @@
           </div>
 
           <div v-if="questionDetail.answers.length" class="space-y-6">
-            <AnswerItem v-for="answer in questionDetail.answers" :key="answer.id" :answer="answer" />
+            <AnswerItem v-for="(answer, index) in questionDetail.answers" :key="index" :answer="answer" />
           </div>
         </section>
 
@@ -87,6 +87,7 @@ const id = route.params.id as string
 
 onMounted(() => {
   questionStore.fetchQuestionDetail(id)
+  console.log(questionStore.currentQuestion)
 })
 
 watch(
@@ -98,7 +99,19 @@ watch(
   }
 )
 
-const questionDetail = computed(() => questionStore.currentQuestion)
+const questionDetail = computed(() => {
+  const detail = questionStore.currentQuestion
+  console.log('Computed question detail:', detail)
+  if (!detail) return null
+  return {
+    ...detail,
+    tags: detail.tags ?? [],
+    answers: detail.answer ?? [],
+    answerCount:
+      detail.answerCount ??
+      (detail.answer ? detail.answer.length : 0)
+  }
+})
 
 const handleSubmitAnswer = async () => {
   const content = answerContent.value.trim()

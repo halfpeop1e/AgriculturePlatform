@@ -23,10 +23,17 @@ export async function loginUser(loginData:LoginRequest){
             UserStore.role=response.data.data.role
             UserStore.LoginSet()
             if (UserStore.role === 'expert') {
+              console.log('用户为专家，获取专家资料')
                 await getExpertProfile()
+                navigateTo('/specicalBoard')
+            }
+            else{
+              console.log('用户为普通用户，获取用户资料')
+                await getUserProfile()
+                navigateTo('/')
             }
             console.log('用户已登录，更新本地状态',UserStore)
-            navigateTo('/')
+            
             return response
         }
         else{
