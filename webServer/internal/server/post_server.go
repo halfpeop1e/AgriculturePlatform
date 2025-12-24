@@ -2,6 +2,7 @@ package gorm
 
 import (
 	"fmt"
+	"go-agriculture/internal/config"
 	"go-agriculture/internal/dao"
 	"go-agriculture/internal/dto/request"
 	"go-agriculture/internal/dto/respond"
@@ -64,13 +65,15 @@ func (p *postServerType) CreatePost(req request.CreatePostRequest, userId string
 		return "用户不存在", nil, -1
 	}
 
+	tempAvatar := "http://" + fmt.Sprint(config.GetConfig().MainConfig.ServerIP) + ":" + fmt.Sprint(config.GetConfig().MainConfig.Port) + "/static/avatars/" + user.Avatar
+
 	post := model.Post{
 		Uuid:         util.GenerateUUID(),
 		Title:        req.Title,
 		Content:      req.Content,
 		AuthorId:     userId,
 		AuthorName:   req.Author.Nickname,
-		AuthorAvatar: req.Author.Avatar,
+		AuthorAvatar: tempAvatar,
 		LikeCount:    0,
 		ReplyCount:   0,
 		CreatedAt:    time.Now(),
@@ -95,13 +98,24 @@ func (p *postServerType) AddReply(postId string, req request.CreateReplyRequest,
 		return "帖子不存在", nil, -1
 	}
 
+	var user model.User
+
+	if res := dao.GormDB.Where("uuid = ?", userId).First(&user); res.Error != nil {
+
+		log.Printf("查询用户失败: %v", res.Error)
+
+		return "用户不存在", nil, -1
+
+	}
+	tempAvatar := "http://" + fmt.Sprint(config.GetConfig().MainConfig.ServerIP) + ":" + fmt.Sprint(config.GetConfig().MainConfig.Port) + "/static/avatars/" + user.Avatar
+
 	// 创建回复
 	reply := model.PostReply{
 		PostId:       postId,
 		Content:      req.Content,
 		AuthorId:     userId,
 		AuthorName:   req.Author.Nickname,
-		AuthorAvatar: req.Author.Avatar,
+		AuthorAvatar: tempAvatar,
 		LikeCount:    0,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),

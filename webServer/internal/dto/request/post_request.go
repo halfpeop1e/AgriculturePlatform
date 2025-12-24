@@ -11,7 +11,6 @@ type CreatePostRequest struct {
 type AuthorInput struct {
 	Id       string `json:"id" binding:"required"`
 	Nickname string `json:"nickname" binding:"required"`
-	Avatar   string `json:"avatar,omitempty"`
 }
 
 // CreateReplyRequest 创建回复请求（匹配前端 CreateReplyInput）
