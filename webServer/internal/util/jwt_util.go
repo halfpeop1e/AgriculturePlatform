@@ -12,13 +12,15 @@ var jwtSecret = []byte(config.GetConfig().JwtSecret)
 // Claims 定义 JWT 的声明
 type Claims struct {
 	UserID string `json:"user_id"`
+	Role   string `json:"role"`
 	jwt.RegisteredClaims
 }
 
 // GenerateToken 生成 JWT Token
-func GenerateToken(userID string) (string, error) {
+func GenerateToken(userID, role string) (string, error) {
 	claims := Claims{
 		UserID: userID,
+		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(config.GetConfig().JwtExpireTime) * time.Millisecond)),
 			Issuer:    "go-agriculture",

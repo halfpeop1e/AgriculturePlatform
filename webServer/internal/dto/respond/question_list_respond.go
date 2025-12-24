@@ -1,11 +1,17 @@
 package respond
 
 type QuestionRespond struct {
-	Id       string `json:"id"`
-	ExpertId string `json:"expertId"`
-	Question string `json:"question"`
-	Answer   string `json:"answer"`
-	CaseDate string `json:"caseDate"`
+	Id         string   `json:"id"`
+	ExpertId   string   `json:"expertId"`
+	ExpertUuid string   `json:"expertUuid"`
+	Expert     string   `json:"expert"`
+	Title      string   `json:"title"`
+	Author     string   `json:"author"`
+	AuthorId   string   `json:"authorId"`
+	Tags       []string `json:"tags"`
+	Question   string   `json:"question"`
+	Answer     string   `json:"answer"`
+	CaseDate   string   `json:"caseDate"`
 }
 
 type Answer struct {

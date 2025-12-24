@@ -61,7 +61,7 @@ func init() {
 	{
 		question.GET("/list", v1.GetQuestionList)
 		question.POST("/create", v1.CreateQuestion)
-		// question.GET("/detail/:questionId", v1.GetQuestionDetail)
+		question.GET("/:questionId", v1.GetQuestionDetail)
 		question.POST("/answer/:questionId", v1.AnswerQuestion)
 	}
 

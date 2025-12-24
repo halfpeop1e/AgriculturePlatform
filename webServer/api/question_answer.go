@@ -8,8 +8,16 @@ import (
 )
 
 func GetQuestionList(c *gin.Context) {
-	msg, data, code := gorm.QuestionServer.GetQuestionList()
-	JsonBack(c, msg, code, data)
+	userId := c.Query("userId")
+	if userId == "" {
+		msg, data, code := gorm.QuestionServer.GetQuestionList()
+		JsonBack(c, msg, code, data)
+	} else {
+		role := c.Query("role")
+		msg, data, code := gorm.QuestionServer.GetQuestionListByUser(userId, role)
+		JsonBack(c, msg, code, data)
+	}
+
 }
 
 func CreateQuestion(c *gin.Context) {
@@ -33,12 +41,12 @@ func AnswerQuestion(c *gin.Context) {
 	JsonBack(c, msg, code, nil)
 }
 
-// func GetQuestionDetail(c *gin.Context) {
+func GetQuestionDetail(c *gin.Context) {
 
-// 	questionId := c.Param("id")
+	questionId := c.Param("questionId")
 
-// 	msg, data, code := gorm.QuestionServer.GetQuestionDetail(questionId)
+	msg, data, code := gorm.QuestionServer.GetQuestionDetail(questionId)
 
-// 	JsonBack(c, msg, code, data)
+	JsonBack(c, msg, code, data)
 
-// }
+}
