@@ -90,7 +90,7 @@ const author = computed<Author>(() => {
 	return {
 		id: userStore.userId || String(info.id || `user_${Date.now()}`),
 		nickname: info.nickname || info.name || '匿名',
-		avatar: info.avatar || ''
+		avatar: userStore.avatar || ''
 	}
 })
 
@@ -100,23 +100,22 @@ const ensurePost = async () => {
 	if (!post.value) {
 		try {
 			await fetchPostById(postId.value)
+      console.log('获取帖子成功')
 		} catch (e) {
-			// error state already tracked
+			console.error('获取帖子失败', e)
 		}
 	}
 }
-
-onMounted(() => {
-	ensurePost()
-})
-
+const refreshData = async () => {
+  await fetchPostById(postId.value)
+}
 watch(() => postId.value, () => {
 	replyContent.value = ''
 	ensurePost()
 })
 
-const reload = () => {
-	ensurePost()
+const reload = async () => {
+	await refreshData()
 }
 
 const goBack = () => {
@@ -142,8 +141,20 @@ const submitReply = async () => {
 			author: author.value
 		})
 		replyContent.value = ''
-	} finally {
+    submitting.value = false
+    console.log('状态回复',submitting.value)
+    await refreshData()
+	}
+  catch(err){
+    console.log(err)
+  } finally {
 		submitting.value = false
+    await refreshData()
 	}
 }
+
+onMounted(async () => {
+	await ensurePost()
+})
+
 </script>

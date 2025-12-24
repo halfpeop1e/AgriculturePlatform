@@ -3,10 +3,9 @@
     <div class="max-w-6xl mx-auto">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h1 class="text-2xl font-bold">专家问答</h1>
-          <p class="text-sm text-gray-500">解决您在农业生产中的疑难问题</p>
+          <h1 class="text-2xl font-bold">专家问答问题浏览</h1>
+          <p class="text-sm text-gray-500">浏览已解决的问题</p>
         </div>
-        <el-button type="primary" @click="navigateToCreate">提问</el-button>
       </div>
 
       <div class="mb-6">

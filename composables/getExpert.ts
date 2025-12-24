@@ -1,16 +1,7 @@
 import { useAxios } from "./useAxios";
 import { ElMessage } from 'element-plus';
-import type { Expert } from "~/types/expert";
+import type { Expert,ExpertDetail } from "~/types/expert";
 
-// 补充 ExpertDetail 类型定义（扩展自 Expert 基础信息）
-export interface ExpertDetail extends Expert {
-  education?: string; // 教育背景
-  experience?: string; // 工作经历
-  certification?: string[]; // 资质证书
-  availableTime?: string[]; // 可咨询时间
-  serviceScope?: string[]; // 服务范围
-  price?: number; // 咨询费用
-}
 
 const useAxiosInstance = useAxios();
 
@@ -18,11 +9,11 @@ const useAxiosInstance = useAxios();
 export async function getExpertList(page: number = 1, pageSize: number = 10, field?: string, searchKey?: string) {
   try {
     const response = await useAxiosInstance.get<{
-      list: Expert[];
+      data:{list: Expert[];
       total: number;
       page: number;
       pageSize: number;
-      hasMore: boolean;
+      hasMore: boolean;}
     }>('/expert/list', {
       params: {
         page,
@@ -45,10 +36,10 @@ export async function getExpertList(page: number = 1, pageSize: number = 10, fie
 // 获取专家详情
 export async function getExpertDetail(id: string) {
   try {
-    const response = await useAxiosInstance.get<ExpertDetail>(`/expert/${id}`);
+    const response = await useAxiosInstance.get<{data: ExpertDetail}>(`/expert/${id}`);
     if (response.status === 200) {
       console.log('获取专家详情成功', response.data);
-      return response.data;
+      return response.data.data;
     }
     throw new Error('获取专家详情失败');
   } catch (err) {

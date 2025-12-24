@@ -33,15 +33,22 @@ const normalizePost = (post: Post): Post => ({
 	...post,
 	likes: post.likes ?? 0,
 	liked: post.liked ?? false,
-	replies: post.replies?.map((reply) => ({
-		...reply,
-		likes: reply.likes ?? 0,
-		liked: reply.liked ?? false
-	})) ?? []
+	replies: post.replies?.map((reply) => normalizeReply(reply)) ?? []
 })
 
 const normalizeReply = (reply: Reply): Reply => ({
 	...reply,
+	author: reply.author
+		? {
+			id: reply.author.id,
+			nickname: reply.author.nickname || '匿名用户',
+			avatar: reply.author.avatar
+		}
+		: {
+			id: 'anonymous',
+			nickname: '匿名用户',
+			avatar: ''
+		},
 	likes: reply.likes ?? 0,
 	liked: reply.liked ?? false
 })
@@ -55,8 +62,8 @@ export const usePost = () => {
 		loadingState.value = true
 		setError(null)
 		try {
-			const response = await axiosInstance.get<Post[]>('/posts')
-			const data = response.data || []
+			const response = await axiosInstance.get('/posts')
+			const data = response.data.data || []
 			postsState.value = data.map(normalizePost)
 			return postsState.value
 		} catch (err: any) {
@@ -72,15 +79,16 @@ export const usePost = () => {
 	const fetchPostById = async (id: string) => {
 		const existing = postsState.value.find((post) => post.id === id)
 		if (existing) {
+			console.log('使用已存在帖子数据', existing)
 			return existing
 		}
 
 		loadingState.value = true
 		setError(null)
 		try {
-			const response = await axiosInstance.get<Post>(`/posts/${id}`)
+			const response = await axiosInstance.get(`/posts/${id}`)
 			if (response.data) {
-				const normalized = normalizePost(response.data)
+				const normalized = normalizePost(response.data.data)
 				upsertPost(normalized)
 				return normalized
 			}
@@ -117,6 +125,7 @@ export const usePost = () => {
 			const response = await axiosInstance.post<Post>('/posts', tempPost)
 			const created = response.data ? normalizePost(response.data) : tempPost
 			upsertPost(created)
+      ElMessage.success('帖子创建成功')
 			return created
 		} catch (err: any) {
 			console.error('创建帖子失败，使用本地结果', err)
@@ -142,9 +151,13 @@ export const usePost = () => {
 		})
 
 		try {
-			const response = await axiosInstance.post<Reply>(`/posts/${postId}/replies`, tempReply)
-			const created = response.data ? normalizeReply(response.data) : tempReply
+			const response = await axiosInstance.post(`/posts/${postId}/replies`, tempReply)
+	      console.log('回复帖子成功', response.data)
+			const createdPayload = response.data?.data ?? response.data
+			const created = createdPayload ? normalizeReply(createdPayload) : tempReply
 			post.replies = [created, ...(post.replies || [])]
+	      ElMessage.success('回复帖子成功')
+	      console.log(created, post.replies)
 			return created
 		} catch (err: any) {
 			console.error('回复帖子失败，使用本地结果', err)
@@ -169,6 +182,7 @@ export const usePost = () => {
 			await axiosInstance.post(`/posts/${postId}/like`, { liked: nextLiked })
 		} catch (err: any) {
 			console.error('更新帖子点赞状态失败，回滚', err)
+      ElMessage.error('点赞失败')
 			post.liked = original.liked
 			post.likes = original.likes
 			setError(err?.message || '更新点赞状态失败')

@@ -7,10 +7,16 @@ const useAxiosInstance = useAxios()
 // 获取问答列表
 export async function getQuestionList() {
   try {
-    const response = await useAxiosInstance.get<Question[]>('/question/list')
+    const userStore = useUserStore()
+    const response = await useAxiosInstance.get<{data:Question[]}>(`/question/list`,{
+      params:{
+        userId: userStore.userId,
+        role: userStore.role
+      }
+    })
     if (response.status === 200) {
       console.log('获取问答列表成功', response.data)
-      return response.data
+      return response.data.data
     }
     throw new Error('获取问答列表失败')
   } catch (err) {
@@ -24,10 +30,10 @@ export async function getQuestionDetail(id: string) {
   try {
     // 修正1：修复模板字符串语法错误（缺少反引号闭合）
     // 修正2：正确使用泛型参数（QuestionDetail是类型，应放在<>中）
-    const response = await useAxiosInstance.get<QuestionDetail>(`/question/${id}`)
+    const response = await useAxiosInstance.get(`/question/${id}`)
     if (response.status === 200) {
       console.log('获取问答详情成功', response.data)
-      return response.data
+      return response.data.data as QuestionDetail
     }
     throw new Error('获取问答详情失败')
   } catch (err) {
@@ -37,7 +43,7 @@ export async function getQuestionDetail(id: string) {
 }
 
 // 提交问题
-export async function submitQuestion(data: Omit<Question, 'id' | 'date' | 'author' | 'answerCount' | 'isAnswered'>) {
+export async function submitQuestion(data: Omit<Question, 'id' | 'date'  | 'answerCount' | 'isAnswered'>) {
   try {
     const response = await useAxiosInstance.post('/question/create', data)
     if (response.status === 200) {
@@ -54,12 +60,13 @@ export async function submitQuestion(data: Omit<Question, 'id' | 'date' | 'autho
 // 回答问题
 export async function submitAnswer(questionId: string, content: string) {
   try {
-    const response = await useAxiosInstance.post('/answer/create', {
+    const response = await useAxiosInstance.post(`/question/answer/${questionId}`, {
       questionId,
       content
     })
     if (response.status === 200) {
       ElMessage.success('回答提交成功')
+      console.log('回答提交成功', response.data)
       return response.data
     }
     throw new Error('回答提交失败')

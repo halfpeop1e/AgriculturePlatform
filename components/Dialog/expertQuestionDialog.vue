@@ -66,7 +66,7 @@ import { submitQuestion } from '~/composables/useQuestionAnswer'
 import { useUserStore } from '~/utils/userStore'
 import { v4 as uuidv4 } from 'uuid'
 
-const props = defineProps<{ modelValue: boolean;expertId:string }>()
+const props = defineProps<{ modelValue: boolean;expertId:string;expert:string }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
   (e: 'submitted'): void
@@ -158,7 +158,9 @@ const onSubmit = async () => {
       content: form.value.content,
       tags: form.value.tags,
       authorId: form.value.authorId,
-      expertId:props.expertId
+      author: userStore.userinfo.nickname || '匿名',
+      expertId:props.expertId,
+      expert:props.expertId
     })
 
     if (result) {

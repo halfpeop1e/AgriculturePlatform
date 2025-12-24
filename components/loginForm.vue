@@ -80,7 +80,6 @@ async function onSubmit() {
                 username: form.value.useremail,
                 password: form.value.password,
             })
-            getUserProfile()
             emit('setactivetime')
             if(response?.status==200){
               if(form.value.remember){

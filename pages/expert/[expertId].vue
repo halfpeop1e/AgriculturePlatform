@@ -112,7 +112,7 @@
       <div v-else class="bg-white rounded-md shadow p-6 text-center text-gray-500">
         未找到专家信息，请返回列表重试。
       </div>
-      <ExpertQuestionDialog v-model:model-value="showdialog" :expert-id="expertId" @close="showdialog = false" />
+      <ExpertQuestionDialog v-model:model-value="showdialog" :expert-id="expertId" :expert="expertDetail?.name || ''" @close="showdialog = false" />
     </div>
   </div>
 </template>
@@ -128,7 +128,8 @@ import Button from 'primevue/button'
 import Divider from 'primevue/divider'
 import type { ExpertDetail } from '~/types/expert'
 import { getMockExpertById } from '~/types/experttest'
-
+import { useExpertDataStore } from '~/utils/expertDataStore'
+const expertDataStore = useExpertDataStore()
 definePageMeta({ layout: 'home-page-layout' })
 
 const props = defineProps<{
@@ -140,21 +141,16 @@ const router = useRouter()
 const showdialog = ref(false)
 const defaultAvatar = '/ioanImage/default-avatar.png'
 const expertId = computed(() => String(route.params.expertId || ''))
-const expertDetail = computed<ExpertDetail | null>(() => {
-  if (props.expert) {
-    return props.expert
-  }
-  const id = String(route.params.expertId || '')
-  console.log(id)
-  return getMockExpertById(id) ?? null
-})
+const expertDetail = ref<ExpertDetail | null>(null)
 const showDialog = () => {
   showdialog.value = true
 }
 const goBack = () => {
   router.back()
 }
-onMounted(() => {
+onMounted(async () => {
+  await expertDataStore.fetchExpertDetail(expertId.value)
+  expertDetail.value = expertDataStore.currentExpert
   console.log(expertDetail.value)
 })
 </script>

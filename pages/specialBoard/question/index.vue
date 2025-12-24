@@ -1,71 +1,57 @@
-<!-- 
- 这个页面用于展示专家收到的问题 -->
 <template>
-  <div class="space-y-8">
-    <section class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div>
-        <h1 class="text-2xl font-semibold text-slate-900">专家问答</h1>
-        <p class="text-sm text-slate-500">解决您在农业生产中的疑难问题</p>
+  <div class="p-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold">专家问答问题浏览</h1>
+          <p class="text-sm text-gray-500">浏览已解决的问题</p>
+        </div>
       </div>
-    </section>
 
-    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <span class="text-sm text-slate-500">按标签筛选</span>
-        <Button
-          v-if="selectedTags.size"
-          label="清除"
-          severity="secondary"
-          text
-          size="small"
-          @click="clearTags"
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm text-gray-500">按标签筛选</div>
+          <el-button v-if="selectedTags.size" @click="clearTags" class="text-sm text-gray-400">清除</el-button>
+        </div>
+
+        <div class="flex gap-3 flex-wrap">
+          <el-button
+            v-for="tag in allTags"
+            :key="tag"
+            @click="toggleTag(tag)"
+            :type="selectedTags.has(tag) ? 'primary' : 'default'"
+            :plain="!selectedTags.has(tag)"
+            round
+            size="default"
+            class="px-3 text-sm"
+          >
+            {{ tag }}
+          </el-button>
+        </div>
+      </div>
+
+      <!-- 搜索框添加 -->
+      <div class="mb-6">
+        <el-input v-model="q" clearable placeholder="搜索问题标题或内容" class="w-64" />
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        <QuestionCard
+          v-for="qItem in filtered"
+          :key="qItem.id"
+          :question="qItem"
+          @click="openQuestion(qItem.id)"
         />
       </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <Button
-          v-for="tag in allTags"
-          :key="tag"
-          :label="tag"
-          :severity="selectedTags.has(tag) ? 'primary' : 'secondary'"
-          :outlined="!selectedTags.has(tag)"
-          rounded
-          size="small"
-          @click="toggleTag(tag)"
-        />
-      </div>
-    </section>
 
-    <section class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div class="text-sm text-slate-500">搜索问题标题或内容</div>
-      <IconField iconPosition="left">
-        <InputIcon class="pi pi-search" />
-        <InputText v-model="q" placeholder="输入关键词" class="w-72" />
-      </IconField>
-    </section>
-
-    <div class="grid grid-cols-1 gap-6">
-      <QuestionCard
-        v-for="qItem in filtered"
-        :key="qItem.id"
-        :question="qItem"
-        @click="openQuestion(qItem.id)"
-      />
+      <div v-if="filtered.length === 0" class="text-center text-gray-500 mt-8">没有匹配的问题</div>
     </div>
-
-    <Message v-if="!filtered.length" severity="warn" class="justify-center text-sm">
-      没有匹配的问题，试试其他筛选条件
-    </Message>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Message from 'primevue/message'
-import IconField from 'primevue/iconfield'
-import InputIcon from 'primevue/inputicon'
 import QuestionCard from '~/components/Card/QuestionCard.vue'
 import { useQuestionDataStore } from '~/utils/questionDataStore'
 
@@ -99,14 +85,14 @@ const toggleTag = (tag: string) => {
 const filtered = computed(() => {
   const keyword = q.value.trim().toLowerCase()
   return questionStore.questions.filter((qItem) => {
-    const title = qItem.title.toLowerCase()
-    const content = qItem.content.toLowerCase()
-    const tags = (qItem.tags || []).map((t) => t.toLowerCase())
+    const safeTitle = (qItem.title || '').toLowerCase()
+    const safeContent = (qItem.content || '').toLowerCase()
+    const tags = (qItem.tags || []).map((t) => t?.toLowerCase?.() || '')
 
     const matchKeyword =
       !keyword ||
-      title.includes(keyword) ||
-      content.includes(keyword) ||
+      safeTitle.includes(keyword) ||
+      safeContent.includes(keyword) ||
       tags.some((t) => t.includes(keyword))
 
     const matchTag =
@@ -118,7 +104,7 @@ const filtered = computed(() => {
 })
 
 const openQuestion = (id: string) => {
-  router.push(`/question/${id}`)
+  router.push(`/specialBoard/question/${id}`)
 }
 
 

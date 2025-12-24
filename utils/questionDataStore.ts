@@ -5,7 +5,7 @@ import { getQuestionList, getQuestionDetail } from '~/composables/useQuestionAns
 export const useQuestionDataStore = defineStore('questionDataStore', {
   state: () => ({
     questions: [] as Question[],
-    currentQuestion: null as QuestionDetail | null
+    currentQuestion: {} as QuestionDetail | null
   }),
   actions: {
     async fetchQuestions() {
@@ -16,6 +16,7 @@ export const useQuestionDataStore = defineStore('questionDataStore', {
     },
     async fetchQuestionDetail(id: string) {
       const data = await getQuestionDetail(id)
+      console.log('Fetched question detail:', data)
       if (data) {
         this.currentQuestion = data
       }
