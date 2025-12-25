@@ -59,6 +59,16 @@ export const menuData = [
 ]
 export const menuExpertData = [
   {
+    label: '问题主页',
+    icon: 'pi pi-cog',
+    to: '/specialBoard'
+  },
+  {
+    label: '文章发布主页',
+    icon: 'pi pi-cog',
+    to: '/specialBoard/article'
+  },
+  {
     label: '个人中心',
     icon: 'pi pi-user',
     to: `/expertprofile`
@@ -66,8 +76,9 @@ export const menuExpertData = [
   {
     label: '设置',
     icon: 'pi pi-cog',
-    to: '/infomationcomplete'
+    to: '/speciallBoard/edit'
   },
+  
   {
     separator: true
   },
