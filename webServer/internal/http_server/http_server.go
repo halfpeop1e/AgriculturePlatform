@@ -93,4 +93,9 @@ func init() {
 		postsAuth.POST("/:postId/like", v1.TogglePostLike)                   // 切换帖子点赞
 		postsAuth.POST("/:postId/replies/:replyId/like", v1.ToggleReplyLike) // 切换回复点赞
 	}
+	konwledge := GE.Group("/knowledge")
+	{
+		konwledge.GET("/list", v1.GetKnowledgeList)
+		konwledge.POST("/article/create", v1.AddKnowledge)
+	}
 }
