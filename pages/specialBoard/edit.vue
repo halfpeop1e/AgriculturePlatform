@@ -4,7 +4,7 @@
       <el-card>
 					<div class="flex items-center justify-between">
 						<div>
-							<h1 class="text-2xl font-semibold text-slate-900">完善专家资料</h1>
+							<h1 class="text-2xl font-semibold text-slate-900">编辑专家资料</h1>
 							<p class="mt-1 text-sm text-slate-500">
 								请补充以下信息，以便用户更好地了解您的专业背景
 							</p>
@@ -152,7 +152,6 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
-import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import MultiSelect from 'primevue/multiselect'
@@ -160,7 +159,6 @@ import InputNumber from 'primevue/inputnumber'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
 import { useUserStore } from '~/utils/userStore'
-import { submitExpertProfile } from '~/composables/useChange'
 import type { ExpertProfile } from '~/types/profile'
 
 type SelectOption = { label: string; value: string }
@@ -328,7 +326,7 @@ const handleSubmit = async () => {
 	submitting.value = true
 	try {
 		const payload = buildProfilePayload()
-		const success = await submitExpertProfile(payload)
+		const success = await EditExpertProfile(payload)
 		if (!success) {
 			ElMessage.error('资料提交失败，请稍后再试')
 			return

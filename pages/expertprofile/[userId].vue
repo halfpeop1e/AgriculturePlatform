@@ -245,7 +245,7 @@ const handleBack = () => {
 
 const handleEdit = () => {
 	if (userStore.userId && route.params.userId === userStore.userId) {
-		router.push('/infomationcomplete')
+		router.push('/specialBoard/edit')
 		return
 	}
 	ElMessage.info('仅限专家本人编辑资料')

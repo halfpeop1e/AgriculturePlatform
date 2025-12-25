@@ -8,7 +8,7 @@
   使用场景：在知识库列表页调用 setArticles() 加载文章；示例数据 ARTICLES 可用于开发/测试
   注意：ARTICLES 为静态示例，生产环境应从接口获取；setArticles 当前未正确处理 Promise，建议改为 async/await
 */
-import type { KnowledgeArticle } from '@/types/knowledgeArticle'
+import type { KnowledgeArticle,PostArticleRequest } from '@/types/knowledgeArticle'
 import { defineStore } from 'pinia'
 import { getKnowledgeArticleList } from '~/composables/useArticle'
 export const ARTICLES: KnowledgeArticle[] = [
@@ -42,12 +42,16 @@ export const ARTICLES: KnowledgeArticle[] = [
 ]//示例数据
 export const useKnowledgeDataStore = defineStore('knowledgeDataStore', {
   state: () => ({
-    articles: [] as KnowledgeArticle[]
+    articles: [] as KnowledgeArticle[],
+    articleDrafts: {} as PostArticleRequest
   }),
   actions: {
     setArticles() {
       const responseList = getKnowledgeArticleList()
       this.articles = responseList as unknown as KnowledgeArticle[]
+    },
+    setArticalDrafts(draft: PostArticleRequest) {
+      this.articleDrafts = draft
     }
   }
 }) 

@@ -76,3 +76,18 @@ export async function submitExpertProfile(profileData: ExpertProfile){
         return false
     }
 }
+export async function EditExpertProfile(profileData: ExpertProfile){
+    const userStore=useUserStore()
+    try{
+        const response=await useAxiosInstance.post(`/expert/profile/${userStore.userId}/edit`,profileData)
+        if(response.status===200){
+            console.log('提交专家资料成功')
+            return true
+        }
+        throw new Error('提交专家资料失败')
+    }
+    catch(err){
+        console.error('提交专家资料失败',err)
+        return false
+    }
+}
