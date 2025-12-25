@@ -335,7 +335,7 @@ const handleSubmit = async () => {
 		}
 		userStore.setExpertProfile(payload)
 		ElMessage.success('资料已提交，正在跳转专家工作台')
-		await router.push('/expert/dashboard')
+		await router.push('/specialBoard/question')
 	} finally {
 		submitting.value = false
 	}
