@@ -73,7 +73,7 @@ func (q *questionServerType) GetQuestionList() (string, *[]respond.QuestionRespo
 func (q *questionServerType) GetQuestionListByUser(userId string, role string) (string, *[]respond.QuestionRespond, int) {
 	var questions []model.ExpertCase
 
-	if role == "normal" {
+	if role == "normal" || role == "user" {
 		if res := dao.GormDB.Where("author_id = ?", userId).Find(&questions); res.Error != nil {
 			log.Printf("Database error: %v", res.Error)
 			return "查询失败10", nil, -1
