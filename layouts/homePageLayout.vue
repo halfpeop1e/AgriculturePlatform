@@ -44,22 +44,31 @@
                 </template>
             <!-- 命名插槽 end：放置在右侧 -->
             <template #end>
-                <div class="flex items-center gap-5">
-                   <el-button v-if="!userStore.islogin" type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
-                  <Avatar
-      :image="userStore.avatar"
-      shape="circle"
-      size="large"
-      class="cursor-pointer border border-gray-300 hover:ring-2 hover:ring-gray-300 transition-all"
-      @click="toggleMenu"
-    />
-    <Menu
-      ref="menu"
-      :model="menuItems"
-      :popup="true"
-      style="margin-top: 10px;margin-left: 10px;"
-    />
-             </div>
+                <ClientOnly>
+                    <div class="flex items-center gap-5">
+                        <el-button v-if="!userStore.islogin" type="success" @click="navigateTo('/login')">登录 ｜ 注册</el-button>
+                        <template v-else>
+                            <Avatar
+                                :image="userStore.avatar"
+                                shape="circle"
+                                size="large"
+                                class="cursor-pointer border border-gray-300 hover:ring-2 hover:ring-gray-300 transition-all"
+                                @click="toggleMenu"
+                            />
+                            <Menu
+                                ref="menu"
+                                :model="menuItems"
+                                :popup="true"
+                                style="margin-top: 10px; margin-left: 10px;"
+                            />
+                        </template>
+                    </div>
+                    <template #fallback>
+                        <div class="flex items-center gap-5">
+                            <span class="text-white/70 text-sm">初始化导航...</span>
+                        </div>
+                    </template>
+                </ClientOnly>
             </template>
             </TopBar>
         </div>

@@ -12,10 +12,10 @@ import type { KnowledgeArticle,PostArticleRequest } from "~/types/knowledgeArtic
 const useAxiosInstance=useAxios()
 export async function getKnowledgeArticleList(){
     try{
-        const responese =await useAxiosInstance.get<KnowledgeArticle[]>('/knowledge/list')
+        const responese =await useAxiosInstance.get<{data:KnowledgeArticle[]}>('/knowledge/list')
         if(responese.status===200){
             console.log('获取知识文章列表成功',responese.data)
-            return responese.data
+            return responese.data.data
         }
         else{
             throw new Error('获取知识文章列表失败')

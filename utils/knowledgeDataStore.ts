@@ -46,9 +46,23 @@ export const useKnowledgeDataStore = defineStore('knowledgeDataStore', {
     articleDrafts: {} as PostArticleRequest
   }),
   actions: {
-    setArticles() {
-      const responseList = getKnowledgeArticleList()
-      this.articles = responseList as unknown as KnowledgeArticle[]
+    async setArticles() {
+      try {
+        const responseList = await getKnowledgeArticleList()
+        if (Array.isArray(responseList)) {
+          this.articles = responseList
+          return
+        }
+        console.warn('知识文章列表为空或格式不正确，将使用本地示例数据')
+        if (!this.articles.length) {
+          this.articles = ARTICLES
+        }
+      } catch (error) {
+        console.error('加载知识文章列表失败，将回退示例数据', error)
+        if (!this.articles.length) {
+          this.articles = ARTICLES
+        }
+      }
     },
     setArticalDrafts(draft: PostArticleRequest) {
       this.articleDrafts = draft

@@ -103,7 +103,7 @@
           <div class="flex items-center justify-between">
             <div class="flex gap-3">
               <Button label="在线咨询" icon="pi pi-comments" severity="primary" @click="showDialog()"/>
-              <Button label="预约服务" icon="pi pi-calendar" severity="secondary" />
+              <Button label="预约服务" icon="pi pi-calendar" severity="secondary" @click="openPreorderDialog" />
             </div>
           </div>
         </template>
@@ -113,13 +113,20 @@
         未找到专家信息，请返回列表重试。
       </div>
       <ExpertQuestionDialog v-model:model-value="showdialog" :expert-id="expertId" :expert="expertDetail?.name || ''" @close="showdialog = false" />
+      <PreorderDialog
+        v-model:model-value="preorderDialogVisible"
+        :expert-id="expertId"
+        :expert-name="expertDetail?.name || ''"
+        @success="handlePreorderSuccess"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import ExpertQuestionDialog from '~/components/Dialog/expertQuestionDialog.vue'
+import PreorderDialog from '~/components/Dialog/preorderDialog.vue'
 import { useRoute, useRouter } from 'vue-router'
 import Card from 'primevue/card'
 import Avatar from 'primevue/avatar'
@@ -139,11 +146,19 @@ const props = defineProps<{
 const route = useRoute()
 const router = useRouter()
 const showdialog = ref(false)
+const preorderDialogVisible = ref(false)
 const defaultAvatar = '/ioanImage/default-avatar.png'
 const expertId = computed(() => String(route.params.expertId || ''))
 const expertDetail = ref<ExpertDetail | null>(null)
 const showDialog = () => {
   showdialog.value = true
+}
+const openPreorderDialog = () => {
+  preorderDialogVisible.value = true
+}
+const handlePreorderSuccess = () => {
+  // 预留钩子：可在此刷新专家数据或跳转
+  console.log('预约成功，等待后续处理')
 }
 const goBack = () => {
   router.back()

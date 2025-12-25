@@ -45,6 +45,11 @@ export const menuData = [
     to: `/profile`
   },
   {
+    label: '我的预约',
+    icon: 'pi pi-file-arrow-up',
+    to: '/profile/myorder'
+  },
+  {
     label: '设置',
     icon: 'pi pi-cog',
     to: '/setting'
@@ -68,6 +73,11 @@ export const menuExpertData = [
     label: '文章发布主页',
     icon: 'pi pi-file-arrow-up',
     to: '/specialBoard/article'
+  },
+  {
+    label: '预约主页',
+    icon: 'pi pi-file-arrow-up',
+    to: '/specialBoard/myorder'
   },
   {
     label: '个人中心',
