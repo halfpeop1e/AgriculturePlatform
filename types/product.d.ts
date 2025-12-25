@@ -56,3 +56,9 @@ export interface postProductRequest {
     saler:string;
     salerId:string;
 }
+
+export interface orderDate {
+  dates: [],
+  categories: [],
+  products: []
+}

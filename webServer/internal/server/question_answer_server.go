@@ -108,7 +108,7 @@ func (q *questionServerType) GetQuestionListByUser(userId string, role string) (
 
 			log.Printf("Database error: %v", res.Error)
 
-			return "查询失败3", nil, -1
+			continue
 
 		}
 
@@ -116,7 +116,7 @@ func (q *questionServerType) GetQuestionListByUser(userId string, role string) (
 		log.Print("userId:" + question.AuthorId)
 		if res := dao.GormDB.Where("uuid = ?", question.AuthorId).First(&user); res.Error != nil {
 			log.Printf("Database error: %v", res.Error)
-			return "查询失败4", nil, -1
+			continue
 		}
 
 		newQuestion := respond.QuestionRespond{

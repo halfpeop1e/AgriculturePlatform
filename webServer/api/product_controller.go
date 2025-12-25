@@ -110,3 +110,8 @@ func DeleteProduct(c *gin.Context) {
 	msg, code := gorm.ProductServer.DeleteProduct(productId)
 	JsonBack(c, msg, code, nil)
 }
+
+func GetDateAnlazy(c *gin.Context) {
+	msg, data, code := gorm.ProductServer.GetDateAnlazy()
+	JsonBack(c, msg, code, data)
+}

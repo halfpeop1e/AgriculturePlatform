@@ -8,6 +8,7 @@ export const nav = [
       { label: '出售商品',routername:'/product/sellproduct',icon: 'pi pi-fw pi-tags' },
       { label: '我的订单',routername:'/product/myorder/my_buy',icon: 'pi pi-fw pi-list' },
       { label: '我的发布',routername:'/product/myrelease',icon: 'pi pi-fw pi-money' },
+      { label: '价格预测',routername:'/product/buff',icon: 'pi pi-fw pi-tags' },
     ],
   },
   {

@@ -34,6 +34,7 @@ func init() {
 		product.POST("/buy", v1.BuyProduct)
 		product.PUT("/edit/:productId", v1.EditerProduct)
 		product.DELETE("/delete/:productId", v1.DeleteProduct)
+		product.GET("/date", v1.GetDateAnlazy)
 	}
 	order := GE.Group("/order")
 	order.Use(JWTAuthMiddleware())
