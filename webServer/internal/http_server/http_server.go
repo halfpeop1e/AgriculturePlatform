@@ -77,6 +77,7 @@ func init() {
 		expert.POST("/contact/:expertId/book", v1.BookExpert)
 		expert.POST("/profile/:userId/submit", v1.SubmitExpertProfile)
 		expert.GET("/profile/:userId", v1.GetExpertProfile)
+		expert.POST("/profile/:userId/edit", v1.EditExpertProfile)
 	}
 
 	// 在文件中添加帖子路由组（匹配前端接口）
