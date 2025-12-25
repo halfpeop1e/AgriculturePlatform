@@ -59,10 +59,10 @@ definePageMeta({ layout: 'home-page-layout' })
 const router = useRouter()
 const q = ref('')
 const selectedTags = ref(new Set<string>())
-
+const useArticleStore= useKnowledgeDataStore()
 const allTags = computed(() => {
   const s = new Set<string>()
-  ARTICLES.forEach((a) => (a.tags || []).forEach((t) => s.add(t)))
+  useArticleStore.articles.forEach((a) => (a.tags || []).forEach((t) => s.add(t)))
   return Array.from(s)
 })
 
@@ -72,7 +72,7 @@ const toggleTag = (tag: string) => {
 }
 
 const filtered = computed(() => {
-  return ARTICLES.filter((a) => {
+  return useArticleStore.articles.filter((a) => {
     const matchQ = q.value.trim() === '' || a.title.includes(q.value) || a.excerpt.includes(q.value) || (a.tags || []).some((t) => t.includes(q.value))
     const matchTag = selectedTags.value.size === 0 || (a.tags || []).some((t) => selectedTags.value.has(t))
     return matchQ && matchTag
@@ -97,6 +97,9 @@ function openArticle(id: string,title: string,author:string,date:string, content
 function clearTags() {
   selectedTags.value = new Set<string>()
 }
+onMounted(() => {
+  useArticleStore.setArticles()
+})  
 </script>
 
 <style scoped>
