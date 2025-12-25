@@ -7,7 +7,7 @@
     - 若未检测到 token，则显示提示并跳转到 `/login`
   注意：当前实现只做“存在性检查”，未校验 token 有效性或过期；可以扩展为调用后端验证或解析 JWT 检查 exp
 */
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware( async (to) => {
     // 允许访问的公开路径
     const publicPaths = ['/','/homePage', '/login', '/register']
     const userStore = useUserStore()
@@ -32,10 +32,10 @@ export default defineNuxtRouteMiddleware((to) => {
     }
     if (userStore.role === 'expert') {
       const completionPath = '/infomationcomplete'
-
       // 未完善资料：强制跳转到完善页，仅允许访问完善页本身
+      await getExpertProfile()
       if (!userStore.expertProfile?.name) {
-        console.log(userStore.expertProfile?.name)
+        console.log('这是什么',userStore.expertProfile?.name)
         if (to.path !== completionPath){
           console.log('跳转到专家资料完善页')
           return navigateTo(completionPath)

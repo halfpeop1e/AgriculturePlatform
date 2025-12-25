@@ -60,12 +60,12 @@ export const menuData = [
 export const menuExpertData = [
   {
     label: '问题主页',
-    icon: 'pi pi-cog',
+    icon: 'pi pi-question',
     to: '/specialBoard'
   },
   {
     label: '文章发布主页',
-    icon: 'pi pi-cog',
+    icon: 'pi pi-file-arrow-up',
     to: '/specialBoard/article'
   },
   {

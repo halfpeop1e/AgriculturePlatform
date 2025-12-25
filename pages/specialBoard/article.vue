@@ -31,21 +31,6 @@
         <div class="text-gray-500 text-sm mt-2">最多添加5个标签，用于文章分类检索</div>
       </el-form-item>
 
-      <!-- 文章封面（非必填，补充字段） -->
-      <el-form-item label="文章封面" prop="coverImage">
-        <el-upload
-          class="avatar-uploader"
-          action="/api/expert/upload/image"
-          :show-file-list="false"
-          :on-success="handleCoverSuccess"
-          :before-upload="beforeCoverUpload"
-        >
-          <img v-if="articleForm.coverImage" :src="articleForm.coverImage" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><plus /></el-icon>
-        </el-upload>
-        <div class="text-gray-500 text-sm mt-2">建议尺寸：800*450px，支持jpg/png格式，大小不超过2MB（非必填）</div>
-      </el-form-item>
-
       <!-- 文章摘要（对应 excerpt 字段） -->
       <el-form-item label="文章摘要" prop="excerpt">
         <el-input
@@ -91,35 +76,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, type Ref } from 'vue'
+import { ref, reactive} from 'vue'
 import { 
   ElMessage, ElMessageBox, ElForm, ElFormItem, ElInput, 
   ElRadioGroup, ElRadio, ElButton, ElUpload, ElIcon,
   type FormItemRule // 直接从element-plus核心模块导入
 } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
 import { useRouter } from 'nuxt/app'
 import type { PostArticleRequest } from '@/types/knowledgeArticle'
-
-// 临时Mock Pinia Store（解决找不到模块问题，后续替换为真实Store）
-const useArticleStore = () => {
-  return {
-    expertInfo: {
-      id: localStorage.getItem('expertId') || 'default-expert-id'
-    },
-    saveDraft: async (data: PostArticleRequest) => {
-      return { code: 200, msg: '草稿保存成功' }
-    },
-    publishArticle: async (data: PostArticleRequest) => {
-      return { code: 200, msg: '文章发布成功' }
-    }
-  }
-}
+const userStore = useUserStore()
+definePageMeta({
+  layout: 'expert-backend-layout'
+})
+const useArticleStore = useKnowledgeDataStore()
 
 // 路由实例
 const router = useRouter()
-// 文章Store
-const articleStore = useArticleStore()
 // 表单Ref
 const articleFormRef = ref<InstanceType<typeof ElForm>>()
 // 提交加载状态
@@ -128,16 +100,12 @@ const submitLoading = ref(false)
 const tagInputValue = ref('')
 
 // 文章表单数据
-const articleForm = reactive<Omit<PostArticleRequest, 'author' | 'date'> & {
-  coverImage: string
-  status: 'draft' | 'publish'
-}>({
+const articleForm = reactive({
   title: '',
   excerpt: '',
   content: '',
-  tags: [],
-  coverImage: '',
-  status: 'publish'
+  tags: [] as string[],
+  status: 'draft'
 })
 
 // 表单校验规则
@@ -177,36 +145,12 @@ const goBack = () => {
 }
 
 // 封面图片上传前校验
-const beforeCoverUpload = (file: File) => {
-  const isImage = file.type === 'image/jpeg' || file.type === 'image/png'
-  const isLt2M = file.size / 1024 / 1024 < 2
 
-  if (!isImage) {
-    ElMessage.error('封面图片只能是 JPG/PNG 格式!')
-    return false
-  }
-  if (!isLt2M) {
-    ElMessage.error('封面图片大小不能超过 2MB!')
-    return false
-  }
-  return true
-}
-
-// 封面图片上传成功回调
-const handleCoverSuccess = (response: any) => {
-  if (response.code === 200) {
-    articleForm.coverImage = response.data.url
-    ElMessage.success('封面上传成功')
-  } else {
-    ElMessage.error('封面上传失败：' + response.msg)
-  }
-}
 
 // 重置表单
 const resetForm = () => {
   if (articleFormRef.value) {
     articleFormRef.value.resetFields()
-    articleForm.coverImage = ''
     articleForm.tags = []
     tagInputValue.value = ''
   }
@@ -227,19 +171,19 @@ const submitArticle = async () => {
       excerpt: articleForm.excerpt,
       content: articleForm.content,
       tags: tags,
-      author: articleStore.expertInfo.id,
+      author: userStore.expertProfile?.name || '匿名专家',
       date: new Date().toISOString()
     }
 
-    const res = articleForm.status === 'draft' 
-      ? await articleStore.saveDraft(submitData) 
-      : await articleStore.publishArticle(submitData)
+   const res = articleForm.status === 'draft' 
+      ?  useArticleStore.setArticalDrafts(submitData) 
+      : await postKnowledgeArticle(submitData)
 
-    if (res.code === 200) {
+    if (useArticleStore.articleDrafts || res.code === 200) {
       ElMessage.success(articleForm.status === 'draft' ? '草稿保存成功' : '文章发布成功')
-      router.push('/expert')
+      router.push('/specialBoard')
     } else {
-      ElMessage.error(res.msg || '操作失败')
+      ElMessage.error('操作失败')
     }
   } catch (error) {
     console.error('提交文章失败：', error)
@@ -249,17 +193,7 @@ const submitArticle = async () => {
   }
 }
 
-// 页面挂载时校验登录状态
-onMounted(() => {
-  if (!articleStore.expertInfo?.id) {
-    ElMessageBox.alert('请先登录专家账号', '权限不足', {
-      confirmButtonText: '前往登录',
-      type: 'warning'
-    }).then(() => {
-      router.push('/login')
-    })
-  }
-})
+
 </script>
 
 <style scoped>
