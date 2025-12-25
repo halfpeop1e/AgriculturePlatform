@@ -34,6 +34,7 @@ func init() {
 		product.POST("/buy", v1.BuyProduct)
 		product.PUT("/edit/:productId", v1.EditerProduct)
 		product.DELETE("/delete/:productId", v1.DeleteProduct)
+		product.GET("/date", v1.GetDateAnlazy)
 	}
 	order := GE.Group("/order")
 	order.Use(JWTAuthMiddleware())
@@ -76,6 +77,7 @@ func init() {
 		expert.POST("/contact/:expertId/book", v1.BookExpert)
 		expert.POST("/profile/:userId/submit", v1.SubmitExpertProfile)
 		expert.GET("/profile/:userId", v1.GetExpertProfile)
+		expert.POST("/profile/:userId/edit", v1.EditExpertProfile)
 	}
 
 	// 在文件中添加帖子路由组（匹配前端接口）

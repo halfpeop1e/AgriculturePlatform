@@ -373,3 +373,62 @@ func (e *expertServerType) GetExpertProfile(userId string) (string, *respond.Exp
 
 	return "获取成功", expertProfile, 0
 }
+
+func (e *expertServerType) EditExpertProfile(userId string, req request.SubmitExpertProfileRequest) (string, int) {
+	// 检查用户是否存在
+	var user model.User
+	if res := dao.GormDB.Where("uuid = ?", userId).First(&user); res.Error != nil {
+		log.Printf("查询用户失败: %v", res.Error)
+		return "用户不存在", -1
+	}
+	// 查找专家记录
+	var expert model.Expert
+	if res := dao.GormDB.Where("uuid = ?", userId).First(&expert); res.Error != nil {
+		log.Printf("查询专家失败: %v", res.Error)
+		return "查询失败", -1
+	}
+	// 只在字段非空时更新专家记录
+	if req.Name != "" {
+		expert.Name = req.Name
+	}
+	if req.Avatar != "" {
+		expert.Avatar = req.Avatar
+	}
+	if req.Field != "" {
+		expert.Field = req.Field
+	}
+	if req.Introduction != "" {
+		expert.Introduction = req.Introduction
+	}
+	if len(req.Skills) > 0 {
+		skillsJSON, _ := json.Marshal(req.Skills)
+		expert.Skills = string(skillsJSON)
+	}
+	if req.Education != "" {
+		expert.Education = req.Education
+	}
+	if req.Experience != "" {
+		expert.Experience = req.Experience
+	}
+	if len(req.Certification) > 0 {
+		certificationJSON, _ := json.Marshal(req.Certification)
+		expert.Certification = string(certificationJSON)
+	}
+	if len(req.AvailableTime) > 0 {
+		availableTimeJSON, _ := json.Marshal(req.AvailableTime)
+		expert.AvailableTime = string(availableTimeJSON)
+	}
+	if len(req.ServiceScope) > 0 {
+		serviceScopeJSON, _ := json.Marshal(req.ServiceScope)
+		expert.ServiceScope = string(serviceScopeJSON)
+	}
+	if req.Price != nil {
+		expert.Price = *req.Price
+	}
+	expert.Status = "active"
+	if res := dao.GormDB.Save(&expert); res.Error != nil {
+		log.Printf("更新专家记录失败: %v", res.Error)
+		return "更新专家资料失败", -1
+	}
+	return "更新专家资料成功", 0
+}

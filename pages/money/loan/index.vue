@@ -393,6 +393,9 @@ const GetLoanData = async () => {
   const data = await addLoanProduct();
   console.log(data, "data");
   loanData.value = data ?? loanData.value;
+  if(loanData.value.loanList == null){
+    loanData.value.loanList = []
+  }
 };
 
 onMounted(() => {
@@ -400,44 +403,9 @@ onMounted(() => {
 });
 // --- 模拟数据 (实际开发中请替换为 API 请求) ---
 const loanData = ref<CheckMyLoanRespond>({
-  loanedSum: 500000.0,
-  loanSum: 200000.0,
-  loanList: [
-    {
-      id: 1,
-      year: 2023,
-      month: 10,
-      amount: 5000,
-      loanName: "装修贷",
-      loanStatus: "Paid",
-    },
-    // 假设下个月是 11月，这笔是待还的
-    {
-      id: 2,
-      year: 2023,
-      month: 11,
-      amount: 8500.5,
-      loanName: "装修贷",
-      loanStatus: "Unpaid",
-    },
-    {
-      id: 3,
-      year: 2023,
-      month: 11,
-      amount: 2000.0,
-      loanName: "消费贷",
-      loanStatus: "Unpaid",
-    },
-    // 未来的
-    {
-      id: 4,
-      year: 2023,
-      month: 12,
-      amount: 8500.5,
-      loanName: "装修贷",
-      loanStatus: "Unpaid",
-    },
-  ],
+  loanedSum: 0,
+  loanSum: 0,
+  loanList: [],
 });
 
 // --- 状态控制 ---

@@ -137,3 +137,36 @@ func GetExpertProfile(c *gin.Context) {
 	msg, data, code := gorm.ExpertServer.GetExpertProfile(userId)
 	JsonBack(c, msg, code, data)
 }
+
+func EditExpertProfile(c *gin.Context) {
+	userId := c.Param("userId")
+
+	if userId == "" {
+
+		c.JSON(http.StatusBadRequest, gin.H{
+
+			"code": 400,
+
+			"message": "缺少用户ID",
+		})
+
+		return
+
+	}
+	var req request.SubmitExpertProfileRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+
+			"code": 400,
+
+			"message": "参数解析错误: " + err.Error(),
+		})
+
+		return
+
+	}
+	msg, code := gorm.ExpertServer.EditExpertProfile(userId, req)
+	JsonBack(c, msg, code, nil)
+
+}
