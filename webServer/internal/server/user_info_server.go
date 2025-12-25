@@ -43,7 +43,7 @@ func (u *userInfoService) Login(loginReq request.LoginRequest) (string, *respond
 	}
 	user.ActiveTime = time.Now()
 	dao.GormDB.Save(&user)
-	token, err := util.GenerateToken(user.Uuid)
+	token, err := util.GenerateToken(user.Uuid, user.Role)
 	if err != nil {
 		return "生成token失败", nil, -1
 	}
