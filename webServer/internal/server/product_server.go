@@ -307,12 +307,28 @@ func (p *productServer) GetDateAnlazy() (string, *respond.MarketDataRespond, int
 			priceVariation := product.Price * (1 + (rand.Float64()-0.5)*0.2)
 			productMap[product.Name].Data[i] = fmt.Sprintf("%.2f", priceVariation)
 		}
-		// 明天的预测价格（基于当前价格的小幅波动）
-		tomorrowPrice := product.Price * (1 + (rand.Float64()-0.5)*0.1)
-		productMap[product.Name].Data[7] = fmt.Sprintf("%.2f", tomorrowPrice)
-		// 后天的预测价格（基于明天预测价格的进一步波动）
-		dayAfterTomorrowPrice := tomorrowPrice * (1 + (rand.Float64()-0.5)*0.15)
-		productMap[product.Name].Data[8] = fmt.Sprintf("%.2f", dayAfterTomorrowPrice)
+		// 使用ARIMA模型预测产品价格
+		historicalPrices := make([]float64, 7)
+		for i := 0; i < 7; i++ {
+			// 为产品生成历史价格数据
+			priceVariation := product.Price * (1 + (rand.Float64()-0.5)*0.2)
+			historicalPrices[i] = priceVariation
+			productMap[product.Name].Data[i] = fmt.Sprintf("%.2f", priceVariation)
+		}
+		
+		// 使用ARIMA进行预测
+		arima := util.NewARIMAModel(2, 1, 1)
+		forecasts, err := arima.Forecast(historicalPrices, 2)
+		if err != nil || len(forecasts) < 2 {
+			// 如果预测失败，使用基于当前价格的保守预测
+			tomorrowPrice := product.Price * (1 + (rand.Float64()-0.5)*0.05)
+			productMap[product.Name].Data[7] = fmt.Sprintf("%.2f", tomorrowPrice)
+			dayAfterTomorrowPrice := tomorrowPrice * (1 + (rand.Float64()-0.5)*0.05)
+			productMap[product.Name].Data[8] = fmt.Sprintf("%.2f", dayAfterTomorrowPrice)
+		} else {
+			productMap[product.Name].Data[7] = fmt.Sprintf("%.2f", forecasts[0])
+			productMap[product.Name].Data[8] = fmt.Sprintf("%.2f", forecasts[1])
+		}
 	}
 
 	// 构建分类数据
@@ -358,19 +374,23 @@ func (p *productServer) GetDateAnlazy() (string, *respond.MarketDataRespond, int
 					recentPrices = append(recentPrices, simPrice)
 				}
 			}
-			// 为明天和后天生成预测价格（基于最近7天的平均价格）
+			// 使用ARIMA模型进行预测
 			if len(recentPrices) > 0 {
-				sum := 0.0
-				for _, price := range recentPrices {
-					sum += price
+				arima := util.NewARIMAModel(2, 1, 1) // ARIMA(2,1,1)模型
+				forecasts, err := arima.Forecast(recentPrices, 2)
+				if err != nil || len(forecasts) < 2 {
+					// 如果ARIMA预测失败，使用简单的平均预测
+					sum := 0.0
+					for _, price := range recentPrices {
+						sum += price
+					}
+					avgPrice := sum / float64(len(recentPrices))
+					data[7] = fmt.Sprintf("%.1f", avgPrice*(1+(rand.Float64()-0.5)*0.05))
+					data[8] = fmt.Sprintf("%.1f", avgPrice*(1+(rand.Float64()-0.5)*0.05))
+				} else {
+					data[7] = fmt.Sprintf("%.1f", forecasts[0])
+					data[8] = fmt.Sprintf("%.1f", forecasts[1])
 				}
-				avgPrice := sum / float64(len(recentPrices))
-				// 明天的预测（基于7天均值的±5%波动）
-				tomorrowPredict := avgPrice * (1 + (rand.Float64()-0.5)*0.1)
-				data[7] = fmt.Sprintf("%.1f", tomorrowPredict)
-				// 后天的预测（基于明天预测价格的±7.5%波动）
-				dayAfterTomorrowPredict := tomorrowPredict * (1 + (rand.Float64()-0.5)*0.15)
-				data[8] = fmt.Sprintf("%.1f", dayAfterTomorrowPredict)
 			} else {
 				data[7] = "2.0" // 默认预测值
 				data[8] = "2.1" // 默认预测值
