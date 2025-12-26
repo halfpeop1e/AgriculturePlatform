@@ -3,7 +3,7 @@
 		<div class="preorder-card__header">
 			<div>
 				<p class="label">专家</p>
-				<p class="value">{{ preorder.expertname }}</p>
+				<p class="value">{{ preorder.expertName }}</p>
 			</div>
 			<Tag :value="statusLabel" :severity="statusSeverity" />
 		</div>
@@ -11,7 +11,7 @@
 		<div class="preorder-card__body">
 			<div>
 				<p class="label">预约人</p>
-				<p class="value">{{ preorder.author }}</p>
+				<p class="value">{{ preorder.authorName }}</p>
 			</div>
 
 			<div>
@@ -21,7 +21,7 @@
 
 			<div>
 				<p class="label">订单号</p>
-				<p class="value monospace">{{ preorder.orderId }}</p>
+				<p class="value monospace">{{ preorder.preorderId }}</p>
 			</div>
 		</div>
 	</div>

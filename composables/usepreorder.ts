@@ -2,11 +2,11 @@ import { useAxios } from "./useAxios";
 import { ElMessage } from 'element-plus';
 export interface PreOrder {
   expertId: string;
-  expertname: string;
-  author: string;
+  expertName: string;
+  authorName: string;
   authorId: string;
   time: string;
-  orderId: string;
+  preorderId: string;
 }
 export interface PreOrderRequest {
   expertId: string;
@@ -31,7 +31,7 @@ export async function PreOrder(expertId: string, scheduleTime?: string | Date) {
       authorId: userStore.userId,
       time: normalizedTime.toISOString()
     };
-    const response = await useAxiosInstance.post('/preorder', payload);
+    const response = await useAxiosInstance.post('/book/preorder', payload);
     if (response.status === 200) {
       console.log('预约成功', response.data);
       ElMessage.success('预约成功');
@@ -48,7 +48,7 @@ export async function GetPreOrder() {
   const useAxiosInstance = useAxios();
   try {
     const userStore= useUserStore()
-    const response = await useAxiosInstance.get<{data:PreOrder[]}>(`/preorder/list`,
+    const response = await useAxiosInstance.get<{data:PreOrder[]}>(`/book/preorder/list`,
       {
         params: { 
           userId: userStore.userId,

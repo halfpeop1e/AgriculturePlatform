@@ -13,7 +13,7 @@
 			暂无新的预约，去知识社区提升曝光吧。
 		</div>
 		<div v-else class="preorder-page__grid">
-			<PreorderCard v-for="item in upcomingPreorders" :key="item.orderId" :preorder="item" />
+			<PreorderCard v-for="item in upcomingPreorders" :key="item.preorderId" :preorder="item" />
 		</div>
 	</div>
 </template>
@@ -24,7 +24,7 @@ import Button from 'primevue/button'
 import PreorderCard from '~/components/Card/preorderCard.vue'
 import { GetPreOrder, type PreOrder } from '~/composables/usepreorder'
 
-definePageMeta({ layout: 'home-page-layout' })
+definePageMeta({ layout: 'expert-backend-layout'})
 
 const loading = ref(false)
 const preorders = ref<PreOrder[]>([])

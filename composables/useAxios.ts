@@ -10,6 +10,7 @@
 */
 // composables/useAxios.ts
 import axios from "axios";
+import { useUserStore } from "~/utils/userStore";
 
 export const useAxios = () => {
   const AxiosInstance = axios.create({
@@ -39,6 +40,13 @@ export const useAxios = () => {
         const m = document.cookie.match(/(?:^|; )(?:(?:AuthToken|authToken))=([^;]+)/i);
         if (m && m[1]) return decodeURIComponent(m[1]);
       }
+    } catch (e) {
+      // ignore
+    }
+
+    try {
+      const store = useUserStore()
+      if (store?.tokens) return store.tokens
     } catch (e) {
       // ignore
     }

@@ -13,7 +13,7 @@
 			暂无新的预约，去专家列表看看吧。
 		</div>
 		<div v-else class="preorder-page__grid">
-			<PreorderCard v-for="item in upcomingPreorders" :key="item.orderId" :preorder="item" />
+			<PreorderCard v-for="item in upcomingPreorders" :key="item.preorderId" :preorder="item" />
 		</div>
 	</div>
 </template>
