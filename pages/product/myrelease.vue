@@ -58,9 +58,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import ProductEditDialog from '~/components/productEditDialog.vue'
+import ProductEditDialog from '~/components/Dialog/productEditDialog.vue'
 import { runWithBackoff } from '~/composables/useBackoff'
-import ProductCard from '~/components/productCard.vue'
+import ProductCard from '~/components/Card/productCard.vue'
 import { getProductList } from '~/composables/getProduct'
 import { EditMyProduct } from '~/composables/useProduct'
 import { useComfirmBuyStore , useEditProductStore} from '~/utils/useProductStore'
